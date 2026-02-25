@@ -1,0 +1,7 @@
+title: Your Docs Site
+description: Simple markdown documentation
+theme: null
+markdown: kramdown
+
+# Optional, but nice:
+permalink: pretty
