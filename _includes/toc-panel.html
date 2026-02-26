@@ -1,8 +1,16 @@
 <aside class="side-panel toc-panel" id="tocPanel">
   <header class="toc-header">
-    <button type="button" class="action-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">🌙</button>
+    <button type="button" class="action-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"
+            data-icon-light="{{ site.theme_icon_light | default: '☀️' }}"
+            data-icon-dark="{{ site.theme_icon_dark | default: '🌙' }}">
+      {{ site.theme_icon_dark | default: '🌙' }}
+    </button>
+    
     <h2>On this page</h2>
-    <button type="button" class="action-btn" onclick="toggleTocNav()" aria-label="Toggle table of contents" aria-controls="tocNav" aria-expanded="false">📖</button>
+    
+    <button type="button" class="action-btn" onclick="toggleTocNav()" aria-label="Toggle table of contents" aria-controls="tocNav" aria-expanded="false">
+      {{ site.toc_icon | default: '📖' }}
+    </button>
   </header>
 
   <nav class="toc-nav" id="tocNav"></nav>
