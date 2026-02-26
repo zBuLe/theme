@@ -16,7 +16,7 @@
   <main class="doc-panel">
     <header class="doc-header">
       <button type="button" class="action-btn logo-btn" onclick="toggleSiteNav()" aria-label="Toggle site navigation" aria-controls="siteNav" aria-expanded="false">
-        <div class="logo-img" aria-hidden="true"></div>
+        <img src="{{ site.logo | relative_url }}" alt="{{ site.title }} Logo" class="logo-img">
       </button>
 
       <h1 class="doc-title">{{ page.title }}</h1>

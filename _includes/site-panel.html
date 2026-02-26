@@ -1,7 +1,7 @@
 <aside class="side-panel site-panel" id="sitePanel">
   <header class="site-header">
     <button type="button" class="action-btn" onclick="toggleSiteNav()" aria-label="Toggle site navigation" aria-controls="siteNav" aria-expanded="false">
-      <div class="logo-img" aria-hidden="true"></div>
+      <img src="{{ site.logo | relative_url }}" alt="{{ site.title }} Logo" class="logo-img">
     </button>
     <h2>{{ site.title }}</h2>
   </header>

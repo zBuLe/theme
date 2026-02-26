@@ -201,6 +201,7 @@ body {
   display: block;
   border-radius: 6px;
   background-color: var(--accent-color);
+  object-fit: contain;
 }
 
 /* Search Box */

@@ -1,5 +1,8 @@
-title: Your Docs Site
-description: Simple markdown documentation
+title: DocuTheme
+description: A clean, modern documentation theme for Jekyll.
+# Add your logo path here:
+logo: /assets/images/logo.svg
+
 theme: null
 markdown: kramdown
 
