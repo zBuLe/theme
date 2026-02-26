@@ -83,3 +83,41 @@ window.addEventListener("resize", () => {
   // Keep aria-expanded in sync if layout conditions change.
   setAriaExpandedForToggles();
 });
+
+// --- DYNAMIC TABLE OF CONTENTS GENERATOR ---
+function generateTOC() {
+  const tocNav = document.getElementById('tocNav');
+  const article = document.querySelector('.doc-content');
+  
+  if (!tocNav || !article) return; // Exit if not on a document page
+
+  // Find all H2, H3, and H4 tags inside the main content
+  const headings = article.querySelectorAll('h2, h3, h4');
+
+  headings.forEach(heading => {
+    // Jekyll auto-generates IDs, but just in case it's missing:
+    if (!heading.id) {
+      heading.id = heading.textContent.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    }
+
+    // Create the link
+    const link = document.createElement('a');
+    link.href = `#${heading.id}`;
+    link.textContent = heading.textContent;
+    
+    // Apply the correct CSS class based on heading level
+    link.className = `toc-${heading.tagName.toLowerCase()}`;
+    
+    // Add click event to close mobile menu when a link is clicked
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        toggleTocNav(); // Close panel on mobile after clicking
+      }
+    });
+
+    tocNav.appendChild(link);
+  });
+}
+
+// Run the generator when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', generateTOC);
