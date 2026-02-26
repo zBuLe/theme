@@ -11,16 +11,37 @@
       <input type="text" class="search-input" placeholder="Search docs..." />
     </div>
 
-    <a href="#">About</a>
-    <a href="#" class="active-link">Core Concepts</a>
-    <a href="#">API Reference</a>
+    {% for item in site.data.navigation %}
+      
+      {% if item.sublinks %}
+        
+        {% assign is_active_group = false %}
+        {% for sublink in item.sublinks %}
+          {% if page.url == sublink.url %}
+            {% assign is_active_group = true %}
+          {% endif %}
+        {% endfor %}
 
-    <button type="button" class="accordion-btn" aria-expanded="false">Getting Started <span class="caret" aria-hidden="true">&#9660;</span></button>
-    <div class="accordion-content">
-      <a href="#">Installation</a>
-      <a href="#">Configuration</a>
-      <a href="#">Tutorial</a>
-    </div>
+        <button type="button" class="accordion-btn {% if is_active_group %}active{% endif %}" aria-expanded="{% if is_active_group %}true{% else %}false{% endif %}">
+          {{ item.title }} <span class="caret" aria-hidden="true">&#9660;</span>
+        </button>
+        
+        <div class="accordion-content" {% if is_active_group %}style="max-height: 2000px;"{% endif %}>
+          {% for sublink in item.sublinks %}
+            <a href="{{ sublink.url | relative_url }}" class="{% if page.url == sublink.url %}active-link{% endif %}">
+              {{ sublink.title }}
+            </a>
+          {% endfor %}
+        </div>
+
+      {% else %}
+        <a href="{{ item.url | relative_url }}" class="{% if page.url == item.url %}active-link{% endif %}">
+          {{ item.title }}
+        </a>
+      {% endif %}
+      
+    {% endfor %}
+
   </nav>
 
   <footer class="site-footer">

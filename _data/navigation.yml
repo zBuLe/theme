@@ -1,0 +1,17 @@
+- title: About
+  url: /about/
+
+- title: Core Concepts
+  url: /core-concepts/
+
+- title: API Reference
+  url: /api-reference/
+
+- title: Getting Started
+  sublinks:
+    - title: Installation
+      url: /installation/
+    - title: Configuration
+      url: /configuration/
+    - title: Tutorial
+      url: /tutorial/
