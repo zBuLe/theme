@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Docs Layout Prototype (Toggles)</title>
+  <style>
+    :root{
+      --bg: #0b1020;
+      --panel: #101a33;
+      --panel2:#0e1730;
+      --text:#d7e2ff;
+      --muted:#91a3d6;
+      --line: rgba(255,255,255,.10);
+      --accent:#7aa7ff;
+
+      --header-h: 56px;
+      --footer-h: 44px;
+      --left-w: 260px;
+      --right-w: 260px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font: 15px/1.55 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    a{ color: var(--accent); text-decoration:none; }
+    a:hover{ text-decoration:underline; }
+
+    .app{
+      min-height:100vh;
+      display:grid;
+      grid-template-rows: var(--header-h) 1fr var(--footer-h);
+    }
+
+    header{
+      display:grid;
+      grid-template-columns: auto 1fr auto;
+      align-items:center;
+      gap:12px;
+      padding: 0 12px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));
+    }
+
+    .toggle{
+      width: 38px;
+      height: 34px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      font-weight: 800;
+      letter-spacing:.02em;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      user-select:none;
+    }
+    .toggle:hover{ background: rgba(255,255,255,.07); }
+    .toggle:active{ transform: translateY(1px); }
+    .toggle[aria-pressed="false"]{
+      opacity: .75;
+    }
+    .toggle:focus{
+      outline: 2px solid rgba(122,167,255,.45);
+      outline-offset: 2px;
+    }
+
+    .brand{
+      justify-self:center;
+      font-weight:700;
+      letter-spacing:.2px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      padding: 0 10px;
+    }
+
+    .main{
+      display:grid;
+      grid-template-columns: var(--left-w) minmax(0,1fr) var(--right-w);
+      min-height:0; /* enables internal scrolling */
+      transition: grid-template-columns 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Explicit Grid Placement (The Fix) */
+    nav   { grid-column: 1; }
+    main  { grid-column: 2; }
+    aside { grid-column: 3; }
+
+    /* Panels */
+    nav, aside{
+      min-height:0;
+      overflow:auto;
+      padding: 14px 12px;
+      transition: opacity 0.2s ease, visibility 0s linear;
+    }
+    
+    /* Using visibility instead of display:none allows for animation while keeping it accessible */
+    nav.hidden, aside.hidden {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0s linear 0.3s;
+    }
+
+    nav{
+      background: var(--panel2);
+      border-right: 1px solid var(--line);
+    }
+
+    aside{
+      background: var(--panel);
+      border-left: 1px solid var(--line);
+    }
+
+    nav h2, aside h2{
+      margin: 4px 0 10px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--muted);
+    }
+
+    nav ul, aside ul{ list-style:none; padding:0; margin:0; }
+    nav li, aside li{ margin: 6px 0; }
+    nav a, aside a{ color: var(--text); opacity:.9; }
+    nav a:hover, aside a:hover{ opacity:1; }
+
+    /* Content */
+    main{
+      min-height:0;
+      overflow:auto;
+      padding: 18px 22px 40px;
+    }
+
+    .content-card{
+      max-width: 920px;
+      margin: 0 auto;
+      background: rgba(255,255,255,.03);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px 18px 22px;
+    }
+    .content-card h1{ margin: 6px 0 10px; font-size: 28px; }
+    .content-card p{ margin: 0 0 12px; color: rgba(215,226,255,.92); }
+    .content-card code{
+      background: rgba(0,0,0,.25);
+      border: 1px solid var(--line);
+      padding: 2px 6px;
+      border-radius: 8px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .95em;
+    }
+    .content-card hr{
+      border:0;
+      border-top:1px solid var(--line);
+      margin: 16px 0;
+    }
+
+    footer{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 0 16px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      background: linear-gradient(0deg, rgba(255,255,255,.04), rgba(255,255,255,0));
+      font-size: 13px;
+    }
+
+    /* Toggle behavior: hide columns */
+    .no-left .main{ grid-template-columns: 0 minmax(0,1fr) var(--right-w); }
+    .no-right .main{ grid-template-columns: var(--left-w) minmax(0,1fr) 0; }
+    .no-left.no-right .main{ grid-template-columns: 0 minmax(0,1fr) 0; }
+
+    /* Responsive default: collapse panels but keep toggles usable */
+    @media (max-width: 980px){
+      :root{ --left-w: 240px; --right-w: 240px; }
+
+      body.show-left.show-right .main{ grid-template-columns: var(--left-w) minmax(0,1fr) var(--right-w); }
+      body.show-left:not(.show-right) .main{ grid-template-columns: var(--left-w) minmax(0,1fr) 0; }
+      body.show-right:not(.show-left) .main{ grid-template-columns: 0 minmax(0,1fr) var(--right-w); }
+      body:not(.show-left):not(.show-right) .main{ grid-template-columns: 0 minmax(0,1fr) 0; }
+    }
+  </style>
+</head>
+<body class="">
+  <div class="app">
+    <header>
+      <button class="toggle" id="toggleLeft" aria-pressed="true" aria-label="Toggle docs panel">H</button>
+      <div class="brand"><a href="#">Header</a></div>
+      <button class="toggle" id="toggleRight" aria-pressed="true" aria-label="Toggle table of contents panel">O</button>
+    </header>
+
+    <div class="main">
+      <nav id="leftNav" aria-label="Docs navigation">
+        <h2>Docs</h2>
+        <ul>
+          <li><a href="#">Getting Started</a></li>
+          <li><a href="#">Installation</a></li>
+          <li><a href="#">Configuration</a></li>
+          <li><a href="#">Pages</a></li>
+          <li><a href="#">Theme</a></li>
+        </ul>
+      </nav>
+
+      <main>
+        <div class="content-card">
+          <h1>Content</h1>
+          <p><code>H</code> toggles the left Docs panel. <code>O</code> toggles the right TOC panel.</p>
+          <hr />
+          <p>Scroll behavior: each column scrolls independently.</p>
+          <p>More content…</p><p>More content…</p><p>More content…</p><p>More content…</p>
+          <p>More content…</p><p>More content…</p><p>More content…</p><p>More content…</p>
+        </div>
+      </main>
+
+      <aside id="rightNav" aria-label="Table of contents">
+        <h2>TOC</h2>
+        <ul>
+          <li><a href="#">Intro</a></li>
+          <li><a href="#">Section A</a></li>
+          <li><a href="#">Section B</a></li>
+          <li><a href="#">Section C</a></li>
+        </ul>
+      </aside>
+    </div>
+
+    <footer>Footer</footer>
+  </div>
+
+  <script>
+    (function(){
+      const body = document.body;
+      const btnL = document.getElementById('toggleLeft');
+      const btnR = document.getElementById('toggleRight');
+      const leftNav = document.getElementById('leftNav');
+      const rightNav = document.getElementById('rightNav');
+
+      function setPressed(btn, pressed){
+        btn.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+      }
+
+      function updatePanelVisibility() {
+        if (mq.matches) {
+          leftNav.classList.toggle('hidden', !body.classList.contains('show-left'));
+          rightNav.classList.toggle('hidden', !body.classList.contains('show-right'));
+        } else {
+          leftNav.classList.toggle('hidden', body.classList.contains('no-left'));
+          rightNav.classList.toggle('hidden', body.classList.contains('no-right'));
+        }
+      }
+
+      // Desktop behavior uses .no-left / .no-right.
+      // Small screens use .show-left / .show-right to allow “both hidden by default”.
+      const mq = window.matchMedia('(max-width: 980px)');
+
+      function syncUI(){
+        if (mq.matches){
+          setPressed(btnL, body.classList.contains('show-left'));
+          setPressed(btnR, body.classList.contains('show-right'));
+        } else {
+          setPressed(btnL, !body.classList.contains('no-left'));
+          setPressed(btnR, !body.classList.contains('no-right'));
+        }
+        updatePanelVisibility();
+      }
+
+      function toggleLeft(){
+        if (mq.matches){
+          body.classList.toggle('show-left');
+        } else {
+          body.classList.toggle('no-left');
+        }
+        syncUI();
+      }
+
+      function toggleRight(){
+        if (mq.matches){
+          body.classList.toggle('show-right');
+        } else {
+          body.classList.toggle('no-right');
+        }
+        syncUI();
+      }
+
+      btnL.addEventListener('click', toggleLeft);
+      btnR.addEventListener('click', toggleRight);
+
+      mq.addEventListener?.('change', () => {
+        // Reset to sensible defaults when crossing breakpoint:
+        if (mq.matches){
+          body.classList.remove('no-left','no-right');
+          body.classList.remove('show-left','show-right'); // start collapsed on small
+        } else {
+          body.classList.remove('show-left','show-right');
+        }
+        syncUI();
+      });
+
+      // initial setup
+      syncUI();
+    })();
+  </script>
+</body>
+</html>

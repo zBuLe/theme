@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Docs Theme Foundation</title>
+<style>
+/* =========================================
+   0. VARIABLES & THEMING
+   ========================================= */
+:root {
+  /* Main Layout */
+  --bg-main: #ffffff;
+  --text-main: #1f2937;
+  --bg-header: #ffffff;
+  --border-color: #e5e7eb;
+
+  /* Accent Colors */
+  --accent-color: #4f46e5;
+  --accent-bg: #e0e7ff;
+
+  /* Side Panels */
+  --panel-bg: #f9fafb;
+  --panel-text: #4b5563;
+  --panel-heading: #111827;
+  --panel-border: #e5e7eb;
+  --panel-hover-bg: #f3f4f6;
+
+  /* Markdown Elements */
+  --code-bg: #f3f4f6;
+  --code-text: #db2777;
+  --pre-bg: #1f2937;
+  --pre-text: #e5e7eb;
+  --quote-border: var(--accent-color);
+  --quote-bg: var(--accent-bg);
+
+  /* Nav sizing */
+  --nav-pad-left: 32px;
+  --active-border: 3px;
+
+  /* Z stack */
+  --z-header: 10;
+  --z-panel: 20;
+  --z-modal: 100;
+}
+
+body.dark-mode {
+  --bg-main: #0d1117;
+  --text-main: #c9d1d9;
+  --bg-header: #161b22;
+  --border-color: #30363d;
+
+  --accent-color: #58a6ff;
+  --accent-bg: rgba(56, 139, 253, 0.15);
+
+  --panel-bg: #161b22;
+  --panel-text: #8b949e;
+  --panel-heading: #c9d1d9;
+  --panel-border: #30363d;
+  --panel-hover-bg: #21262d;
+
+  --code-bg: #21262d;
+  --code-text: #ff7b72;
+  --pre-bg: #010409;
+  --pre-text: #c9d1d9;
+  --quote-border: var(--accent-color);
+  --quote-bg: var(--accent-bg);
+}
+
+/* =========================================
+   1. CSS RESET
+   ========================================= */
+*, *::before, *::after { box-sizing: border-box; }
+*:not(dialog) { margin: 0; }
+
+@media (prefers-reduced-motion: no-preference) {
+  html { interpolate-size: allow-keywords; }
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, picture, video, canvas, svg { display: block; max-width: 100%; }
+input, button, textarea, select { font: inherit; }
+p, h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; }
+p { text-wrap: pretty; }
+h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
+#root, #__next { isolation: isolate; }
+
+/* Provide visible focus outlines */
+:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* =========================================
+   2. GLOBAL STYLES
+   ========================================= */
+body {
+  font-family: "Lato", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: 16px;
+  overflow-x: hidden;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  transition: background-color 0.3s, color 0.3s;
+  line-height: 1.6;
+}
+
+/* =========================================
+   3. SIDE PANELS
+   ========================================= */
+.side-panel {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: var(--z-panel);
+  top: 0;
+  background-color: var(--panel-bg);
+  overflow-x: hidden;
+  transition: width 0.5s, background-color 0.3s;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-panel { left: 0; border-right: 1px solid var(--panel-border); }
+.toc-panel  { right: 0; border-left: 1px solid var(--panel-border); }
+
+.site-header, .site-nav, .site-footer,
+.toc-header, .toc-nav, .toc-footer {
+  min-width: 250px;
+  box-sizing: border-box;
+}
+
+/* --- Panel Headers --- */
+.site-header, .toc-header {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.site-header { justify-content: flex-start; gap: 15px; }
+.toc-header  { justify-content: space-between; }
+
+.site-header h2, .toc-header h2 {
+  color: var(--panel-heading);
+  font-size: 1.25em;
+  font-weight: 600;
+}
+
+/* --- Panel Navigation --- */
+.site-nav, .toc-nav {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px 0;
+}
+
+.site-nav a, .toc-nav a {
+  padding: 8px 20px 8px var(--nav-pad-left);
+  text-decoration: none;
+  font-size: 1.1em;
+  color: var(--panel-text);
+  display: block;
+  transition: 0.2s;
+}
+
+.site-nav a:hover, .toc-nav a:hover {
+  color: var(--accent-color);
+  background-color: var(--panel-hover-bg);
+}
+
+/* --- Panel Footers --- */
+.site-footer, .toc-footer {
+  padding: 15px 25px;
+  border-top: 1px solid var(--panel-border);
+  color: var(--panel-text);
+  font-size: 0.875em;
+}
+
+/* =========================================
+   4. UI COMPONENTS
+   ========================================= */
+.action-btn {
+  font-size: 1.75em;
+  cursor: pointer;
+  user-select: none;
+  color: var(--panel-text);
+  background: none;
+  border: none;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.2s, opacity 0.2s;
+}
+.action-btn:hover { color: var(--accent-color); opacity: 0.85; }
+.doc-header .action-btn { color: var(--text-main); }
+
+.logo-img {
+  height: 32px;
+  width: 32px;
+  display: block;
+  border-radius: 6px;
+  background-color: var(--accent-color);
+}
+
+/* Search Box */
+.search-box { padding: 0 16px 20px 16px; }
+.search-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-size: 0.95em;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.search-input::placeholder { color: #9ca3af; }
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px var(--accent-bg);
+}
+
+/* Accordion Component */
+.accordion-btn {
+  background-color: transparent;
+  color: var(--panel-text);
+  cursor: pointer;
+  padding: 8px 25px 8px var(--nav-pad-left);
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 1.1em;
+  transition: 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.accordion-btn:hover, .accordion-btn.active {
+  color: var(--accent-color);
+  background-color: var(--panel-hover-bg);
+}
+.caret { font-size: 0.8em; transition: transform 0.3s ease; }
+.accordion-btn.active .caret { transform: rotate(180deg); }
+
+.accordion-content {
+  background-color: var(--bg-main);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+.accordion-content a {
+  font-size: 0.95em;
+  padding-left: 48px;
+}
+
+/* TOC Specifics */
+.toc-h2 { font-size: 1em !important; font-weight: bold; color: var(--panel-heading) !important; margin-top: 8px; }
+.toc-h3 { font-size: 0.95em !important; padding-left: 48px !important; }
+.toc-h4 { font-size: 0.85em !important; padding-left: 64px !important; opacity: 0.8; }
+
+/* Active TOC/Nav State */
+.active-link {
+  color: var(--accent-color) !important;
+  font-weight: bold;
+  border-left: var(--active-border) solid var(--accent-color);
+  padding-left: calc(var(--nav-pad-left) - var(--active-border)) !important;
+  background-color: var(--panel-hover-bg);
+}
+
+/* Metadata Tags */
+.meta-item { margin-bottom: 6px; white-space: normal; }
+.meta-item strong { color: var(--panel-heading); }
+.meta-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; white-space: normal; }
+.meta-tags .tag {
+  background-color: var(--accent-bg);
+  border: 1px solid var(--accent-color);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75em;
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+/* =========================================
+   5. DOCUMENT PANEL
+   ========================================= */
+.doc-panel {
+  transition: margin-left .5s, margin-right .5s;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.doc-header {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  background-color: var(--bg-header);
+  border-bottom: 1px solid var(--border-color);
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.doc-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.25em;
+  color: var(--text-main);
+  transition: color 0.3s;
+  font-weight: 600;
+}
+
+.doc-content {
+  padding: 40px;
+  flex: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Document Typography */
+.doc-content h1, .doc-content h2, .doc-content h3 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+  color: var(--panel-heading);
+}
+.doc-content h2 { border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
+.doc-content a { color: var(--accent-color); text-decoration: none; }
+.doc-content a:hover { text-decoration: underline; }
+
+.doc-content p code, .doc-content li code {
+  background-color: var(--code-bg);
+  color: var(--code-text);
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-size: 0.9em;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.doc-content pre {
+  background-color: var(--pre-bg);
+  color: var(--pre-text);
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-size: 0.95em;
+  transition: background-color 0.3s, color 0.3s;
+  border: 1px solid var(--border-color);
+}
+.doc-content pre code { background-color: transparent; color: inherit; padding: 0; }
+
+.doc-content blockquote {
+  margin: 1.5em 0;
+  padding: 16px 20px;
+  background-color: var(--quote-bg);
+  border-left: 5px solid var(--quote-border);
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+.doc-content blockquote p { margin: 0; color: var(--panel-heading); }
+
+.doc-content table { width: 100%; border-collapse: collapse; margin: 1.5em 0; }
+.doc-content th, .doc-content td {
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  text-align: left;
+}
+.doc-content th { background-color: var(--bg-header); font-weight: bold; }
+
+/* =========================================
+   6. STATE CONTROLS & RESPONSIVE BEHAVIOR
+   ========================================= */
+body.site-open .site-panel { width: 250px; }
+body.toc-open  .toc-panel  { width: 250px; }
+
+body.site-open .logo-btn { opacity: 0; pointer-events: none; }
+body.toc-open  .book-btn { opacity: 0; pointer-events: none; }
+
+@media screen and (min-width: 769px) {
+  body.site-open .doc-panel { margin-left: 250px; }
+  body.toc-open  .doc-panel { margin-right: 250px; }
+}
+
+@media screen and (max-width: 768px) {
+  body.site-open .doc-panel { margin-left: 0; }
+  body.toc-open  .doc-panel { margin-right: 0; }
+  .doc-title { font-size: 1.125em; }
+  .doc-content { padding: 20px; }
+}
+
+@media screen and (max-height: 450px), screen and (max-width: 450px) {
+  body.site-open .site-panel, body.toc-open .toc-panel { width: 100%; }
+  .site-header, .site-nav, .site-footer, .toc-header, .toc-nav, .toc-footer { min-width: 100vw; }
+  .site-nav a, .accordion-btn { font-size: 1.125em; }
+}
+</style>
+</head>
+
+<body>
+<aside class="side-panel site-panel" id="sitePanel">
+  <header class="site-header">
+    <button type="button" class="action-btn" onclick="toggleSiteNav()" aria-label="Toggle site navigation" aria-controls="siteNav" aria-expanded="false">
+      <div class="logo-img" aria-hidden="true"></div>
+    </button>
+    <h2>DocuTheme</h2>
+  </header>
+
+  <nav class="site-nav" id="siteNav">
+    <div class="search-box">
+      <input type="text" class="search-input" placeholder="Search docs..." />
+    </div>
+
+    <a href="#">About</a>
+    <a href="#" class="active-link">Core Concepts</a>
+    <a href="#">API Reference</a>
+
+    <button type="button" class="accordion-btn" aria-expanded="false">Getting Started <span class="caret" aria-hidden="true">&#9660;</span></button>
+    <div class="accordion-content">
+      <a href="#">Installation</a>
+      <a href="#">Configuration</a>
+      <a href="#">Tutorial</a>
+    </div>
+  </nav>
+
+  <footer class="site-footer">
+    &copy; 2026 DocuTheme
+  </footer>
+</aside>
+
+<aside class="side-panel toc-panel" id="tocPanel">
+  <header class="toc-header">
+    <button type="button" class="action-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">🌙</button>
+    <h2>On this page</h2>
+    <button type="button" class="action-btn" onclick="toggleTocNav()" aria-label="Toggle table of contents" aria-controls="tocNav" aria-expanded="false">📖</button>
+  </header>
+
+  <nav class="toc-nav" id="tocNav">
+    <a href="#" class="toc-h2">1. Palettes</a>
+    <a href="#" class="toc-h3 active-link">1.1 Variables</a>
+    <a href="#" class="toc-h3">1.2 Usage</a>
+
+    <a href="#" class="toc-h2">2. UI Components</a>
+    <a href="#" class="toc-h3">2.1 Active States</a>
+  </nav>
+
+  <footer class="toc-footer">
+    <div class="meta-item"><strong>Author:</strong> Jane Doe</div>
+    <div class="meta-item"><strong>Updated:</strong> Feb 26, 2026</div>
+
+    <div class="meta-tags">
+      <span class="tag">#ui-design</span>
+      <span class="tag">#css-vars</span>
+    </div>
+  </footer>
+</aside>
+
+<main class="doc-panel">
+  <header class="doc-header">
+    <button type="button" class="action-btn logo-btn" onclick="toggleSiteNav()" aria-label="Toggle site navigation" aria-controls="siteNav" aria-expanded="false">
+      <div class="logo-img" aria-hidden="true"></div>
+    </button>
+
+    <h1 class="doc-title">Adaptive Color Palette</h1>
+
+    <button type="button" class="action-btn book-btn" onclick="toggleTocNav()" aria-label="Toggle table of contents" aria-controls="tocNav" aria-expanded="false">📖</button>
+  </header>
+
+  <article class="doc-content">
+    <h2>Beautiful Theming</h2>
+    <p>Notice how the side panels now use a subtle off-white (<code>#f9fafb</code>) in light mode to differentiate themselves from the pure white reading area, and smoothly transition to a deep dark gray (<code>#161b22</code>) in dark mode.</p>
+
+    <h3>The Accent Color</h3>
+    <p>Hover over the links in the side panels! You will see the new <code>--accent-color</code> in action. I also added a special <code>.active-link</code> class to the "Core Concepts" link in the left panel to demonstrate how Jekyll can highlight the current page you are on.</p>
+
+    <blockquote>
+      <p><strong>Tip:</strong> The blockquote and tag pills now dynamically use the Accent Color to ensure your branding stays consistent across the entire site.</p>
+    </blockquote>
+  </article>
+</main>
+
+<script>
+function setAriaExpandedForToggles() {
+  const siteOpen = document.body.classList.contains("site-open");
+  const tocOpen = document.body.classList.contains("toc-open");
+
+  document.querySelectorAll('[onclick="toggleSiteNav()"]').forEach(btn => {
+    if (btn && btn.setAttribute) btn.setAttribute("aria-expanded", siteOpen ? "true" : "false");
+  });
+  document.querySelectorAll('[onclick="toggleTocNav()"]').forEach(btn => {
+    if (btn && btn.setAttribute) btn.setAttribute("aria-expanded", tocOpen ? "true" : "false");
+  });
+}
+
+function reflowAccordions() {
+  document.querySelectorAll(".accordion-btn.active").forEach(btn => {
+    const panel = btn.nextElementSibling;
+    if (!panel) return;
+    panel.style.maxHeight = panel.scrollHeight + "px";
+  });
+}
+
+function initSettings() {
+  const savedTheme = localStorage.getItem("theme");
+  const themeBtn = document.getElementById("theme-toggle");
+
+  if (savedTheme === "dark" || (!savedTheme && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+    document.body.classList.add("dark-mode");
+    themeBtn.innerText = "☀️";
+  } else {
+    themeBtn.innerText = "🌙";
+  }
+
+  // Restore panel open state only on desktop-ish widths
+  if (window.innerWidth > 768) {
+    if (localStorage.getItem("sitePanel") === "open") document.body.classList.add("site-open");
+    if (localStorage.getItem("tocPanel") === "open") document.body.classList.add("toc-open");
+  }
+
+  setAriaExpandedForToggles();
+}
+initSettings();
+
+function toggleSiteNav() {
+  document.body.classList.toggle("site-open");
+  localStorage.setItem("sitePanel", document.body.classList.contains("site-open") ? "open" : "closed");
+  setAriaExpandedForToggles();
+}
+
+function toggleTocNav() {
+  document.body.classList.toggle("toc-open");
+  localStorage.setItem("tocPanel", document.body.classList.contains("toc-open") ? "open" : "closed");
+  setAriaExpandedForToggles();
+}
+
+function toggleTheme() {
+  document.body.classList.toggle("dark-mode");
+  const isDark = document.body.classList.contains("dark-mode");
+  const themeBtn = document.getElementById("theme-toggle");
+
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+  themeBtn.innerText = isDark ? "☀️" : "🌙";
+
+  requestAnimationFrame(reflowAccordions);
+}
+
+document.querySelectorAll(".accordion-btn").forEach(btn => {
+  btn.addEventListener("click", function () {
+    this.classList.toggle("active");
+    const panel = this.nextElementSibling;
+    const expanded = this.classList.contains("active");
+    this.setAttribute("aria-expanded", expanded ? "true" : "false");
+
+    if (!panel) return;
+    if (panel.style.maxHeight) {
+      panel.style.maxHeight = null;
+    } else {
+      panel.style.maxHeight = panel.scrollHeight + "px";
+    }
+  });
+});
+
+window.addEventListener("resize", () => {
+  reflowAccordions();
+  // Keep aria-expanded in sync if layout conditions change.
+  setAriaExpandedForToggles();
+});
+</script>
+</body>
+</html>

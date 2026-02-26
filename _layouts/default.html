@@ -1,17 +1,34 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}</title>
-    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
-  </head>
-  <body>
-    <header class="site-header">
-      <a class="site-title" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ page.title | default: site.title }}</title>
+  
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+</head>
+
+<body>
+  {% include site-panel.html %}
+
+  {% include toc-panel.html %}
+
+  <main class="doc-panel">
+    <header class="doc-header">
+      <button type="button" class="action-btn logo-btn" onclick="toggleSiteNav()" aria-label="Toggle site navigation" aria-controls="siteNav" aria-expanded="false">
+        <div class="logo-img" aria-hidden="true"></div>
+      </button>
+
+      <h1 class="doc-title">{{ page.title }}</h1>
+
+      <button type="button" class="action-btn book-btn" onclick="toggleTocNav()" aria-label="Toggle table of contents" aria-controls="tocNav" aria-expanded="false">📖</button>
     </header>
-    <main class="content">
+
+    <article class="doc-content">
       {{ content }}
-    </main>
-  </body>
+    </article>
+  </main>
+
+  <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+</body>
 </html>

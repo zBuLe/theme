@@ -1,0 +1,31 @@
+<aside class="side-panel toc-panel" id="tocPanel">
+  <header class="toc-header">
+    <button type="button" class="action-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">🌙</button>
+    <h2>On this page</h2>
+    <button type="button" class="action-btn" onclick="toggleTocNav()" aria-label="Toggle table of contents" aria-controls="tocNav" aria-expanded="false">📖</button>
+  </header>
+
+  <nav class="toc-nav" id="tocNav">
+    <a href="#" class="toc-h2">1. Palettes</a>
+    <a href="#" class="toc-h3 active-link">1.1 Variables</a>
+    <a href="#" class="toc-h3">1.2 Usage</a>
+  </nav>
+
+  <footer class="toc-footer">
+    {% if page.author %}
+      <div class="meta-item"><strong>Author:</strong> {{ page.author }}</div>
+    {% endif %}
+    
+    {% if page.date %}
+      <div class="meta-item"><strong>Updated:</strong> {{ page.date | date: "%b %d, %Y" }}</div>
+    {% endif %}
+
+    {% if page.tags %}
+      <div class="meta-tags">
+        {% for tag in page.tags %}
+          <span class="tag">#{{ tag }}</span>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </footer>
+</aside>

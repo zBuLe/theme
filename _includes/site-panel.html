@@ -1,0 +1,29 @@
+<aside class="side-panel site-panel" id="sitePanel">
+  <header class="site-header">
+    <button type="button" class="action-btn" onclick="toggleSiteNav()" aria-label="Toggle site navigation" aria-controls="siteNav" aria-expanded="false">
+      <div class="logo-img" aria-hidden="true"></div>
+    </button>
+    <h2>{{ site.title }}</h2>
+  </header>
+
+  <nav class="site-nav" id="siteNav">
+    <div class="search-box">
+      <input type="text" class="search-input" placeholder="Search docs..." />
+    </div>
+
+    <a href="#">About</a>
+    <a href="#" class="active-link">Core Concepts</a>
+    <a href="#">API Reference</a>
+
+    <button type="button" class="accordion-btn" aria-expanded="false">Getting Started <span class="caret" aria-hidden="true">&#9660;</span></button>
+    <div class="accordion-content">
+      <a href="#">Installation</a>
+      <a href="#">Configuration</a>
+      <a href="#">Tutorial</a>
+    </div>
+  </nav>
+
+  <footer class="site-footer">
+    &copy; {{ site.time | date: "%Y" }} {{ site.title }}
+  </footer>
+</aside>
