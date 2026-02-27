@@ -9,8 +9,5 @@ theme_icon_dark: "☀️"   # Icon shown when switching TO dark mode
 
 # Automatic Layouts (Optional, but recommended)
 defaults:
-  - scope:
-      path: ""
-    values:
-      layout: "default"
-
+  - scope: { path: "" }
+    values: { layout: default }
