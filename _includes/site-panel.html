@@ -1,8 +1,16 @@
 <aside class="side-panel site-panel" id="siteNav" aria-label="Site Navigation">
   
-  <div class="site-header">
+  <div class="site-header" style="justify-content: space-between;">
+    
+    <div style="display: flex; align-items: center; gap: 12px;">
+      {% if site.logo %}
+        <img src="{{ site.logo | relative_url }}" alt="Logo" class="logo-img" style="height: 32px; width: 32px;">
+      {% endif %}
+      <h2 style="margin: 0;">{{ site.title }}</h2>
+    </div>
+
     <button type="button" class="action-btn" onclick="toggleSiteNav()" aria-label="Close site navigation">×</button>
-    <h2>{{ site.title }}</h2>
+    
   </div>
 
   <nav class="site-nav">
