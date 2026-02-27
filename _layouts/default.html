@@ -32,7 +32,9 @@
         <img src="{{ site.logo | relative_url }}" alt="{{ site.title }} Logo" class="logo-img">
       </button>
       
-      <h1 class="doc-title">{{ page.title }}</h1>
+      <h1 class="doc-title">
+  <a href="#" aria-label="Scroll to top">{{ page.title }}</a>
+</h1>
       
       <button type="button" class="action-btn book-btn" onclick="toggleTocNav()" aria-label="Toggle table of contents" aria-controls="tocNav" aria-expanded="false">
         {{ site.toc_icon | default: '📖' }}
