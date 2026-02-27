@@ -4,8 +4,8 @@ logo: /assets/images/logo.svg
 
 # --- UI Icons ---
 toc_icon: "☰"
-theme_icon_light: "☀️"  # Icon to show when switching TO light mode
-theme_icon_dark: "🌙"   # Icon to show when switching TO dark mode ☀️
+theme_icon_light: "🌙"  # Icon to show when switching TO light mode
+theme_icon_dark: "☀️"   # Icon to show when switching TO dark mode ☀️
 
 theme: null
 markdown: kramdown
