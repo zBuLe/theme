@@ -2,14 +2,15 @@ title: DocuTheme
 description: A clean, modern documentation theme for Jekyll.
 logo: /assets/images/logo.svg
 
-# --- UI Icons ---
+# UI Icons
 toc_icon: "☰"
-theme_icon_light: "🌙"  # Icon to show when switching TO light mode
-theme_icon_dark: "☀️"   # Icon to show when switching TO dark mode ☀️
+theme_icon_light: "🌙"  # Icon shown when switching TO light mode
+theme_icon_dark: "☀️"   # Icon shown when switching TO dark mode
 
-theme: null
-markdown: kramdown
+# Automatic Layouts (Optional, but recommended)
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
 
-# Optional, but nice:
-
-permalink: pretty
