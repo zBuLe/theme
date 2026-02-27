@@ -1,15 +1,13 @@
 ---
-layout: none
 ---
 [
-  {% for post in site.posts %}
+  {% for page in site.pages %}
+    {% if page.title %}
     {
-      "title"    : "{{ post.title | escape }}",
-      "category" : "{{ post.category }}",
-      "tags"     : "{{ post.tags | join: ', ' }}",
-      "url"      : "{{ site.baseurl }}{{ post.url }}",
-      "date"     : "{{ post.date }}",
-      "content"  : "{{ page.content | strip_html | strip_newlines | escape }}",
+      "title"    : "{{ page.title | escape }}",
+      "url"      : "{{ site.baseurl }}{{ page.url }}",
+      "content"  : "{{ page.content | strip_html | strip_newlines | escape }}"
     } {% unless forloop.last %},{% endunless %}
+    {% endif %}
   {% endfor %}
 ]

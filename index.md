@@ -8,6 +8,8 @@ tags: [jekyll, javascript, toc]
 
 Welcome to the documentation! If you look at the right panel, you will notice that the Table of Contents has been automatically generated based on the headings in this very Markdown file.
 
+## Searche Test
+
 ## 1. Getting Started
 This is a primary section. It uses an `<h2>` tag, so it will appear as a top-level item in the TOC menu. 
 

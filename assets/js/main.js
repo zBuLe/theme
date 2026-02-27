@@ -159,6 +159,7 @@ window.addEventListener("resize", () => {
 // =========================================
 // 6. Search Functionality using Simple-Jekyll-Search
 // =========================================
+
 var sjs = SimpleJekyllSearch({
   searchInput: document.getElementById('search-input'),
   resultsContainer: document.getElementById('search-results'),
