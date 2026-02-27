@@ -393,6 +393,7 @@ body {
 
 /* Removes the top margin from the VERY FIRST item in the document */
 .doc-content > *:first-child {
+  scroll-margin-top: 0px;
   margin-top: 0;
 }
 
