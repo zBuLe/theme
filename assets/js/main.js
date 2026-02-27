@@ -155,3 +155,14 @@ window.addEventListener("resize", () => {
   reflowAccordions();
   setAriaExpandedForToggles();
 });
+
+// =========================================
+// 6. Search Functionality using Simple-Jekyll-Search
+// =========================================
+var sjs = SimpleJekyllSearch({
+  searchInput: document.getElementById('search-input'),
+  resultsContainer: document.getElementById('search-results'),
+  json: '/search.json', // The file Jekyll generated in Step 1
+  searchResultTemplate: '<li><a href="{url}">{title}</a></li>',
+  noResultsText: '<li class="no-results">No results found.</li>'
+})
