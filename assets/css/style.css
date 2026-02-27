@@ -355,7 +355,13 @@ body.toc-open  .book-btn { opacity: 0; pointer-events: none; }
 
 @media screen and (max-height: 450px), screen and (max-width: 450px) {
   body.site-open .site-panel, body.toc-open .toc-panel { width: 100%; }
-  .site-header, .site-nav, .site-footer, .toc-header, .toc-nav, .toc-footer { min-width: 100vw; }
+  
+  /* Use 100% instead of 100vw to respect device boundaries securely */
+  .site-header, .site-nav, .site-footer, .toc-header, .toc-nav, .toc-footer { 
+    min-width: auto; 
+    width: 100%; 
+  }
+  
   .site-nav a, .accordion-btn { font-size: 1.125em; }
 }
 

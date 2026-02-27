@@ -85,6 +85,33 @@
 
 
 /* =========================================
+   FALLBACK CODE BLOCKS (Ignored by Rouge)
+   ========================================= */
+.doc-content pre {
+  background-color: var(--pre-bg);
+  color: var(--pre-text);
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto; /* This prevents the mobile viewport blowout! */
+  border: 1px solid var(--border-color);
+  margin: 1.5em 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-size: 0.9em;
+  line-height: 1.5;
+  max-width: 100%;
+}
+
+/* Strips the fallback styling if Rouge successfully wrapped it */
+.highlight pre { 
+  margin: 0; 
+  padding: 0; 
+  border: none; 
+  background: transparent; 
+}
+
+
+
+/* =========================================
    CODE BLOCKS & TITLE BARS
    ========================================= */
 /* The outermost wrapper Jekyll generates */
@@ -204,3 +231,4 @@ body.dark-mode .highlight .nx { color: #c9d1d9; }
 body.dark-mode .highlight .nd, 
 body.dark-mode .highlight .ni, 
 body.dark-mode .highlight .nn { color: #ffa657; }
+
