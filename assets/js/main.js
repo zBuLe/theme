@@ -87,7 +87,7 @@ function generateTOC() {
 // =========================================
 document.addEventListener("DOMContentLoaded", () => {
   
-  // 1. Sync the theme button icon based on the state set by the inline script
+  // 1. Sync the theme button icon based on the state set by the inline script in default.html
   const themeBtn = document.getElementById("theme-toggle");
   if (themeBtn) {
     const iconLight = themeBtn.getAttribute("data-icon-light") || "☀️";
@@ -119,8 +119,72 @@ document.addEventListener("DOMContentLoaded", () => {
   // 4. Update Accessibility
   setAriaExpandedForToggles();
 
-  // 5. Remove the preload class to allow smooth animations again!
-  // We use a tiny 50ms timeout to guarantee CSS has finished rendering
+  // 5. Code Blocks: Title Bar & Copy Button
+  document.querySelectorAll('.highlighter-rouge').forEach(codeBlock => {
+    
+    // Extract the language from the class name
+    let lang = "Code";
+    codeBlock.classList.forEach(cls => {
+      if (cls.startsWith('language-')) {
+        lang = cls.replace('language-', '');
+      }
+    });
+
+    // Make the shortcodes look pretty
+    const langMap = {
+      'js': 'JavaScript',
+      'javascript': 'JavaScript',
+      'gml': 'GML',
+      'python': 'Python',
+      'java': 'Java',
+      'go': 'Go',
+      'html': 'HTML',
+      'css': 'CSS',
+      'ruby': 'Ruby',
+      'json': 'JSON',
+      'yaml': 'YAML',
+      'yml': 'YAML',
+      'bash': 'Bash',
+      'sh': 'Shell'
+    };
+    const displayLang = langMap[lang.toLowerCase()] || lang;
+
+    // Create the Title Bar (Header)
+    const header = document.createElement('div');
+    header.className = 'code-header';
+
+    const langSpan = document.createElement('span');
+    langSpan.className = 'code-lang';
+    langSpan.textContent = displayLang;
+
+    // Create the Copy Button
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.setAttribute('aria-label', 'Copy code to clipboard');
+    btn.textContent = 'Copy';
+
+    // Assemble and Inject the Title Bar
+    header.appendChild(langSpan);
+    header.appendChild(btn);
+    codeBlock.insertBefore(header, codeBlock.firstChild);
+
+    // Add Copy Functionality
+    btn.addEventListener('click', () => {
+      const codeText = codeBlock.querySelector('code').innerText;
+      
+      navigator.clipboard.writeText(codeText).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      }).catch(err => console.error('Failed to copy code: ', err));
+    });
+  });
+
+  // 6. Remove the preload class to allow smooth animations again!
   setTimeout(() => {
     document.body.classList.remove("preload");
   }, 50);

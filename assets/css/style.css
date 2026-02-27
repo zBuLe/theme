@@ -21,14 +21,6 @@
   --panel-border: #e5e7eb;
   --panel-hover-bg: #f3f4f6;
 
-  /* Markdown Elements */
-  --code-bg: #f3f4f6;
-  --code-text: #db2777;
-  --pre-bg: #1f2937;
-  --pre-text: #e5e7eb;
-  --quote-border: var(--accent-color);
-  --quote-bg: var(--accent-bg);
-
   /* Nav sizing */
   --nav-pad-left: 32px;
   --active-border: 3px;
@@ -53,13 +45,6 @@ body.dark-mode {
   --panel-heading: #c9d1d9;
   --panel-border: #30363d;
   --panel-hover-bg: #21262d;
-
-  --code-bg: #21262d;
-  --code-text: #ff7b72;
-  --pre-bg: #010409;
-  --pre-text: #c9d1d9;
-  --quote-border: var(--accent-color);
-  --quote-bg: var(--accent-bg);
 }
 
 /* =========================================

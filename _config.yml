@@ -1,23 +1,38 @@
+# =========================================
+# SITE CONFIGURATION
+# =========================================
 title: DocuTheme
-description: A clean, modern documentation theme for Jekyll.
-logo: /assets/images/logo.svg
+description: A fast, responsive, and accessible documentation theme.
+logo: /assets/images/logo.png
 
-# UI Icons
-toc_icon: "☰"
-theme_icon_light: "🌙"  # Icon shown when switching TO light mode
-theme_icon_dark: "☀️"   # Icon shown when switching TO dark mode
+# =========================================
+# THEME SETTINGS & UI ICONS
+# =========================================
+# These icons are pulled dynamically into the HTML
+toc_icon: "📖"
+theme_icon_light: "☀️"
+theme_icon_dark: "🌙"
 
-# Automatic Layouts (Optional, but recommended)
+# =========================================
+# AUTOMATIC LAYOUTS
+# =========================================
+# This tells Jekyll to automatically apply the "default" layout
+# to all markdown/html pages in the site.
 defaults:
   - scope:
       path: ""
     values:
       layout: "default"
 
-
-theme: null
-markdown: kramdown
-
-# Optional, but nice:
-
-permalink: pretty
+# =========================================
+# BUILD SETTINGS
+# =========================================
+# Exclude these files from the final build
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/

@@ -4,13 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{{ page.title | default: site.title }}</title>
+  
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/markdown.css' | relative_url }}">
 </head>
 
 <body class="preload">
 
   <script>
-    // 1. Theme Check (Now defaults to Dark Mode!)
+    // 1. Theme Check
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme !== "light") {
       document.body.classList.add("dark-mode");
@@ -27,12 +29,14 @@
   {% include toc-panel.html %}
 
   <main class="doc-panel">
-<header class="doc-header">
+    <header class="doc-header">
       <button type="button" class="action-btn logo-btn" onclick="toggleSiteNav()" aria-label="Toggle site navigation" aria-controls="siteNav" aria-expanded="false">
         <img src="{{ site.logo | relative_url }}" alt="{{ site.title }} Logo" class="logo-img">
       </button>
       
-      <h1 class="doc-title">{{ page.title }}</h1>
+      <h1 class="doc-title">
+        <a href="#" aria-label="Scroll to top">{{ page.title }}</a>
+      </h1>
       
       <button type="button" class="action-btn book-btn" onclick="toggleTocNav()" aria-label="Toggle table of contents" aria-controls="tocNav" aria-expanded="false">
         {{ site.toc_icon | default: '📖' }}
@@ -53,7 +57,10 @@
       SimpleJekyllSearch({
         searchInput: document.getElementById('search-input'),
         resultsContainer: document.getElementById('search-results'),
-        json: '{{ "/search.json" | relative_url }}',
+        
+        // Pointing to the assets folder for remote theme compatibility!
+        json: '{{ "/assets/search.json" | relative_url }}',
+        
         searchResultTemplate: '<li><a href="{url}">{title}</a></li>',
         noResultsText: '<li class="no-results">No results found for that term.</li>'
       });

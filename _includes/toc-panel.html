@@ -1,33 +1,37 @@
-<aside class="side-panel toc-panel" id="tocPanel">
-<header class="toc-header">
-  <button type="button" class="action-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"
-          data-icon-light="{{ site.theme_icon_light | default: '☀️' }}"
-          data-icon-dark="{{ site.theme_icon_dark | default: '🌙' }}">
-    {{ site.theme_icon_dark | default: '🌙' }}
-  </button>
+<aside class="side-panel toc-panel" aria-label="Table of Contents">
   
-  <h2>On this page</h2>
-  
-  <button type="button" class="action-btn" onclick="toggleTocNav()" aria-label="Toggle table of contents" aria-controls="tocNav" aria-expanded="false">
-    {{ site.toc_icon | default: '📖' }}
-  </button>
-</header>
+  <div class="toc-header">
+    <h2>Contents</h2>
+    <button type="button" class="action-btn" onclick="toggleTocNav()" aria-label="Close table of contents">×</button>
+  </div>
 
-  <nav class="toc-nav" id="tocNav"></nav>
+  <nav class="toc-nav" id="tocNav">
+    </nav>
 
-  <footer class="toc-footer">
-    {% if page.author %}
-      <div class="meta-item"><strong>Author:</strong> {{ page.author }}</div>
-    {% endif %}
+  <div class="toc-footer">
+    
     {% if page.date %}
-      <div class="meta-item"><strong>Updated:</strong> {{ page.date | date: "%b %d, %Y" }}</div>
+      <div class="meta-item">
+        <strong>Updated:</strong><br>
+        {{ page.date | date: "%B %-d, %Y" }}
+      </div>
     {% endif %}
-    {% if page.tags %}
+    
+    {% if page.author %}
+      <div class="meta-item">
+        <strong>Author:</strong><br>
+        {{ page.author }}
+      </div>
+    {% endif %}
+    
+    {% if page.tags.size > 0 %}
       <div class="meta-tags">
         {% for tag in page.tags %}
-          <span class="tag">#{{ tag }}</span>
+          <span class="tag">{{ tag }}</span>
         {% endfor %}
       </div>
     {% endif %}
-  </footer>
+    
+  </div>
+  
 </aside>

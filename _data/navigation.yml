@@ -1,18 +1,24 @@
-- title: Home
+# =========================================
+# LEFT PANEL NAVIGATION
+# =========================================
+# - title: The name displayed in the menu
+#   url: The path to the page (e.g., /about/)
+#   sublinks: Add this instead of a URL to create an accordion dropdown
+
+- title: Home (README)
   url: /
 
 - title: About
   url: /about/
 
-- title: Project README
-  url: /readme/
-
-- title: Nature Guide
+- title: Test Pages
   sublinks:
-    - title: The Vertebrates
-      url: /vertebrates/
-    - title: Birds of the World
+    - title: Code Syntax
+      url: /code/
+    - title: Birds
       url: /birds/
+    - title: Vertebrates
+      url: /vertebrates/
 
-- title: Places to Visit
-  url: /places-to-visit/
+- title: GitHub Repository
+  url: https://github.com/

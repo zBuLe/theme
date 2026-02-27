@@ -1,52 +1,50 @@
-<aside class="side-panel site-panel" id="sitePanel">
- <header class="site-header">
-  <button type="button" class="action-btn" onclick="toggleSiteNav()" aria-label="Toggle site navigation" aria-controls="siteNav" aria-expanded="false">
-    <img src="{{ site.logo | relative_url }}" alt="{{ site.title }} Logo" class="logo-img">
-  </button>
-  <h2>{{ site.title }}</h2>
-</header>
-
-  <nav class="site-nav" id="siteNav">
-<div class="search-box">
-  <input type="text" id="search-input" class="search-input" placeholder="Search docs..." />
+<aside class="side-panel site-panel" id="siteNav" aria-label="Site Navigation">
   
-  <ul id="search-results" class="search-results"></ul>
-</div>
+  <div class="site-header">
+    <button type="button" class="action-btn" onclick="toggleSiteNav()" aria-label="Close site navigation">×</button>
+    <h2>{{ site.title }}</h2>
+  </div>
 
-    {% for item in site.data.navigation %}
-      
-      {% if item.sublinks %}
-        
-        {% assign is_active_group = false %}
-        {% for sublink in item.sublinks %}
-          {% if page.url == sublink.url %}
-            {% assign is_active_group = true %}
-          {% endif %}
-        {% endfor %}
+  <nav class="site-nav">
+    
+    <div class="search-box">
+      <input type="text" id="search-input" class="search-input" placeholder="Search docs..." />
+      <ul id="search-results" class="search-results"></ul>
+    </div>
 
-        <button type="button" class="accordion-btn {% if is_active_group %}active{% endif %}" aria-expanded="{% if is_active_group %}true{% else %}false{% endif %}">
-          {{ item.title }} <span class="caret" aria-hidden="true">&#9660;</span>
-        </button>
-        
-        <div class="accordion-content" {% if is_active_group %}style="max-height: 2000px;"{% endif %}>
-          {% for sublink in item.sublinks %}
-            <a href="{{ sublink.url | relative_url }}" class="{% if page.url == sublink.url %}active-link{% endif %}">
-              {{ sublink.title }}
-            </a>
-          {% endfor %}
-        </div>
+    {% if site.data.navigation %}
+      {% for item in site.data.navigation %}
+        {% if item.sublinks %}
+          
+          <button type="button" class="accordion-btn" aria-expanded="false">
+            {{ item.title }}
+            <span class="caret">▼</span>
+          </button>
+          
+          <div class="accordion-content">
+            {% for sub in item.sublinks %}
+              <a href="{{ sub.url | relative_url }}" class="{% if page.url == sub.url %}active-link{% endif %}">
+                {{ sub.title }}
+              </a>
+            {% endfor %}
+          </div>
 
-      {% else %}
-        <a href="{{ item.url | relative_url }}" class="{% if page.url == item.url %}active-link{% endif %}">
-          {{ item.title }}
-        </a>
-      {% endif %}
-      
-    {% endfor %}
+        {% else %}
+          
+          <a href="{{ item.url | relative_url }}" class="{% if page.url == item.url %}active-link{% endif %}">
+            {{ item.title }}
+          </a>
+
+        {% endif %}
+      {% endfor %}
+    {% endif %}
 
   </nav>
 
-  <footer class="site-footer">
-    &copy; {{ site.time | date: "%Y" }} {{ site.title }}
-  </footer>
+  <div class="site-footer">
+    <button type="button" id="theme-toggle" class="action-btn" onclick="toggleTheme()" aria-label="Toggle dark mode" data-icon-light="{{ site.theme_icon_light | default: '☀️' }}" data-icon-dark="{{ site.theme_icon_dark | default: '🌙' }}">
+      {{ site.theme_icon_dark | default: '🌙' }}
+    </button>
+  </div>
+  
 </aside>
