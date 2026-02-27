@@ -1,16 +1,11 @@
 <aside class="side-panel toc-panel" aria-label="Table of Contents">
   
   <div class="toc-header">
-       <button type="button" id="theme-toggle" class="action-btn" onclick="toggleTheme()" aria-label="Toggle dark mode" data-icon-light="{{ site.theme_icon_light | default: '☀️' }}" data-icon-dark="{{ site.theme_icon_dark | default: '🌙' }}">
-        {{ site.theme_icon_dark | default: '🌙' }}
-      </button>
+    <button type="button" id="theme-toggle" class="action-btn" onclick="toggleTheme()" aria-label="Toggle dark mode" data-icon-light="{{ site.theme_icon_light | default: '☀️' }}" data-icon-dark="{{ site.theme_icon_dark | default: '🌙' }}">
+      {{ site.theme_icon_dark | default: '🌙' }}
+    </button>
     <h2>Contents</h2>
-    
-    
-   
-      
-      <button type="button" class="action-btn" onclick="toggleTocNav()" aria-label="Close table of contents">×</button>
-    </div>
+    <button type="button" class="action-btn" onclick="toggleTocNav()" aria-label="Close table of contents">×</button>
   </div>
 
   <nav class="toc-nav" id="tocNav">
