@@ -1,6 +1,7 @@
 ---
 layout: default
-title: README
+title: Project README
+permalink: /readme/
 author: zBuLe
 date: 2026-02-26
 tags: [README]

@@ -87,7 +87,7 @@ function generateTOC() {
 // =========================================
 document.addEventListener("DOMContentLoaded", () => {
   
-  // 1. Sync the theme button icon based on the state set by the inline script
+  // 1. Sync the theme button icon based on the state set by the inline script in default.html
   const themeBtn = document.getElementById("theme-toggle");
   if (themeBtn) {
     const iconLight = themeBtn.getAttribute("data-icon-light") || "☀️";
@@ -119,26 +119,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // 4. Update Accessibility
   setAriaExpandedForToggles();
 
-  // 5. Remove the preload class to allow smooth animations again!
-  // We use a tiny 50ms timeout to guarantee CSS has finished rendering
-  setTimeout(() => {
-    document.body.classList.remove("preload");
-  }, 50);
-});
-
-// Handle Window Resizing 
-window.addEventListener("resize", () => {
-  reflowAccordions();
-  setAriaExpandedForToggles();
-});
-
-// -----------------------------------------
-  // CODE BLOCKS: TITLE BAR & COPY BUTTON
-  // -----------------------------------------
-  // Target the outermost container Jekyll creates to avoid double-firing!
+  // 5. Code Blocks: Title Bar & Copy Button
   document.querySelectorAll('.highlighter-rouge').forEach(codeBlock => {
     
-    // 1. Extract the language from the class name (e.g., "language-js")
+    // Extract the language from the class name
     let lang = "Code";
     codeBlock.classList.forEach(cls => {
       if (cls.startsWith('language-')) {
@@ -146,7 +130,7 @@ window.addEventListener("resize", () => {
       }
     });
 
-    // Optional: Make the shortcodes look pretty!
+    // Make the shortcodes look pretty
     const langMap = {
       'js': 'JavaScript',
       'javascript': 'JavaScript',
@@ -165,7 +149,7 @@ window.addEventListener("resize", () => {
     };
     const displayLang = langMap[lang.toLowerCase()] || lang;
 
-    // 2. Create the Title Bar (Header)
+    // Create the Title Bar (Header)
     const header = document.createElement('div');
     header.className = 'code-header';
 
@@ -173,22 +157,19 @@ window.addEventListener("resize", () => {
     langSpan.className = 'code-lang';
     langSpan.textContent = displayLang;
 
-    // 3. Create the Copy Button
+    // Create the Copy Button
     const btn = document.createElement('button');
     btn.className = 'copy-btn';
     btn.setAttribute('aria-label', 'Copy code to clipboard');
     btn.textContent = 'Copy';
 
-    // Assemble the Title Bar
+    // Assemble and Inject the Title Bar
     header.appendChild(langSpan);
     header.appendChild(btn);
-
-    // 4. Inject the Title Bar at the very top of the code block
     codeBlock.insertBefore(header, codeBlock.firstChild);
 
-    // 5. Add Copy Functionality
+    // Add Copy Functionality
     btn.addEventListener('click', () => {
-      // Find the actual text inside the <code> tag
       const codeText = codeBlock.querySelector('code').innerText;
       
       navigator.clipboard.writeText(codeText).then(() => {
@@ -202,3 +183,15 @@ window.addEventListener("resize", () => {
       }).catch(err => console.error('Failed to copy code: ', err));
     });
   });
+
+  // 6. Remove the preload class to allow smooth animations again!
+  setTimeout(() => {
+    document.body.classList.remove("preload");
+  }, 50);
+});
+
+// Handle Window Resizing 
+window.addEventListener("resize", () => {
+  reflowAccordions();
+  setAriaExpandedForToggles();
+});
