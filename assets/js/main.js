@@ -1,11 +1,10 @@
 // =========================================
-// 1. UI STATE & ACCESSIBILITY
+// UI STATE & ACCESSIBILITY
 // =========================================
 function setAriaExpandedForToggles() {
   const siteOpen = document.body.classList.contains("site-open");
   const tocOpen = document.body.classList.contains("toc-open");
 
-  // Keep all header toggle buttons in sync for screen readers
   document.querySelectorAll('[onclick="toggleSiteNav()"]').forEach(btn => {
     if (btn && btn.setAttribute) btn.setAttribute("aria-expanded", siteOpen ? "true" : "false");
   });
@@ -22,41 +21,8 @@ function reflowAccordions() {
   });
 }
 
-
 // =========================================
-// 2. INITIALIZATION
-// =========================================
-function initSettings() {
-  const savedTheme = localStorage.getItem("theme");
-  const themeBtn = document.getElementById("theme-toggle");
-  
-  // Pull custom icons from the HTML data attributes (with fallbacks just in case)
-  const iconLight = themeBtn ? themeBtn.getAttribute("data-icon-light") : "☀️";
-  const iconDark = themeBtn ? themeBtn.getAttribute("data-icon-dark") : "🌙";
-
-  // Check Local Storage or System Preferences for Dark Mode
-  if (savedTheme === "dark" || (!savedTheme && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
-    document.body.classList.add("dark-mode");
-    if (themeBtn) themeBtn.innerText = iconLight;
-  } else {
-    if (themeBtn) themeBtn.innerText = iconDark;
-  }
-
-  // Restore panel open state only on desktop-ish widths
-  if (window.innerWidth > 768) {
-    if (localStorage.getItem("sitePanel") === "open") document.body.classList.add("site-open");
-    if (localStorage.getItem("tocPanel") === "open") document.body.classList.add("toc-open");
-  }
-
-  setAriaExpandedForToggles();
-}
-
-// Run immediately to prevent a flash of unstyled content
-initSettings();
-
-
-// =========================================
-// 3. TOGGLE FUNCTIONS
+// TOGGLE FUNCTIONS
 // =========================================
 function toggleSiteNav() {
   document.body.classList.toggle("site-open");
@@ -76,33 +42,27 @@ function toggleTheme() {
   const themeBtn = document.getElementById("theme-toggle");
   
   if (themeBtn) {
-    const iconLight = themeBtn.getAttribute("data-icon-light");
-    const iconDark = themeBtn.getAttribute("data-icon-dark");
-    // Swap the icon based on the variables read from the HTML
+    const iconLight = themeBtn.getAttribute("data-icon-light") || "☀️";
+    const iconDark = themeBtn.getAttribute("data-icon-dark") || "🌙";
     themeBtn.innerText = isDark ? iconLight : iconDark;
   }
 
   localStorage.setItem("theme", isDark ? "dark" : "light");
-  
-  // Ensure accordions don't clip text if fonts slightly change width during theme swap
   requestAnimationFrame(reflowAccordions);
 }
 
-
 // =========================================
-// 4. AUTO-GENERATE TABLE OF CONTENTS
+// AUTO-GENERATE TABLE OF CONTENTS
 // =========================================
 function generateTOC() {
   const tocNav = document.getElementById('tocNav');
   const article = document.querySelector('.doc-content');
   
-  if (!tocNav || !article) return; // Exit if not on a document page
+  if (!tocNav || !article) return;
 
-  // Find all H2, H3, and H4 tags inside the main markdown content
   const headings = article.querySelectorAll('h2, h3, h4');
 
   headings.forEach(heading => {
-    // Jekyll usually auto-generates IDs, but we do it manually just in case it is missing
     if (!heading.id) {
       heading.id = heading.textContent.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     }
@@ -112,7 +72,6 @@ function generateTOC() {
     link.textContent = heading.textContent;
     link.className = `toc-${heading.tagName.toLowerCase()}`;
     
-    // Auto-close right panel on mobile after clicking a link to jump to content
     link.addEventListener('click', () => {
       if (window.innerWidth <= 768) {
         toggleTocNav();
@@ -123,13 +82,21 @@ function generateTOC() {
   });
 }
 
-
 // =========================================
-// 5. EVENT LISTENERS
+// INITIALIZE ON LOAD
 // =========================================
 document.addEventListener("DOMContentLoaded", () => {
   
-  // Setup Accordion Clicks
+  // 1. Sync the theme button icon based on the state set by the inline script
+  const themeBtn = document.getElementById("theme-toggle");
+  if (themeBtn) {
+    const iconLight = themeBtn.getAttribute("data-icon-light") || "☀️";
+    const iconDark = themeBtn.getAttribute("data-icon-dark") || "🌙";
+    const isDark = document.body.classList.contains("dark-mode");
+    themeBtn.innerText = isDark ? iconLight : iconDark;
+  }
+
+  // 2. Setup Accordion Clicks
   document.querySelectorAll(".accordion-btn").forEach(btn => {
     btn.addEventListener("click", function () {
       this.classList.toggle("active");
@@ -146,8 +113,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Run the TOC Generator
+  // 3. Run the TOC Generator
   generateTOC();
+  
+  // 4. Update Accessibility
+  setAriaExpandedForToggles();
+
+  // 5. Remove the preload class to allow smooth animations again!
+  // We use a tiny 50ms timeout to guarantee CSS has finished rendering
+  setTimeout(() => {
+    document.body.classList.remove("preload");
+  }, 50);
 });
 
 // Handle Window Resizing 
@@ -155,4 +131,3 @@ window.addEventListener("resize", () => {
   reflowAccordions();
   setAriaExpandedForToggles();
 });
-

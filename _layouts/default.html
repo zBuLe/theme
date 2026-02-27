@@ -4,13 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{{ page.title | default: site.title }}</title>
-  
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 </head>
 
-<body>
-  {% include site-panel.html %}
+<body class="preload">
 
+  <script>
+    // 1. Theme Check (Now defaults to Dark Mode!)
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme !== "light") {
+      document.body.classList.add("dark-mode");
+    }
+
+    // 2. Panel State Check
+    if (window.innerWidth > 768) {
+      if (localStorage.getItem("sitePanel") === "open") document.body.classList.add("site-open");
+      if (localStorage.getItem("tocPanel") === "open") document.body.classList.add("toc-open");
+    }
+  </script>
+
+  {% include site-panel.html %}
   {% include toc-panel.html %}
 
   <main class="doc-panel">
@@ -18,32 +31,15 @@
       <button type="button" class="action-btn logo-btn" onclick="toggleSiteNav()" aria-label="Toggle site navigation" aria-controls="siteNav" aria-expanded="false">
         <img src="{{ site.logo | relative_url }}" alt="{{ site.title }} Logo" class="logo-img">
       </button>
-
       <h1 class="doc-title">{{ page.title }}</h1>
-
-      <button type="button" class="action-btn book-btn" onclick="toggleTocNav()" aria-label="Toggle table of contents" aria-controls="tocNav" aria-expanded="false">
-        {{ site.toc_icon | default: '📖' }}
-      </button>
+      <button type="button" class="action-btn book-btn" onclick="toggleTocNav()" aria-label="Toggle table of contents" aria-controls="tocNav" aria-expanded="false">📖</button>
     </header>
 
     <article class="doc-content">
       {{ content }}
     </article>
   </main>
-<script src="{{ '/assets/js/main.js' | relative_url }}"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script>
-  
-  <script>
-    if (document.getElementById('search-input')) {
-      SimpleJekyllSearch({
-        searchInput: document.getElementById('search-input'),
-        resultsContainer: document.getElementById('search-results'),
-        json: '{{ "/search.json" | relative_url }}',
-        searchResultTemplate: '<li><a href="{url}">{title}</a></li>',
-        noResultsText: '<li class="no-results">No results found for that term.</li>'
-      });
-    }
-  </script>
+  <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
 </body>
 </html>

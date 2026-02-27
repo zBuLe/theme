@@ -91,6 +91,13 @@ h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
 }
 
 /* =========================================
+   1.5. PRELOADER (Stops animation flash on load)
+   ========================================= */
+.preload, .preload * {
+  transition: none !important;
+}
+
+/* =========================================
    2. GLOBAL STYLES
    ========================================= */
 body {
