@@ -2,7 +2,14 @@
   
   <div class="toc-header">
     <h2>Contents</h2>
-    <button type="button" class="action-btn" onclick="toggleTocNav()" aria-label="Close table of contents">×</button>
+    
+    <div style="display: flex; gap: 16px; align-items: center;">
+      <button type="button" id="theme-toggle" class="action-btn" onclick="toggleTheme()" aria-label="Toggle dark mode" data-icon-light="{{ site.theme_icon_light | default: '☀️' }}" data-icon-dark="{{ site.theme_icon_dark | default: '🌙' }}">
+        {{ site.theme_icon_dark | default: '🌙' }}
+      </button>
+      
+      <button type="button" class="action-btn" onclick="toggleTocNav()" aria-label="Close table of contents">×</button>
+    </div>
   </div>
 
   <nav class="toc-nav" id="tocNav">
@@ -33,5 +40,4 @@
     {% endif %}
     
   </div>
-  
 </aside>
