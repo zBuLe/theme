@@ -133,36 +133,72 @@ window.addEventListener("resize", () => {
 });
 
 // -----------------------------------------
-  // COPY CODE BUTTONS
+  // CODE BLOCKS: TITLE BAR & COPY BUTTON
   // -----------------------------------------
-  document.querySelectorAll('.highlight').forEach(highlightBlock => {
-    // 1. Create the button
+  // Target the outermost container Jekyll creates to avoid double-firing!
+  document.querySelectorAll('.highlighter-rouge').forEach(codeBlock => {
+    
+    // 1. Extract the language from the class name (e.g., "language-js")
+    let lang = "Code";
+    codeBlock.classList.forEach(cls => {
+      if (cls.startsWith('language-')) {
+        lang = cls.replace('language-', '');
+      }
+    });
+
+    // Optional: Make the shortcodes look pretty!
+    const langMap = {
+      'js': 'JavaScript',
+      'javascript': 'JavaScript',
+      'gml': 'GML',
+      'python': 'Python',
+      'java': 'Java',
+      'go': 'Go',
+      'html': 'HTML',
+      'css': 'CSS',
+      'ruby': 'Ruby',
+      'json': 'JSON',
+      'yaml': 'YAML',
+      'yml': 'YAML',
+      'bash': 'Bash',
+      'sh': 'Shell'
+    };
+    const displayLang = langMap[lang.toLowerCase()] || lang;
+
+    // 2. Create the Title Bar (Header)
+    const header = document.createElement('div');
+    header.className = 'code-header';
+
+    const langSpan = document.createElement('span');
+    langSpan.className = 'code-lang';
+    langSpan.textContent = displayLang;
+
+    // 3. Create the Copy Button
     const btn = document.createElement('button');
     btn.className = 'copy-btn';
     btn.setAttribute('aria-label', 'Copy code to clipboard');
     btn.textContent = 'Copy';
 
-    // 2. Append it to the code wrapper
-    highlightBlock.appendChild(btn);
+    // Assemble the Title Bar
+    header.appendChild(langSpan);
+    header.appendChild(btn);
 
-    // 3. Add the click event
+    // 4. Inject the Title Bar at the very top of the code block
+    codeBlock.insertBefore(header, codeBlock.firstChild);
+
+    // 5. Add Copy Functionality
     btn.addEventListener('click', () => {
       // Find the actual text inside the <code> tag
-      const codeText = highlightBlock.querySelector('code').innerText;
+      const codeText = codeBlock.querySelector('code').innerText;
       
-      // Write to the clipboard
       navigator.clipboard.writeText(codeText).then(() => {
-        // Change button appearance to show success
         btn.textContent = 'Copied!';
         btn.classList.add('copied');
         
-        // Reset the button after 2 seconds
         setTimeout(() => {
           btn.textContent = 'Copy';
           btn.classList.remove('copied');
         }, 2000);
-      }).catch(err => {
-        console.error('Failed to copy code: ', err);
-      });
+      }).catch(err => console.error('Failed to copy code: ', err));
     });
   });
