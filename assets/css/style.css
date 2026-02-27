@@ -407,3 +407,65 @@ body.toc-open  .book-btn { opacity: 0; pointer-events: none; }
   .site-header, .site-nav, .site-footer, .toc-header, .toc-nav, .toc-footer { min-width: 100vw; }
   .site-nav a, .accordion-btn { font-size: 1.125em; }
 }
+
+
+/* =========================================
+   7. SEARCH RESULTS DROPDOWN
+   ========================================= */
+.search-box {
+  position: relative; /* Anchor for the absolute dropdown */
+  padding: 0 16px 20px 16px;
+}
+
+.search-results {
+  position: absolute;
+  top: calc(100% - 15px); /* Positions right below the input */
+  left: 16px;
+  right: 16px;
+  background-color: var(--bg-main);
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 350px;
+  overflow-y: auto;
+  z-index: 50;
+  display: none; /* Hidden when empty */
+}
+
+/* Show the box only when the JavaScript injects <li> items into it */
+.search-results:not(:empty) {
+  display: block;
+}
+
+.search-results li {
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.search-results li:last-child {
+  border-bottom: none;
+}
+
+.search-results li a, 
+.search-results li.no-results {
+  display: block;
+  padding: 10px 14px;
+  text-decoration: none;
+  color: var(--text-main);
+  font-size: 0.9em;
+  transition: background-color 0.2s, color 0.2s;
+  white-space: normal; /* Allows long titles to wrap */
+  line-height: 1.4;
+}
+
+.search-results li a:hover {
+  background-color: var(--panel-hover-bg);
+  color: var(--accent-color);
+}
+
+.search-results li.no-results {
+  color: var(--panel-text);
+  font-style: italic;
+}
