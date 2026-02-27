@@ -1,12 +1,10 @@
 <aside class="side-panel site-panel" id="sitePanel">
-  <header class="site-header">
-    <button type="button" class="action-btn" onclick="toggleSiteNav()" aria-label="Toggle site navigation" aria-controls="siteNav" aria-expanded="false">
-      <img src="{{ site.logo | relative_url }}" alt="{{ site.title }} Logo" class="logo-img">
-    </button>
-    
-    <h2><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h2>
-    
-  </header>
+ <header class="site-header">
+  <button type="button" class="action-btn" onclick="toggleSiteNav()" aria-label="Toggle site navigation" aria-controls="siteNav" aria-expanded="false">
+    <img src="{{ site.logo | relative_url }}" alt="{{ site.title }} Logo" class="logo-img">
+  </button>
+  <h2>{{ site.title }}</h2>
+</header>
 
   <nav class="site-nav" id="siteNav">
 <div class="search-box">

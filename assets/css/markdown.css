@@ -56,6 +56,21 @@
   transition: background-color 0.3s, color 0.3s;
 }
 
+/* Code Blocks */
+.doc-content pre {
+  background-color: var(--pre-bg);
+  color: var(--pre-text);
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-size: 0.95em;
+  transition: background-color 0.3s, color 0.3s;
+  border: 1px solid var(--border-color);
+  margin: 1.5em 0;
+}
+.doc-content pre code { background-color: transparent; color: inherit; padding: 0; }
+
 /* Blockquotes */
 .doc-content blockquote {
   margin: 1.5em 0;
@@ -85,122 +100,38 @@
 
 
 /* =========================================
-   CODE BLOCKS & TITLE BARS
+   ROUGE SYNTAX HIGHLIGHTING
    ========================================= */
-/* The outermost wrapper Jekyll generates */
-.highlighter-rouge {
-  background: var(--pre-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  margin: 1.5em 0;
-  overflow: hidden; /* Keeps the title bar neatly inside the rounded corners */
-}
-
-/* The title bar injected via JS */
-.code-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--panel-hover-bg);
-  border-bottom: 1px solid var(--border-color);
-  padding: 8px 16px;
-}
-
-/* The language label */
-.code-lang {
-  color: var(--panel-text);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
-  font-size: 0.75em;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* The inner code wrapper */
 .highlight {
+  background: var(--pre-bg);
   color: var(--pre-text);
   padding: 16px;
+  border-radius: 8px;
   overflow-x: auto;
+  border: 1px solid var(--border-color);
+  margin: 1.5em 0;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
   font-size: 0.9em;
   line-height: 1.5;
-  margin: 0;
 }
 
 .highlight pre { margin: 0; padding: 0; border: none; background: transparent; }
 
-/* =========================================
-   COPY BUTTON STYLES
-   ========================================= */
-.copy-btn {
-  background-color: transparent;
-  color: var(--panel-text);
-  border: 1px solid var(--panel-border);
-  border-radius: 4px;
-  padding: 4px 10px;
-  font-size: 0.75em;
-  font-family: inherit;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
-}
-
-.copy-btn:hover {
-  background-color: var(--accent-color);
-  color: #ffffff;
-  border-color: var(--accent-color);
-}
-
-.copy-btn.copied {
-  background-color: #10b981; 
-  color: #ffffff;
-  border-color: #10b981;
-}
-
-/* =========================================
-   ROUGE SYNTAX HIGHLIGHTING (COLORS)
-   ========================================= */
-/* Base Colors (Light Mode) */
-.highlight .c, .highlight .cm, .highlight .c1 { color: #6a737d; font-style: italic; } /* Comments */
-.highlight .k, .highlight .kd, .highlight .kn, .highlight .kr, .highlight .kt { color: #d73a49; font-weight: bold; } /* Keywords */
-.highlight .o, .highlight .ow { color: #d73a49; font-weight: bold; } /* Operators */
-.highlight .p { color: var(--pre-text); } /* Punctuation */
-.highlight .s, .highlight .s1, .highlight .s2, .highlight .sd, .highlight .se { color: #032f62; } /* Strings */
-.highlight .m, .highlight .mi, .highlight .mf { color: #005cc5; } /* Numbers */
-.highlight .nf { color: #6f42c1; font-weight: bold; } /* Functions */
-.highlight .nc { color: #e36209; font-weight: bold; } /* Classes */
-.highlight .nx { color: #24292e; } /* Variables/Other */
-.highlight .nd, .highlight .ni, .highlight .nn { color: #e36209; } /* Decorators/Namespaces */
-.highlight .err { color: #d73a49; background-color: #ffeef0; } /* Errors */
+/* Base Token Colors */
+.highlight .c  { color: #6a737d; font-style: italic; } /* Comments */
+.highlight .k  { color: #d73a49; font-weight: bold; }  /* Keywords */
+.highlight .o  { color: #d73a49; font-weight: bold; }  /* Operators */
+.highlight .s  { color: #032f62; }                     /* Strings */
+.highlight .p  { color: var(--pre-text); }             /* Punctuation */
+.highlight .nf { color: #6f42c1; font-weight: bold; }  /* Functions */
+.highlight .nx { color: #005cc5; }                     /* Variables */
+.highlight .nc { color: #e36209; font-weight: bold; }  /* Classes */
 
 /* Dark Mode Overrides */
-body.dark-mode .highlight .c, 
-body.dark-mode .highlight .cm, 
-body.dark-mode .highlight .c1 { color: #8b949e; }
-
-body.dark-mode .highlight .k, 
-body.dark-mode .highlight .kd, 
-body.dark-mode .highlight .kn, 
-body.dark-mode .highlight .kr, 
-body.dark-mode .highlight .kt, 
-body.dark-mode .highlight .o, 
-body.dark-mode .highlight .ow { color: #ff7b72; }
-
-body.dark-mode .highlight .s, 
-body.dark-mode .highlight .s1, 
-body.dark-mode .highlight .s2, 
-body.dark-mode .highlight .sd, 
-body.dark-mode .highlight .se { color: #a5d6ff; }
-
-body.dark-mode .highlight .m, 
-body.dark-mode .highlight .mi, 
-body.dark-mode .highlight .mf { color: #79c0ff; }
-
-body.dark-mode .highlight .nf, 
-body.dark-mode .highlight .nc { color: #d2a8ff; }
-
-body.dark-mode .highlight .nx { color: #c9d1d9; }
-
-body.dark-mode .highlight .nd, 
-body.dark-mode .highlight .ni, 
-body.dark-mode .highlight .nn { color: #ffa657; }
+body.dark-mode .highlight .c  { color: #8b949e; }
+body.dark-mode .highlight .k  { color: #ff7b72; }
+body.dark-mode .highlight .o  { color: #ff7b72; }
+body.dark-mode .highlight .s  { color: #a5d6ff; }
+body.dark-mode .highlight .nf { color: #d2a8ff; }
+body.dark-mode .highlight .nx { color: #79c0ff; }
+body.dark-mode .highlight .nc { color: #ffa657; }
