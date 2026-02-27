@@ -330,6 +330,7 @@ body {
 }
 
 .doc-content {
+  padding: 20px;
   flex: 1;
   max-width: 800px;
   margin: 0 auto;
