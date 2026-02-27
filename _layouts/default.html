@@ -41,5 +41,19 @@
   </main>
 
   <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script>
+  
+  <script>
+    if (document.getElementById('search-input')) {
+      SimpleJekyllSearch({
+        searchInput: document.getElementById('search-input'),
+        resultsContainer: document.getElementById('search-results'),
+        json: '{{ "/search.json" | relative_url }}',
+        searchResultTemplate: '<li><a href="{url}">{title}</a></li>',
+        noResultsText: '<li class="no-results">No results found for that term.</li>'
+      });
+    }
+  </script>
 </body>
 </html>
