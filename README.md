@@ -1,3 +1,11 @@
+---
+layout: default
+title: README
+author: zBuLe
+date: 2026-02-26
+tags: [README]
+---
+
 # DocuTheme
 
 A fast, responsive, and accessible documentation theme for Jekyll and GitHub Pages. 

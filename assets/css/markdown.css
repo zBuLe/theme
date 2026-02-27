@@ -56,21 +56,6 @@
   transition: background-color 0.3s, color 0.3s;
 }
 
-/* Code Blocks */
-.doc-content pre {
-  background-color: var(--pre-bg);
-  color: var(--pre-text);
-  padding: 16px;
-  border-radius: 8px;
-  overflow-x: auto;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
-  font-size: 0.95em;
-  transition: background-color 0.3s, color 0.3s;
-  border: 1px solid var(--border-color);
-  margin: 1.5em 0;
-}
-.doc-content pre code { background-color: transparent; color: inherit; padding: 0; }
-
 /* Blockquotes */
 .doc-content blockquote {
   margin: 1.5em 0;
@@ -111,7 +96,7 @@
   overflow: hidden; /* Keeps the title bar neatly inside the rounded corners */
 }
 
-/* The new title bar injected via JS */
+/* The title bar injected via JS */
 .code-header {
   display: flex;
   justify-content: space-between;
@@ -139,7 +124,7 @@
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
   font-size: 0.9em;
   line-height: 1.5;
-  margin: 0; /* Removed margin since the parent handles it */
+  margin: 0;
 }
 
 .highlight pre { margin: 0; padding: 0; border: none; background: transparent; }
