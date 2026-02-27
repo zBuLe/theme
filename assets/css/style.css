@@ -90,6 +90,8 @@ h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
   outline-offset: 2px;
 }
 
+html { scroll-behavior: smooth; }
+
 /* =========================================
    1.5. PRELOADER (Stops animation flash on load)
    ========================================= */
