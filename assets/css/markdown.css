@@ -103,6 +103,7 @@
    ROUGE SYNTAX HIGHLIGHTING
    ========================================= */
 .highlight {
+  position: relative;
   background: var(--pre-bg);
   color: var(--pre-text);
   padding: 16px;
@@ -135,3 +136,41 @@ body.dark-mode .highlight .s  { color: #a5d6ff; }
 body.dark-mode .highlight .nf { color: #d2a8ff; }
 body.dark-mode .highlight .nx { color: #79c0ff; }
 body.dark-mode .highlight .nc { color: #ffa657; }
+
+/* =========================================
+   COPY BUTTON STYLES
+   ========================================= */
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: var(--panel-hover-bg);
+  color: var(--panel-text);
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 0.8em;
+  font-family: inherit;
+  cursor: pointer;
+  opacity: 0; /* Hidden by default */
+  transition: opacity 0.2s, background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+/* Show button when hovering over the code block */
+.highlight:hover .copy-btn,
+.copy-btn:focus-visible {
+  opacity: 1;
+}
+
+.copy-btn:hover {
+  background-color: var(--accent-color);
+  color: #ffffff;
+  border-color: var(--accent-color);
+}
+
+/* Success state when clicked */
+.copy-btn.copied {
+  background-color: #10b981; /* A nice success green */
+  color: #ffffff;
+  border-color: #10b981;
+}

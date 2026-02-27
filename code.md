@@ -4,7 +4,9 @@ title: Code
 permalink: /code/
 ---
 
-# Verbose “add two numbers” examples (5 languages)
+## Verbose “add two numbers” examples (5 languages)
+
+Test file for code blocks.
 
 ## JavaScript (JS)
 

@@ -131,3 +131,38 @@ window.addEventListener("resize", () => {
   reflowAccordions();
   setAriaExpandedForToggles();
 });
+
+// -----------------------------------------
+  // COPY CODE BUTTONS
+  // -----------------------------------------
+  document.querySelectorAll('.highlight').forEach(highlightBlock => {
+    // 1. Create the button
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.setAttribute('aria-label', 'Copy code to clipboard');
+    btn.textContent = 'Copy';
+
+    // 2. Append it to the code wrapper
+    highlightBlock.appendChild(btn);
+
+    // 3. Add the click event
+    btn.addEventListener('click', () => {
+      // Find the actual text inside the <code> tag
+      const codeText = highlightBlock.querySelector('code').innerText;
+      
+      // Write to the clipboard
+      navigator.clipboard.writeText(codeText).then(() => {
+        // Change button appearance to show success
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        
+        // Reset the button after 2 seconds
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy code: ', err);
+      });
+    });
+  });
