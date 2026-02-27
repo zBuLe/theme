@@ -2,6 +2,10 @@
 layout: default
 title: The Vertebrates
 permalink: /vertebrates/
+author: zbule
+date: 2026-02-26
+tags: [jekyll, diology, toc]
+---
 ---
 
 ## Overview
