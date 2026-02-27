@@ -1,17 +1,18 @@
+- title: Home
+  url: /
+
 - title: About
   url: /about/
 
-- title: Core Concepts
-  url: /core-concepts/
+- title: Project README
+  url: /readme/
 
-- title: API Reference
-  url: /api-reference/
-
-- title: Getting Started
+- title: Nature Guide
   sublinks:
-    - title: Installation
-      url: /installation/
-    - title: Configuration
-      url: /configuration/
-    - title: Tutorial
-      url: /tutorial/
+    - title: The Vertebrates
+      url: /vertebrates/
+    - title: Birds of the World
+      url: /birds/
+
+- title: Places to Visit
+  url: /places-to-visit/
