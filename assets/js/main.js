@@ -52,7 +52,7 @@ function toggleTheme() {
 }
 
 // =========================================
-// AUTO-GENERATE TABLE OF CONTENTS
+// AUTO-GENERATE TABLE OF CONTENTS & SCROLLSPY
 // =========================================
 function generateTOC() {
   const tocNav = document.getElementById('tocNav');
@@ -60,8 +60,10 @@ function generateTOC() {
   
   if (!tocNav || !article) return;
 
-  const headings = article.querySelectorAll('h2, h3, h4');
+  const headings = Array.from(article.querySelectorAll('h2, h3, h4'));
+  if (headings.length === 0) return;
 
+  // 1. Build the Links
   headings.forEach(heading => {
     if (!heading.id) {
       heading.id = heading.textContent.toLowerCase().replace(/[^a-z0-9]+/g, '-');
@@ -73,13 +75,44 @@ function generateTOC() {
     link.className = `toc-${heading.tagName.toLowerCase()}`;
     
     link.addEventListener('click', () => {
-      if (window.innerWidth <= 768) {
-        toggleTocNav();
-      }
+      if (window.innerWidth <= 768) toggleTocNav();
     });
 
     tocNav.appendChild(link);
   });
+
+  // 2. Setup ScrollSpy (Tracks your position)
+  const tocLinks = tocNav.querySelectorAll('a');
+  
+  function onScroll() {
+    let currentHeading = headings[0];
+
+    // Find the heading closest to the top of the viewport
+    for (let heading of headings) {
+      const rect = heading.getBoundingClientRect();
+      // 120px offset accounts for the sticky header + some breathing room
+      if (rect.top <= 120) {
+        currentHeading = heading;
+      } else {
+        break; 
+      }
+    }
+
+    // Apply the active class to the matching TOC link
+    tocLinks.forEach(link => {
+      if (link.getAttribute('href') === `#${currentHeading.id}`) {
+        link.classList.add('active-toc');
+        // Automatically scroll the TOC sidebar if the list gets too long
+        link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      } else {
+        link.classList.remove('active-toc');
+      }
+    });
+  }
+
+  // Fire once on load to set the initial state, then attach to the window scroll
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
 }
 
 // =========================================
@@ -87,7 +120,7 @@ function generateTOC() {
 // =========================================
 document.addEventListener("DOMContentLoaded", () => {
   
-  // 1. Sync the theme button icon based on the state set by the inline script in default.html
+  // 1. Sync the theme button icon
   const themeBtn = document.getElementById("theme-toggle");
   if (themeBtn) {
     const iconLight = themeBtn.getAttribute("data-icon-light") || "☀️";
@@ -96,25 +129,22 @@ document.addEventListener("DOMContentLoaded", () => {
     themeBtn.innerText = isDark ? iconLight : iconDark;
   }
 
-// 2. Setup Accordion Clicks & State Memory
-  
+  // 2. Setup Accordion Clicks & State Memory
   // A. Auto-open the accordions if the user is currently on a nested page
   const activeLink = document.querySelector('.site-nav a.active-link');
   if (activeLink) {
     let parentPanel = activeLink.closest('.accordion-content');
     while (parentPanel) {
-      // Find the button that controls this panel and set it to active
       const btn = parentPanel.previousElementSibling;
       if (btn && btn.classList.contains('accordion-btn')) {
         btn.classList.add('active');
         btn.setAttribute('aria-expanded', 'true');
       }
-      // Force the panel open
       parentPanel.style.maxHeight = "none";
       parentPanel = parentPanel.parentElement.closest('.accordion-content');
     }
     
-    // Now convert "none" to actual pixel heights so the closing animation still works later
+    // Convert "none" to actual pixel heights for closing animations
     document.querySelectorAll('.accordion-content').forEach(panel => {
       if (panel.previousElementSibling && panel.previousElementSibling.classList.contains('active')) {
         panel.style.maxHeight = panel.scrollHeight + "px";
@@ -122,7 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // B. The click listener (now with nested height recalculation!)
+  // B. The click listener (with nested height recalculation)
   document.querySelectorAll(".accordion-btn").forEach(btn => {
     btn.addEventListener("click", function (e) {
       this.classList.toggle("active");
@@ -136,14 +166,12 @@ document.addEventListener("DOMContentLoaded", () => {
         panel.style.maxHeight = null;
       }
 
-      // If this accordion is INSIDE another accordion, we must adjust the parent's height!
+      // If this accordion is INSIDE another accordion, adjust the parent's height
       let parentPanel = this.parentElement.closest('.accordion-content');
       while (parentPanel) {
         if (expanded) {
-          // Add the expanding child's height to the parent
           parentPanel.style.maxHeight = parseInt(parentPanel.style.maxHeight) + panel.scrollHeight + "px";
         } else {
-          // Subtract the collapsing child's height from the parent
           parentPanel.style.maxHeight = parseInt(parentPanel.style.maxHeight) - panel.scrollHeight + "px";
         }
         parentPanel = parentPanel.parentElement.closest('.accordion-content');
@@ -158,6 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setAriaExpandedForToggles();
 
   // 5. Code Blocks: Title Bar & Copy Button
+  // USING 'div' SO IT IGNORES INLINE CODE
   document.querySelectorAll('div.highlighter-rouge').forEach(codeBlock => {
     
     // Extract the language from the class name
@@ -222,7 +251,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // 6. Remove the preload class to allow smooth animations again!
+  // 6. Remove the preload class to allow smooth animations again
   setTimeout(() => {
     document.body.classList.remove("preload");
   }, 50);
