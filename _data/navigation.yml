@@ -20,5 +20,45 @@
     - title: Vertebrates
       url: /vertebrates/
 
+# --- 4-LEVEL NESTING DEMONSTRATION ---
+- title: Geography
+  sublinks:
+    # Level 2
+    - title: Continents
+      sublinks:
+        # Level 3
+        - title: North America
+          sublinks:
+            # Level 4
+            - title: United States
+              url: /geography/na/usa/
+            - title: Canada
+              url: /geography/na/canada/
+            - title: Mexico
+              url: /geography/na/mexico/
+        
+        # Level 3
+        - title: South America
+          sublinks:
+            # Level 4
+            - title: Brazil
+              url: /geography/sa/brazil/
+            - title: Argentina
+              url: /geography/sa/argentina/
+              
+        # Level 3
+        - title: Europe
+          sublinks:
+            # Level 4
+            - title: France
+              url: /geography/eu/france/
+
+- title: Game Systems
+  sublinks:
+    - title: Combat
+      url: /systems/combat/
+    - title: Magic
+      url: /systems/magic/
+
 - title: GitHub Repository
   url: https://github.com/
