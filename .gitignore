@@ -1,0 +1,17 @@
+# Jekyll build directory
+_site/
+
+# Jekyll cache folders
+.jekyll-cache/
+.jekyll-metadata
+
+# Ruby/Bundler dependencies (if you used 'bundle install' locally)
+vendor/
+.bundle/
+
+# Ruby dependencies
+Gemfile
+Gemfile.lock
+
+# Mac system files (just in case you are on a Mac)
+.DS_Store
