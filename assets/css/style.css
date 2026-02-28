@@ -275,6 +275,13 @@ body {
   background-color: var(--panel-hover-bg);
 }
 
+/* Active TOC State (ScrollSpy) */
+.toc-nav a.active-toc {
+  color: var(--accent-color) !important;
+  font-weight: bold;
+  background-color: var(--accent-bg);
+}
+
 /* Metadata Tags */
 .meta-item { margin-bottom: 6px; white-space: normal; }
 .meta-item strong { color: var(--panel-heading); }
@@ -429,5 +436,6 @@ body.toc-open  .book-btn { opacity: 0; pointer-events: none; }
   font-style: italic;
 
 }
+
 
 
