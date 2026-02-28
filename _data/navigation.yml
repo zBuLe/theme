@@ -5,8 +5,11 @@
 #   url: The path to the page (e.g., /about/)
 #   sublinks: Add this instead of a URL to create an accordion dropdown
 
-- title: Home (README)
+- title: Home
   url: /
+
+- title: Test
+  url: /test
 
 - title: About
   url: /about/

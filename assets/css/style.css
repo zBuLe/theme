@@ -486,3 +486,25 @@ body.toc-open  .book-btn { opacity: 0; pointer-events: none; }
   opacity: 0.7;
   text-align: center;
 }
+
+/* =========================================
+   TOC PANEL FOOTER
+   ========================================= */
+.toc-footer .meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 0.9em;
+}
+
+.toc-footer .meta-item i {
+  opacity: 0.7;
+  width: 16px; /* Forces both icons to take up the same space so the text aligns perfectly */
+  text-align: center;
+}
+
+/* Add a little breathing room above the tags if metadata is present */
+.toc-footer .meta-tags {
+  margin-top: 16px; 
+}
