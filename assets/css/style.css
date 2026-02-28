@@ -253,10 +253,13 @@ body {
   overflow: hidden;
   transition: max-height 0.2s ease-out;
 }
-.accordion-content a {
-  font-size: 0.95em;
-  padding-left: 48px;
-}
+/* Nested Menu Indentation */
+.accordion-content a { font-size: 0.95em; }
+
+.level-1 { padding-left: var(--nav-pad-left); }
+.level-2 { padding-left: calc(var(--nav-pad-left) + 16px); }
+.level-3 { padding-left: calc(var(--nav-pad-left) + 32px); }
+.level-4 { padding-left: calc(var(--nav-pad-left) + 48px); }
 
 /* TOC Specifics */
 .toc-h2 { font-size: 1em !important; font-weight: bold; color: var(--panel-heading) !important; margin-top: 8px; }
@@ -426,4 +429,5 @@ body.toc-open  .book-btn { opacity: 0; pointer-events: none; }
   font-style: italic;
 
 }
+
 
