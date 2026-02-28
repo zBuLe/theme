@@ -1,24 +1,13 @@
 ---
 title: Text & Typography Playground
-description: A compact style guide with examples of headings, lists, tables, math, diagrams, images, and video embeds.
 author: your-name
-permalink: /about/
 date: 2026-02-28 11:33:00 -0500
 categories: [Docs, Demo]
 tags: [typography, style-guide]
-pin: true
-math: true
-mermaid: true
-image:
-  path: /commons/devices-mockup.png
-  lqip: data:image/webp;base64,UklGRpoAAABXRUJQVlA4WAoAAAAQAAAADwAABwAAQUxQSDIAAAARL0AmbZurmr57yyIiqE8oiG0bejIYEQTgqiDA9vqnsUSI6H+oAERp2HZ65qP/VIAWAFZQOCBCAAAA8AEAnQEqEAAIAAVAfCWkAALp8sF8rgRgAP7o9FDvMCkMde9PK7euH5M1m6VWoDXf2FkP3BqV0ZYbO6NA/VFIAAAA
-  alt: Responsive layout preview on multiple devices.
 ---
 
 ## Headings
 
-<!-- markdownlint-capture -->
-<!-- markdownlint-disable -->
 # H1 — page title
 {: .mt-4 .mb-0 }
 
@@ -30,7 +19,7 @@ image:
 
 #### H4 — minor heading
 {: data-toc-skip='' .mt-4 }
-<!-- markdownlint-restore -->
+
 
 ## Paragraph
 
@@ -71,8 +60,6 @@ Staging environment
 
 ## Prompts
 
-<!-- markdownlint-capture -->
-<!-- markdownlint-disable -->
 > Tip: Keep headings short so the table of contents stays readable.
 {: .prompt-tip }
 
@@ -84,7 +71,7 @@ Staging environment
 
 > Danger: Deleting a dataset is irreversible—verify backups first.
 {: .prompt-danger }
-<!-- markdownlint-restore -->
+
 
 ## Tables
 
@@ -117,7 +104,7 @@ Here is the `/docs/guides/typography.md`{: .filepath}.
 ```text
 This is a plain code snippet with no syntax highlighting or line numbers.
 Use it for logs, output samples, or quick notes.
-````
+```
 
 ### Specific Language
 
