@@ -3,6 +3,7 @@ title: About the Institute
 author: Arch-Scribe Vex
 date: 2026-02-28
 tags: [lore, paradox, methodology]
+permalink: /about/
 ---
 
 ## The Pursuit of Temporal Geology
