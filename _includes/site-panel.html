@@ -23,26 +23,38 @@
     {% if site.data.navigation %}
       {% for item in site.data.navigation %}
         {% if item.sublinks %}
-          
-          <button type="button" class="accordion-btn" aria-expanded="false">
-            {{ item.title }}
-            <span class="caret">▼</span>
-          </button>
-          
+          <button type="button" class="accordion-btn level-1" aria-expanded="false">{{ item.title }} <span class="caret">▼</span></button>
           <div class="accordion-content">
-            {% for sub in item.sublinks %}
-              <a href="{{ sub.url | relative_url }}" class="{% if page.url == sub.url %}active-link{% endif %}">
-                {{ sub.title }}
-              </a>
+            
+            {% for sub1 in item.sublinks %}
+              {% if sub1.sublinks %}
+                <button type="button" class="accordion-btn level-2" aria-expanded="false">{{ sub1.title }} <span class="caret">▼</span></button>
+                <div class="accordion-content">
+                  
+                  {% for sub2 in sub1.sublinks %}
+                    {% if sub2.sublinks %}
+                      <button type="button" class="accordion-btn level-3" aria-expanded="false">{{ sub2.title }} <span class="caret">▼</span></button>
+                      <div class="accordion-content">
+                        
+                        {% for sub3 in sub2.sublinks %}
+                          <a href="{{ sub3.url | relative_url }}" class="level-4 {% if page.url == sub3.url %}active-link{% endif %}">{{ sub3.title }}</a>
+                        {% endfor %}
+                        
+                      </div>
+                    {% else %}
+                      <a href="{{ sub2.url | relative_url }}" class="level-3 {% if page.url == sub2.url %}active-link{% endif %}">{{ sub2.title }}</a>
+                    {% endif %}
+                  {% endfor %}
+                  
+                </div>
+              {% else %}
+                <a href="{{ sub1.url | relative_url }}" class="level-2 {% if page.url == sub1.url %}active-link{% endif %}">{{ sub1.title }}</a>
+              {% endif %}
             {% endfor %}
+            
           </div>
-
         {% else %}
-          
-          <a href="{{ item.url | relative_url }}" class="{% if page.url == item.url %}active-link{% endif %}">
-            {{ item.title }}
-          </a>
-
+          <a href="{{ item.url | relative_url }}" class="level-1 {% if page.url == item.url %}active-link{% endif %}">{{ item.title }}</a>
         {% endif %}
       {% endfor %}
     {% endif %}
