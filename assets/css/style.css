@@ -19,6 +19,9 @@
   --panel-border: #e5e7eb;
   --panel-hover-bg: #f3f4f6;
 
+  --code-bg: #f1f5f9;     /* Soft slate grey background */
+  --code-text: #b91c1c;   /* Subtle red text (GitHub style) */
+
   /* Nav sizing */
   --nav-pad-left: 32px;
   --active-border: 3px;
@@ -43,6 +46,9 @@ body.dark-mode {
   --panel-heading: #c9d1d9;
   --panel-border: #30363d;
   --panel-hover-bg: #21262d;
+
+  --code-bg: #1e293b;     /* Dark slate background */
+  --code-text: #fca5a5;   /* Soft red text */
 }
 
 /* =========================================
@@ -420,3 +426,4 @@ body.toc-open  .book-btn { opacity: 0; pointer-events: none; }
   font-style: italic;
 
 }
+
