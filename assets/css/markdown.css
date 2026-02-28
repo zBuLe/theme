@@ -115,12 +115,12 @@
    CODE BLOCKS & TITLE BARS
    ========================================= */
 /* The outermost wrapper Jekyll generates */
-.highlighter-rouge {
+div.highlighter-rouge {
   background: var(--pre-bg);
   border: 1px solid var(--border-color);
   border-radius: 8px;
   margin: 1.5em 0;
-  overflow: hidden; /* Keeps the title bar neatly inside the rounded corners */
+  overflow: hidden; 
 }
 
 /* The title bar injected via JS */
