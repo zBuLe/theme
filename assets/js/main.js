@@ -96,19 +96,57 @@ document.addEventListener("DOMContentLoaded", () => {
     themeBtn.innerText = isDark ? iconLight : iconDark;
   }
 
-  // 2. Setup Accordion Clicks
+// 2. Setup Accordion Clicks & State Memory
+  
+  // A. Auto-open the accordions if the user is currently on a nested page
+  const activeLink = document.querySelector('.site-nav a.active-link');
+  if (activeLink) {
+    let parentPanel = activeLink.closest('.accordion-content');
+    while (parentPanel) {
+      // Find the button that controls this panel and set it to active
+      const btn = parentPanel.previousElementSibling;
+      if (btn && btn.classList.contains('accordion-btn')) {
+        btn.classList.add('active');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+      // Force the panel open
+      parentPanel.style.maxHeight = "none";
+      parentPanel = parentPanel.parentElement.closest('.accordion-content');
+    }
+    
+    // Now convert "none" to actual pixel heights so the closing animation still works later
+    document.querySelectorAll('.accordion-content').forEach(panel => {
+      if (panel.previousElementSibling && panel.previousElementSibling.classList.contains('active')) {
+        panel.style.maxHeight = panel.scrollHeight + "px";
+      }
+    });
+  }
+
+  // B. The click listener (now with nested height recalculation!)
   document.querySelectorAll(".accordion-btn").forEach(btn => {
-    btn.addEventListener("click", function () {
+    btn.addEventListener("click", function (e) {
       this.classList.toggle("active");
       const panel = this.nextElementSibling;
       const expanded = this.classList.contains("active");
       this.setAttribute("aria-expanded", expanded ? "true" : "false");
 
-      if (!panel) return;
-      if (panel.style.maxHeight) {
-        panel.style.maxHeight = null;
-      } else {
+      if (expanded) {
         panel.style.maxHeight = panel.scrollHeight + "px";
+      } else {
+        panel.style.maxHeight = null;
+      }
+
+      // If this accordion is INSIDE another accordion, we must adjust the parent's height!
+      let parentPanel = this.parentElement.closest('.accordion-content');
+      while (parentPanel) {
+        if (expanded) {
+          // Add the expanding child's height to the parent
+          parentPanel.style.maxHeight = parseInt(parentPanel.style.maxHeight) + panel.scrollHeight + "px";
+        } else {
+          // Subtract the collapsing child's height from the parent
+          parentPanel.style.maxHeight = parseInt(parentPanel.style.maxHeight) - panel.scrollHeight + "px";
+        }
+        parentPanel = parentPanel.parentElement.closest('.accordion-content');
       }
     });
   });
