@@ -1,193 +1,107 @@
 ---
-title: Text & Typography Playground
-author: your-name
-date: 2026-02-28 11:33:00 -0500
-categories: [Docs, Demo]
-tags: [typography, style-guide]
+title: "Sample Markdown Page"
+author: "Your Name"
+date: "2026-02-28"
+tags: [markdown, sample, docs]
 ---
 
-## Headings
+# Sample Markdown Page
 
-# H1 — page title
-{: .mt-4 .mb-0 }
+This is a simple example page written in **Markdown**. It includes common elements like headings, lists, links, images, tables, and code blocks. ✅
 
-## H2 — section title
-{: data-toc-skip='' .mt-4 .mb-0 }
+## Table of contents
 
-### H3 — subsection title
-{: data-toc-skip='' .mt-4 .mb-0 }
+- [Overview](#overview)
+- [Text formatting](#text-formatting)
+- [Lists](#lists)
+- [Links and images](#links-and-images)
+- [Table](#table)
+- [Code](#code)
+- [Quote](#quote)
+- [Task list](#task-list)
 
-#### H4 — minor heading
-{: data-toc-skip='' .mt-4 }
+## Overview
 
+Markdown is a lightweight markup language for formatting plain text. It’s commonly used for README files, documentation, and notes.
 
-## Paragraph
+## Text formatting
 
-This paragraph is a readability sample. It’s long enough to show line length, spacing, and how the theme handles continuous prose. Use it to verify font size, contrast, and rhythm across light/dark modes. If you paste your own copy here, keep a mix of short and medium sentences to see how it scans. ✍️
+- **Bold**
+- *Italic*
+- ***Bold + Italic***
+- `Inline code`
+- ~~Strikethrough~~
+
+A paragraph can span multiple lines, and Markdown will usually treat it as one paragraph.
 
 ## Lists
 
-### Ordered list
+Ordered list:
+1. First item
+2. Second item
+3. Third item
 
-1. Draft the outline
-2. Write the first pass
-3. Review and polish
+Unordered list:
+- Item A
+- Item B
+  - Sub-item B1
+  - Sub-item B2
 
-### Unordered list
+## Links and images
 
-- Project
-  - Milestone
-    - Task
+Link:
+- [OpenAI](https://openai.com)
 
-### ToDo list
+Image:
+- ![Example image](https://via.placeholder.com/640x200.png?text=Sample+Image)
 
-- [ ] Release checklist
-  - [x] Confirm scope
-  - [x] Update documentation
-  - [ ] Run final validation
+## Table
 
-### Description list
+| Feature | Supported | Notes |
+|--------:|:---------:|------|
+| Headings | ✅ | `#`, `##`, `###` |
+| Tables | ✅ | Some flavors require extensions |
+| Footnotes | ⚠️ | Depends on renderer |
+| HTML | ✅ | Often allowed, but not always |
 
-Primary environment
-: the default runtime configuration used for production
+## Code
 
-Staging environment
-: a pre-production space used to test changes safely before release
+Inline code looks like `print("hello")`.
 
-## Block Quote
+Fenced code block (Python):
 
-> This line shows a **block quote** used for callouts or quoted text.
+```python
+def greet(name: str) -> str:
+    return f"Hello, {name}!"
 
-## Prompts
-
-> Tip: Keep headings short so the table of contents stays readable.
-{: .prompt-tip }
-
-> Info: Inline code is ideal for commands, flags, and filenames.
-{: .prompt-info }
-
-> Warning: Don’t paste secrets or API keys into public docs.
-{: .prompt-warning }
-
-> Danger: Deleting a dataset is irreversible—verify backups first.
-{: .prompt-danger }
-
-
-## Tables
-
-| Service                | Owner            | Status |
-| :--------------------- | :--------------- | -----: |
-| Authentication         | Maria Anders     |  Stable |
-| Billing & Invoicing    | Helen Bennett    |   Beta |
-| Data Export            | Giovanni Rovelli |  Draft |
-
-## Links
-
-<http://127.0.0.1:4000>
-
-## Footnote
-
-Clicking the marker will jump to the footnote[^footnote], and here is a second note[^fn-nth-2]. 🧩
-
-## Inline code
-
-This is an example of `inline code` used within a sentence.
-
-## Filepath
-
-Here is the `/docs/guides/typography.md`{: .filepath}.
-
-## Code blocks
-
-### Common
-
-```text
-This is a plain code snippet with no syntax highlighting or line numbers.
-Use it for logs, output samples, or quick notes.
+print(greet("Markdown"))
 ```
 
-### Specific Language
+Fenced code block (JSON):
 
-```bash
-if [ $? -ne 0 ]; then
-  echo "Command failed. Check logs and retry."
-  # handle error / exit as needed
-fi
+```json
+{
+  "name": "Sample",
+  "type": "markdown",
+  "active": true
+}
 ```
 
-### Specific filename
+## Quote
 
-```sass
-@import
-  "colors/light-typography",
-  "colors/dark-typography";
-```
+> “Markdown makes documentation easier to write and read.”
 
-{: file='_sass/jekyll-theme-chirpy.scss'}
+## Task list
 
-## Mathematics
+* [x] Create a Markdown file
+* [x] Add headings and formatting
+* [ ] Export to PDF 📄
+* [ ] Publish online 🌐
 
-The mathematics is rendered by [**MathJax**](https://www.mathjax.org/):
+---
 
-$$
-\begin{equation}
-\sum_{n=1}^\infty \frac{1}{n^2} = \frac{\pi^2}{6}
-\label{eq:series}
-\end{equation}
-$$
+### Footer
 
-We can reference the equation as \eqref{eq:series}.
-
-When $a \ne 0$, there are two solutions to $ax^2 + bx + c = 0$:
-
-$$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
-
-## Mermaid SVG
-
-```mermaid
- gantt
-  title  Documentation rollout plan
-  outline :a, 2017-07-20, 1w
-  draft   :crit, b, 2017-07-23, 1d
-  review  :active, c, after b a, 1d
-```
-
-## Images
-
-### Default (with caption)
-
-![Desktop View](/posts/20190808/mockup.png){: width="972" height="589" }
-*Centered image with a caption beneath*
-
-### Left aligned
-
-![Desktop View](/posts/20190808/mockup.png){: width="972" height="589" .w-75 .normal}
-
-### Float to left
-
-![Desktop View](/posts/20190808/mockup.png){: width="972" height="589" .w-50 .left}
-This paragraph flows around the left-floated image. Use it to confirm spacing, margins, and how text wraps alongside media. If the layout feels cramped, adjust the image width utility class or add extra vertical spacing.
-
-### Float to right
-
-![Desktop View](/posts/20190808/mockup.png){: width="972" height="589" .w-50 .right}
-This paragraph flows around the right-floated image. It’s useful for checking alignment and ensuring that long lines don’t collide with the image edge—especially on smaller screens.
-
-### Dark/Light mode & Shadow
-
-The images below will toggle based on theme preference, and include shadows for depth.
-
-![light mode only](/posts/20190808/devtools-light.png){: .light .w-75 .shadow .rounded-10 w='1212' h='668' }
-![dark mode only](/posts/20190808/devtools-dark.png){: .dark .w-75 .shadow .rounded-10 w='1212' h='668' }
-
-## Video
-
-{% include embed/youtube.html id='Balreaj8Yqs' %}
-
-## Reverse Footnote
-
-[^footnote]: Footnote example text (source or clarification).
-
-[^fn-nth-2]: Second footnote example text (additional detail).
+If you want, you can copy this into a file named `sample.md` and render it with any Markdown viewer.
 
 
