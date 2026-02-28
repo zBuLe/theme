@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setAriaExpandedForToggles();
 
   // 5. Code Blocks: Title Bar & Copy Button
-  document.querySelectorAll('.highlighter-rouge').forEach(codeBlock => {
+  document.querySelectorAll('div.highlighter-rouge').forEach(codeBlock => {
     
     // Extract the language from the class name
     let lang = "Code";
