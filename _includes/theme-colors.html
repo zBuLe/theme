@@ -1,0 +1,21 @@
+{% if site.data.theme.colors %}
+<style>
+  /* Light Mode Overrides */
+  {% if site.data.theme.colors.light %}
+  :root {
+    {% for color in site.data.theme.colors.light %}
+    --{{ color[0] | replace: '_', '-' }}: {{ color[1] }};
+    {% endfor %}
+  }
+  {% endif %}
+
+  /* Dark Mode Overrides */
+  {% if site.data.theme.colors.dark %}
+  body.dark-mode {
+    {% for color in site.data.theme.colors.dark %}
+    --{{ color[0] | replace: '_', '-' }}: {{ color[1] }};
+    {% endfor %}
+  }
+  {% endif %}
+</style>
+{% endif %}

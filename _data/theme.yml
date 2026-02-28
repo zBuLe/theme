@@ -1,0 +1,38 @@
+# =========================================
+# THEME CONFIGURATION (Emerald/Forest)
+# Customize the look and feel of your site.
+# Fallback colors are safely stored in style.css.
+# =========================================
+
+colors:
+  light:
+    bg_dark: "hsl(145, 20%, 95%)"       # Soft mint-grey inset
+    bg: "hsl(145, 30%, 98%)"            # Crisp, slightly cool base
+    bg_light: "hsl(0, 0%, 100%)"        # Pure white panels
+    text: "hsl(145, 40%, 12%)"          # Near-black pine for high contrast
+    text_muted: "hsl(145, 15%, 45%)"    # Mossy grey for metadata
+    border: "hsl(145, 25%, 85%)"        # Soft green-tinted structural border
+    border_muted: "hsl(145, 30%, 92%)"  # Very subtle dividers
+    accent: "hsl(145, 65%, 35%)"        # Deep, rich emerald green
+    accent_muted: "hsl(145, 60%, 90%)"  # Pale green hover background
+    contrast: "hsl(0, 0%, 100%)"        # White text on emerald buttons
+    danger: "hsl(0, 84%, 60%)"          # Standard semantic red
+    warning: "hsl(38, 92%, 50%)"        # Standard semantic yellow
+    success: "hsl(145, 70%, 39%)"       # Matched to the accent emerald
+    info: "hsl(217, 91%, 60%)"          # Standard semantic blue
+
+  dark:
+    bg_dark: "hsl(145, 40%, 6%)"        # Deepest shadow pine
+    bg: "hsl(145, 30%, 10%)"            # Rich dark forest base
+    bg_light: "hsl(145, 20%, 15%)"      # Elevated slate-pine panels
+    text: "hsl(145, 20%, 95%)"          # Off-white with a hint of mint
+    text_muted: "hsl(145, 15%, 65%)"    # Muted moss grey
+    border: "hsl(145, 20%, 25%)"        # Dark structural border
+    border_muted: "hsl(145, 20%, 20%)"  # Subtle dark dividers
+    accent: "hsl(145, 55%, 45%)"        # Vibrant, readable mint/emerald
+    accent_muted: "hsl(145, 50%, 20%)"  # Deep green hover background
+    contrast: "hsl(0, 0%, 100%)"        # White text on mint buttons
+    danger: "hsl(0, 93%, 71%)"          # Lightened semantic red
+    warning: "hsl(43, 96%, 56%)"        # Lightened semantic yellow
+    success: "hsl(145, 60%, 50%)"       # Matched to the dark mode accent
+    info: "hsl(213, 97%, 68%)"          # Lightened semantic blue

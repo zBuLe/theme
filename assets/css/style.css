@@ -1,58 +1,72 @@
 /* =========================================
-   0. VARIABLES & THEMING
+   1. CORE COLOR SYSTEM (LIGHT MODE)
    ========================================= */
 :root {
-  /* Main Layout */
-  --bg-main: #ffffff;
-  --text-main: #1f2937;
-  --bg-header: #ffffff;
-  --border-color: #e5e7eb;
+  /* Backgrounds (Depth Stacking) */
+  --bg-dark: hsl(210, 33%, 96%);       /* Deepest background (e.g., code blocks) */
+  --bg: hsl(210, 40%, 98%);            /* Standard base background (main body) */
+  --bg-light: hsl(0, 0%, 100%);        /* Elevated surfaces (sidebars, panels) */
 
-  /* Accent Colors */
-  --accent-color: #4f46e5;
-  --accent-bg: #e0e7ff;
+  /* Typography */
+  --text: hsl(222, 47%, 11%);          /* High contrast main reading text */
+  --text-muted: hsl(215, 16%, 47%);    /* Secondary text, metadata */
 
-  /* Side Panels */
-  --panel-bg: #f9fafb;
-  --panel-text: #4b5563;
-  --panel-heading: #111827;
-  --panel-border: #e5e7eb;
-  --panel-hover-bg: #f3f4f6;
+  /* Borders & Dividers */
+  --border: hsl(213, 27%, 84%);        /* Strong structural borders */
+  --border-muted: hsl(214, 32%, 91%);  /* Subtle dividers */
 
-  --code-bg: #f1f5f9;     /* Soft slate grey background */
-  --code-text: #b91c1c;   /* Subtle red text (GitHub style) */
+  /* Brand / Interactive */
+  --accent: hsl(221, 83%, 53%);        /* Main interactive color */
+  --accent-muted: hsl(214, 100%, 93%); /* Soft highlights, hover states */
+  --contrast: hsl(0, 0%, 100%);        /* Text color ON TOP of the accent */
 
-  /* Nav sizing */
+  /* Semantic / Status States */
+  --danger: hsl(0, 84%, 60%);          
+  --warning: hsl(38, 92%, 50%);       
+  --success: hsl(160, 84%, 39%);       
+  --info: hsl(217, 91%, 60%);          
+
+  /* Sizing & Layout Variables */
   --nav-pad-left: 32px;
   --active-border: 3px;
 
-  /* Z stack */
+  /* Z-Index Stack */
   --z-header: 10;
   --z-panel: 20;
   --z-modal: 100;
 }
 
+/* =========================================
+   2. DARK MODE OVERRIDES
+   ========================================= */
 body.dark-mode {
-  --bg-main: #0d1117;
-  --text-main: #c9d1d9;
-  --bg-header: #161b22;
-  --border-color: #30363d;
+  /* Backgrounds */
+  --bg-dark: hsl(229, 84%, 5%);       
+  --bg: hsl(222, 47%, 11%);            
+  --bg-light: hsl(217, 33%, 17%);      
 
-  --accent-color: #58a6ff;
-  --accent-bg: rgba(56, 139, 253, 0.15);
+  /* Typography */
+  --text: hsl(210, 40%, 98%);          
+  --text-muted: hsl(215, 20%, 65%);    
 
-  --panel-bg: #161b22;
-  --panel-text: #8b949e;
-  --panel-heading: #c9d1d9;
-  --panel-border: #30363d;
-  --panel-hover-bg: #21262d;
+  /* Borders & Dividers */
+  --border: hsl(215, 19%, 35%);        
+  --border-muted: hsl(215, 25%, 27%);  
 
-  --code-bg: #1e293b;     /* Dark slate background */
-  --code-text: #fca5a5;   /* Soft red text */
+  /* Brand / Interactive */
+  --accent: hsl(217, 91%, 60%);        
+  --accent-muted: hsl(224, 64%, 33%);  
+  --contrast: hsl(0, 0%, 100%);        
+
+  /* Semantic / Status States */
+  --danger: hsl(0, 93%, 71%);
+  --warning: hsl(43, 96%, 56%);
+  --success: hsl(158, 64%, 52%);
+  --info: hsl(213, 97%, 68%);
 }
 
 /* =========================================
-   1. CSS RESET
+   3. CSS RESET
    ========================================= */
 *, *::before, *::after { box-sizing: border-box; }
 *:not(dialog) { margin: 0; }
@@ -74,34 +88,34 @@ h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
 #root, #__next { isolation: isolate; }
 
 :focus-visible {
-  outline: 2px solid var(--accent-color);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
 html { scroll-behavior: smooth; }
 
 /* =========================================
-   1.5. PRELOADER (Stops animation flash on load)
+   3.5. PRELOADER (Stops animation flash)
    ========================================= */
 .preload, .preload * {
   transition: none !important;
 }
 
 /* =========================================
-   2. GLOBAL STYLES
+   4. GLOBAL STYLES
    ========================================= */
 body {
   font-family: "Lato", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   font-size: 16px;
   overflow-x: hidden;
-  background-color: var(--bg-main);
-  color: var(--text-main);
+  background-color: var(--bg);
+  color: var(--text);
   transition: background-color 0.3s, color 0.3s;
   line-height: 1.6;
 }
 
 /* =========================================
-   3. SIDE PANELS
+   5. SIDE PANELS
    ========================================= */
 .side-panel {
   height: 100%;
@@ -109,7 +123,7 @@ body {
   position: fixed;
   z-index: var(--z-panel);
   top: 0;
-  background-color: var(--panel-bg);
+  background-color: var(--bg-light);
   overflow-x: hidden;
   transition: width 0.5s, background-color 0.3s;
   white-space: nowrap;
@@ -117,8 +131,8 @@ body {
   flex-direction: column;
 }
 
-.site-panel { left: 0; border-right: 1px solid var(--panel-border); }
-.toc-panel  { right: 0; border-left: 1px solid var(--panel-border); }
+.site-panel { left: 0; border-right: 1px solid var(--border); }
+.toc-panel  { right: 0; border-left: 1px solid var(--border); }
 
 .site-header, .site-nav, .site-footer,
 .toc-header, .toc-nav, .toc-footer {
@@ -132,14 +146,14 @@ body {
   display: flex;
   align-items: center;
   padding: 0 20px;
-  border-bottom: 1px solid var(--panel-border);
+  border-bottom: 1px solid var(--border);
 }
 
 .site-header { justify-content: flex-start; gap: 15px; }
 .toc-header  { justify-content: space-between; }
 
 .site-header h2, .toc-header h2 {
-  color: var(--panel-heading);
+  color: var(--text);
   font-size: 1.25em;
   font-weight: 600;
 }
@@ -156,32 +170,32 @@ body {
   padding: 8px 20px 8px var(--nav-pad-left);
   text-decoration: none;
   font-size: 1.1em;
-  color: var(--panel-text);
+  color: var(--text-muted);
   display: block;
   transition: 0.2s;
 }
 
 .site-nav a:hover, .toc-nav a:hover {
-  color: var(--accent-color);
-  background-color: var(--panel-hover-bg);
+  color: var(--accent);
+  background-color: var(--bg);
 }
 
 /* --- Panel Footers --- */
 .site-footer, .toc-footer {
   padding: 15px 25px;
-  border-top: 1px solid var(--panel-border);
-  color: var(--panel-text);
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
   font-size: 0.875em;
 }
 
 /* =========================================
-   4. UI COMPONENTS
+   6. UI COMPONENTS
    ========================================= */
 .action-btn {
   font-size: 1.75em;
   cursor: pointer;
   user-select: none;
-  color: var(--panel-text);
+  color: var(--text-muted);
   background: none;
   border: none;
   padding: 0;
@@ -189,8 +203,8 @@ body {
   align-items: center;
   transition: color 0.2s, opacity 0.2s;
 }
-.action-btn:hover { color: var(--accent-color); opacity: 0.85; }
-.doc-header .action-btn { color: var(--text-main); }
+.action-btn:hover { color: var(--accent); opacity: 0.85; }
+.doc-header .action-btn { color: var(--text); }
 
 .logo-img {
   height: 40px;
@@ -208,24 +222,24 @@ body {
 .search-input {
   width: 100%;
   padding: 10px;
-  border: 1px solid var(--panel-border);
+  border: 1px solid var(--border);
   border-radius: 6px;
-  background-color: var(--bg-main);
-  color: var(--text-main);
+  background-color: var(--bg);
+  color: var(--text);
   font-size: 0.95em;
   transition: border-color 0.3s, box-shadow 0.3s;
 }
-.search-input::placeholder { color: #9ca3af; }
+.search-input::placeholder { color: var(--text-muted); }
 .search-input:focus {
   outline: none;
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 2px var(--accent-bg);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-muted);
 }
 
 /* Accordion Component */
 .accordion-btn {
   background-color: transparent;
-  color: var(--panel-text);
+  color: var(--text-muted);
   cursor: pointer;
   padding: 8px 25px 8px var(--nav-pad-left);
   width: 100%;
@@ -241,63 +255,63 @@ body {
   white-space: nowrap;
 }
 .accordion-btn:hover, .accordion-btn.active {
-  color: var(--accent-color);
-  background-color: var(--panel-hover-bg);
+  color: var(--accent);
+  background-color: var(--bg);
 }
 .caret { font-size: 0.8em; transition: transform 0.3s ease; }
 .accordion-btn.active .caret { transform: rotate(180deg); }
 
 .accordion-content {
-  background-color: var(--bg-main);
+  background-color: var(--bg);
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.2s ease-out;
 }
+
 /* Nested Menu Indentation */
 .accordion-content a { font-size: 0.95em; }
-
 .level-1 { padding-left: var(--nav-pad-left); }
 .level-2 { padding-left: calc(var(--nav-pad-left) + 16px); }
 .level-3 { padding-left: calc(var(--nav-pad-left) + 32px); }
 .level-4 { padding-left: calc(var(--nav-pad-left) + 48px); }
 
 /* TOC Specifics */
-.toc-h2 { font-size: 1em !important; font-weight: bold; color: var(--panel-heading) !important; margin-top: 8px; }
+.toc-h2 { font-size: 1em !important; font-weight: bold; color: var(--text) !important; margin-top: 8px; }
 .toc-h3 { font-size: 0.95em !important; padding-left: 48px !important; }
 .toc-h4 { font-size: 0.85em !important; padding-left: 64px !important; opacity: 0.8; }
 
 /* Active TOC/Nav State */
 .active-link {
-  color: var(--accent-color) !important;
+  color: var(--accent) !important;
   font-weight: bold;
-  border-left: var(--active-border) solid var(--accent-color);
+  border-left: var(--active-border) solid var(--accent);
   padding-left: calc(var(--nav-pad-left) - var(--active-border)) !important;
-  background-color: var(--panel-hover-bg);
+  background-color: var(--bg);
 }
 
 /* Active TOC State (ScrollSpy) */
 .toc-nav a.active-toc {
-  color: var(--accent-color) !important;
+  color: var(--accent) !important;
   font-weight: bold;
-  background-color: var(--accent-bg);
+  background-color: var(--accent-muted);
 }
 
 /* Metadata Tags */
 .meta-item { margin-bottom: 6px; white-space: normal; }
-.meta-item strong { color: var(--panel-heading); }
+.meta-item strong { color: var(--text); }
 .meta-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; white-space: normal; }
 .meta-tags .tag {
-  background-color: var(--accent-bg);
-  border: 1px solid var(--accent-color);
+  background-color: var(--accent-muted);
+  border: 1px solid var(--accent);
   padding: 4px 10px;
   border-radius: 12px;
   font-size: 0.75em;
-  color: var(--accent-color);
+  color: var(--accent);
   font-weight: bold;
 }
 
 /* =========================================
-   5. DOCUMENT PANEL (Layout Framework Only)
+   7. DOCUMENT PANEL
    ========================================= */
 .doc-panel {
   transition: margin-left .5s, margin-right .5s;
@@ -311,8 +325,8 @@ body {
   display: flex;
   align-items: center;
   padding: 0 20px;
-  background-color: var(--bg-header);
-  border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-light);
+  border-bottom: 1px solid var(--border);
   justify-content: space-between;
   position: sticky;
   top: 0;
@@ -325,7 +339,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   font-size: 1.25em;
-  color: var(--text-main);
+  color: var(--text);
   transition: color 0.3s;
   font-weight: 600;
 }
@@ -349,7 +363,7 @@ body {
 }
 
 /* =========================================
-   6. STATE CONTROLS & RESPONSIVE BEHAVIOR
+   8. STATE CONTROLS & RESPONSIVE BEHAVIOR
    ========================================= */
 body.site-open .site-panel { width: 250px; }
 body.toc-open  .toc-panel  { width: 250px; }
@@ -372,7 +386,6 @@ body.toc-open  .book-btn { opacity: 0; pointer-events: none; }
 @media screen and (max-height: 450px), screen and (max-width: 450px) {
   body.site-open .site-panel, body.toc-open .toc-panel { width: 100%; }
   
-  /* Use 100% instead of 100vw to respect device boundaries securely */
   .site-header, .site-nav, .site-footer, .toc-header, .toc-nav, .toc-footer { 
     min-width: auto; 
     width: 100%; 
@@ -382,15 +395,15 @@ body.toc-open  .book-btn { opacity: 0; pointer-events: none; }
 }
 
 /* =========================================
-   7. SEARCH RESULTS DROPDOWN
+   9. SEARCH RESULTS DROPDOWN
    ========================================= */
 .search-results {
   position: absolute;
   top: calc(100% - 15px);
   left: 16px;
   right: 16px;
-  background-color: var(--bg-main);
-  border: 1px solid var(--panel-border);
+  background-color: var(--bg);
+  border: 1px solid var(--border);
   border-radius: 6px;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
   margin: 0;
@@ -407,7 +420,7 @@ body.toc-open  .book-btn { opacity: 0; pointer-events: none; }
 }
 
 .search-results li {
-  border-bottom: 1px solid var(--panel-border);
+  border-bottom: 1px solid var(--border-muted);
 }
 
 .search-results li:last-child {
@@ -419,7 +432,7 @@ body.toc-open  .book-btn { opacity: 0; pointer-events: none; }
   display: block;
   padding: 10px 14px;
   text-decoration: none;
-  color: var(--text-main);
+  color: var(--text);
   font-size: 0.9em;
   transition: background-color 0.2s, color 0.2s;
   white-space: normal;
@@ -427,24 +440,22 @@ body.toc-open  .book-btn { opacity: 0; pointer-events: none; }
 }
 
 .search-results li a:hover {
-  background-color: var(--panel-hover-bg);
-  color: var(--accent-color);
+  background-color: var(--bg-light);
+  color: var(--accent);
 }
 
 .search-results li.no-results {
-  color: var(--panel-text);
+  color: var(--text-muted);
   font-style: italic;
-
 }
 
-
 /* =========================================
-   SITE PANEL FOOTER & SOCIAL ICONS
+   10. SITE PANEL FOOTER & SOCIAL ICONS
    ========================================= */
 .site-footer {
   padding: 16px 16px;
-  border-top: 1px solid var(--border-color);
-  background-color: var(--panel-bg);
+  border-top: 1px solid var(--border);
+  background-color: var(--bg-light);
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -460,25 +471,24 @@ body.toc-open  .book-btn { opacity: 0; pointer-events: none; }
 }
 
 .contact-icons a {
-  color: var(--text-color);
-  font-size: 1.25em; /* Sets the master size for BOTH FontAwesome and SVGs */
+  color: var(--text);
+  font-size: 1.25em;
   text-decoration: none;
-  display: inline-flex; /* The magic bullet for perfect icon alignment */
-  align-items: center;  /* Forces exact vertical centering */
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .contact-icons a svg {
-  width: 1.25em;  /* Perfectly inherits the 1.25em from the parent anchor */
+  width: 1.25em;
   height: 1.25em;
   fill: currentColor;
-  /* We completely remove vertical-align because flexbox handles it now! */
 }
 
 .contact-icons a:hover {
-  color: var(--accent-color);
-  transform: translateY(-2px); /* Adds a subtle lift on hover */
+  color: var(--accent);
+  transform: translateY(-2px);
 }
 
 .site-copyright {
@@ -488,7 +498,7 @@ body.toc-open  .book-btn { opacity: 0; pointer-events: none; }
 }
 
 /* =========================================
-   TOC PANEL FOOTER
+   11. TOC PANEL FOOTER
    ========================================= */
 .toc-footer .meta-item {
   display: flex;
@@ -500,11 +510,10 @@ body.toc-open  .book-btn { opacity: 0; pointer-events: none; }
 
 .toc-footer .meta-item i {
   opacity: 0.7;
-  width: 16px; /* Forces both icons to take up the same space so the text aligns perfectly */
+  width: 16px;
   text-align: center;
 }
 
-/* Add a little breathing room above the tags if metadata is present */
 .toc-footer .meta-tags {
   margin-top: 16px; 
 }
