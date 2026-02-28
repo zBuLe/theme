@@ -1,7 +1,8 @@
 ---
+layout: none
 ---
 [
-  {% assign searchable_pages = site.pages | where_exp: "item", "item.title != nil" %}
+  {% assign searchable_pages = site.html_pages | where_exp: "item", "item.title != nil" %}
   {% for page in searchable_pages %}
   {
     "title": {{ page.title | jsonify }},
