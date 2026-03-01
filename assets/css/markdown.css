@@ -76,21 +76,25 @@
   font-style: normal;
 }
 
-/* Map the left border to your semantic theme tokens */
+/* Map the border and dynamically mix the background color */
 .doc-content blockquote.info {
   border-left-color: var(--info);
+  background-color: color-mix(in srgb, var(--info) 10%, var(--bg-dark));
 }
 
 .doc-content blockquote.warning {
   border-left-color: var(--warning);
+  background-color: color-mix(in srgb, var(--warning) 10%, var(--bg-dark));
 }
 
 .doc-content blockquote.danger {
   border-left-color: var(--danger);
+  background-color: color-mix(in srgb, var(--danger) 10%, var(--bg-dark));
 }
 
 .doc-content blockquote.success {
   border-left-color: var(--success);
+  background-color: color-mix(in srgb, var(--success) 10%, var(--bg-dark));
 }
 
 /* Tables */
