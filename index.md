@@ -5,7 +5,7 @@ author: Jane Doe
 tags: [jekyll, guide, setup]
 ---
 
-# Markdown syntax guide
+# Markdown syntax guide 1
 
 ## Headers
 
@@ -87,4 +87,5 @@ alert(message);
 ## Inline code
 
 This web site is using `markedjs/marked`.
+
 
