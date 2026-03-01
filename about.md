@@ -6,7 +6,7 @@ tags: [lore, paradox, methodology]
 permalink: /about/
 ---
 
-## The Pursuit of Temporal Geology
+## The Pursuit of Temporal Geology 
 
 The **Threan Institute of Temporal Geology** was founded on a simple, irrefutable premise: *rocks are simply water that has lost its motivation.* By applying advanced aerodynamic principles to completely stationary boulders, we have unlocked the secrets of the subterranean cosmos.
 
