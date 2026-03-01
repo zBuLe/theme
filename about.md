@@ -60,3 +60,9 @@ For a more comprehensive breakdown of our methodologies, please consult the [Ind
 
 *Fig 1: A completely normal Tuesday at the Institute's primary observation deck.*
 
+> **Historical Note:** The Arch-Scribes originally attempted to document the river's flow, but it refused to cooperate.
+{: .info }
+
+> **Hazard:** Do not approach the Combustible Ice without a Class-4 thermal blanket.
+{: .danger }
+
