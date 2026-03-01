@@ -56,6 +56,19 @@ You may be using [Markdown Live Preview](https://markdownlivepreview.com/).
 >
 >> Markdown is often used to format readme files, for writing messages in online discussion forums, and to create rich text using a plain text editor.
 
+
+> This is a helpful tip!
+{: .info }
+
+> Operation completed successfully.
+{: .success }
+
+> Proceed with caution, Corlee goons ahead.
+{: .warning }
+
+> Do not cross the Donna.
+{: .danger }
+
 ## Tables
 
 | Left columns  | Right columns |
@@ -74,3 +87,4 @@ alert(message);
 ## Inline code
 
 This web site is using `markedjs/marked`.
+
