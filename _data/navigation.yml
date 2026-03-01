@@ -27,6 +27,8 @@
 - title: Geography
   sublinks:
     # Level 2
+    - title: Places
+      url: /places-to-visit/
     - title: Continents
       sublinks:
         # Level 3
