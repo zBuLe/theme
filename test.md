@@ -61,7 +61,7 @@ significantly from most other text-to-HTML formatters (including Movable
 Type's "Convert Line Breaks" option) which translate every line break
 character in a paragraph into a `<br />` tag.
 
-When you *do- want to insert a `<br />` break tag using Markdown, you
+When you *do* want to insert a `<br />` break tag using Markdown, you
 end a line with two or more spaces, then type return.
 
 ### Headers
@@ -226,7 +226,7 @@ delimiters need to be indented:
     > inside a list item.
 
 To put a code block within a list item, the code block needs
-to be indented *twice- -- 8 spaces or two tabs:
+to be indented *twice* -- 8 spaces or two tabs:
 
 - A list item with a code block:
 

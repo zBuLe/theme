@@ -14,10 +14,10 @@ The **Threan Institute of Temporal Geology** was founded on a simple, irrefutabl
 
 Our research is divided into three primary atmospheric phenomena, each requiring absolute dedication and a fundamental misunderstanding of basic physics:
 
-* **Acoustic Silence:** Measuring the exact decibel level of thoughts before they are spoken.
-    * *Sub-discipline:* The echo of forgotten dreams in empty corridors.
-* **Liquid Geometry:** Attempting to force rivers to recognize the authority of a right angle.
-* **Combustible Ice:** Because standard fire is simply too predictable and lacks structural integrity.
+- **Acoustic Silence:** Measuring the exact decibel level of thoughts before they are spoken.
+    - *Sub-discipline:* The echo of forgotten dreams in empty corridors.
+- **Liquid Geometry:** Attempting to force rivers to recognize the authority of a right angle.
+- **Combustible Ice:** Because standard fire is simply too predictable and lacks structural integrity.
 
 ***
 
@@ -66,3 +66,5 @@ For a more comprehensive breakdown of our methodologies, please consult the [Ind
 > **Hazard:** Do not approach the Combustible Ice without a Class-4 thermal blanket.
 {: .danger }
 
+> **Flora Warning:** The native vines of Threa are highly reactive to sudden movements. Proceed slowly.
+{: .warning }
