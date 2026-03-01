@@ -308,6 +308,8 @@ body {
   font-size: 0.75em;
   color: var(--accent);
   font-weight: bold;
+   white-space: nowrap; /* Forces tag text to stay on a single line */
+  flex-shrink: 0;      /* Prevents the pill shape from squishing */
 }
 
 /* =========================================
@@ -478,6 +480,7 @@ body.toc-open  .book-btn { opacity: 0; pointer-events: none; }
   align-items: center;
   justify-content: center;
   transition: color 0.2s ease, transform 0.2s ease;
+   flex-shrink: 0; /* Prevents icons from getting squished */
 }
 
 .contact-icons a svg {
@@ -516,4 +519,29 @@ body.toc-open  .book-btn { opacity: 0; pointer-events: none; }
 
 .toc-footer .meta-tags {
   margin-top: 16px; 
+
+}
+
+/* =========================================
+   MOBILE FOOTER SCROLL (Swipeable Rows)
+   ========================================= */
+@media screen and (max-width: 450px) {
+  .contact-icons, 
+  .meta-tags {
+    flex-wrap: nowrap;     /* Stops the vertical stacking */
+    overflow-x: auto;      /* Enables horizontal scrolling */
+    justify-content: flex-start; /* Aligns left so scrolling feels natural */
+    padding-bottom: 8px;   /* Breathing room */
+    -webkit-overflow-scrolling: touch; /* Smooth native swipe on iOS */
+    
+    /* Optional: Adds a subtle fade on the right side so users know to swipe */
+    mask-image: linear-gradient(to right, black 85%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+  }
+
+  /* Hides the ugly native scrollbar for a clean app feel */
+  .contact-icons::-webkit-scrollbar, 
+  .meta-tags::-webkit-scrollbar {
+    display: none;
+  }
 }
