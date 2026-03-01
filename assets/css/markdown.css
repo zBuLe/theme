@@ -81,6 +81,58 @@
 .doc-content th { background-color: var(--bg-dark); font-weight: bold; }
 
 
+/* Base styles for all custom callout blockquotes */
+blockquote.info, 
+blockquote.success, 
+blockquote.warning, 
+blockquote.danger {
+    padding: 15px 20px;
+    margin: 20px 0;
+    border-left: 5px solid;
+    border-radius: 4px;
+    font-family: inherit;
+}
+
+/* Remove bottom margin from the last paragraph to keep spacing tight */
+blockquote.info p:last-child, 
+blockquote.success p:last-child, 
+blockquote.warning p:last-child, 
+blockquote.danger p:last-child {
+    margin-bottom: 0;
+}
+
+/* --- Specific Styles --- */
+
+/* Info Style (Blue) */
+blockquote.info {
+    border-left-color: #2196F3;
+    background-color: #e3f2fd;
+    color: #0d47a1;
+}
+
+/* Success Style (Green) */
+blockquote.success {
+    border-left-color: #4CAF50;
+    background-color: #e8f5e9;
+    color: #1b5e20;
+}
+
+/* Warning Style (Orange/Yellow) */
+blockquote.warning {
+    border-left-color: #ff9800;
+    background-color: #fff3e0;
+    color: #e65100;
+}
+
+/* Danger Style (Red) */
+blockquote.danger {
+    border-left-color: #f44336;
+    background-color: #ffebee;
+    color: #b71c1c;
+}
+
+
+
 /* =========================================
    FALLBACK CODE BLOCKS (Ignored by Rouge)
    ========================================= */
