@@ -80,3 +80,43 @@
   </footer>
 
 </aside>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // 1. Get the current URL path and remove any trailing slashes to ensure a perfect match
+    const currentPath = window.location.pathname.replace(/\/$/, ""); 
+
+    // 2. Grab every single link inside your site navigation
+    const navLinks = document.querySelectorAll('.site-nav a');
+    
+    navLinks.forEach(link => {
+      // Extract just the pathname from the link's full URL
+      const linkPath = new URL(link.href).pathname.replace(/\/$/, "");
+      
+      // 3. Check if the current browser URL matches this specific link
+      // (The .html check protects you if GitHub Pages adds extensions remotely)
+      if (currentPath === linkPath || currentPath === linkPath + ".html") {
+        
+        // Highlight the active link using the CSS class we already built
+        link.classList.add('active-link'); 
+        
+        // 4. Walk backwards up the HTML tree to open every parent accordion
+        let parentContent = link.closest('.accordion-content');
+        
+        while (parentContent) {
+          // Force the accordion content to expand
+          parentContent.style.maxHeight = "1000px"; // Use a large fixed value or scrollHeight
+          
+          // Find the button that controls this accordion and rotate its caret
+          let parentBtn = parentContent.previousElementSibling;
+          if (parentBtn && parentBtn.classList.contains('accordion-btn')) {
+            parentBtn.classList.add('active');
+          }
+          
+          // Keep moving up in case this is a 3rd or 4th level nested menu
+          parentContent = parentContent.parentElement.closest('.accordion-content');
+        }
+      }
+    });
+  });
+</script>
