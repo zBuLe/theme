@@ -2,6 +2,7 @@
 title: About the Institute
 author: Arch-Scribe Vex
 date: 2026-02-28
+updated: 2026-03-01
 tags: [lore, paradox, methodology]
 permalink: /about/
 ---

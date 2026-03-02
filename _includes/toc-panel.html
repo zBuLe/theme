@@ -14,23 +14,31 @@
   <footer class="toc-footer">
     
     {% if page.author %}
-      <div class="meta-item" title="Author" >
+      <div class="meta-item" title="Author">
         <i class="fas fa-pen-nib"></i> 
         <span>{{ page.author }}</span>
       </div>
     {% endif %}
 
     {% if page.date %}
-      <div class="meta-item" title="Last Updated" >
-        <i class="far fa-calendar-alt"></i> 
+      <div class="meta-item" title="Date Posted">
+        <i class="far fa-calendar-plus"></i> 
         <span>{{ page.date | date: "%B %-d, %Y" }}</span>
+      </div>
+    {% endif %}
+
+    {% assign update_date = page.last_modified_at | default: page.updated %}
+    {% if update_date %}
+      <div class="meta-item" title="Last Updated">
+        <i class="far fa-calendar-check"></i> 
+        <span>{{ update_date | date: "%B %-d, %Y" }}</span>
       </div>
     {% endif %}
     
     {% if page.tags.size > 0 %}
       <div class="meta-tags">
         {% for tag in page.tags %}
-          <span class="tag">{{ tag }}</span>
+          <a href="{{ '/tags/' | relative_url }}#{{ tag | slugify }}" class="tag">{{ tag }}</a>
         {% endfor %}
       </div>
     {% endif %}

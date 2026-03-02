@@ -2,7 +2,9 @@
   
   <header class="site-header" style="justify-content: space-between;">    
     <button type="button" class="action-btn" onclick="toggleSiteNav()" aria-label="Close site navigation">×</button>
-    <h2 style="margin: 0;">{{ site.title }}</h2>    
+    <h2>
+      <a href="{{ '/' | relative_url }}" title="Return to Home">{{ site.title }}</a>
+    </h2>  
     {% if site.logo %}
       <img src="{{ site.logo | relative_url }}" alt="Logo" class="logo-img">
     {% endif %}    
