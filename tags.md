@@ -23,13 +23,13 @@ permalink: /tags/
   
   {% assign all_tags = raw_tags | uniq | sort %}
 
-  <div class="meta-tags tag-cloud" style="margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border);">
+  <div class="meta-tags tag-cloud" >
     {% for tag in all_tags %}
       <a href="#{{ tag | slugify }}" class="tag">
-        <i class="fas fa-hashtag" style="margin-right: 4px; opacity: 0.7;"></i>{{ tag }}
+        <i class="fas fa-hashtag" ></i>{{ tag }}
       </a>
     {% endfor %}
-    <a href="#" class="tag clear-filter" style="display: none; background-color: var(--danger); border-color: var(--danger); color: var(--contrast);">
+    <a href="#" class="tag clear-filter" >
       <i class="fas fa-times" style="margin-right: 4px;"></i>Clear Filter
     </a>
   </div>

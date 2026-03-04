@@ -1,264 +1,342 @@
-// =========================================
-// UI STATE & ACCESSIBILITY
-// =========================================
-function setAriaExpandedForToggles() {
-  const siteOpen = document.body.classList.contains("site-open");
-  const tocOpen = document.body.classList.contains("toc-open");
+/* =========================================
+   1. PRELOADER & INITIALIZATION
+   ========================================= */
+window.addEventListener('load', () => {
+  // Removes the preload class so CSS transitions can safely begin
+  document.body.classList.remove('preload');
+  
+  // Initialize UI components
+  initThemeToggle();
+  initAccordions();
+  buildTOC();
+  initCodeCopy();
+  initLightbox();
+  initAlbums();
+});
 
-  document.querySelectorAll('[onclick="toggleSiteNav()"]').forEach(btn => {
-    if (btn && btn.setAttribute) btn.setAttribute("aria-expanded", siteOpen ? "true" : "false");
-  });
-  document.querySelectorAll('[onclick="toggleTocNav()"]').forEach(btn => {
-    if (btn && btn.setAttribute) btn.setAttribute("aria-expanded", tocOpen ? "true" : "false");
-  });
-}
-
-function reflowAccordions() {
-  document.querySelectorAll(".accordion-btn.active").forEach(btn => {
-    const panel = btn.nextElementSibling;
-    if (!panel) return;
-    panel.style.maxHeight = panel.scrollHeight + "px";
-  });
-}
-
-// =========================================
-// TOGGLE FUNCTIONS
-// =========================================
+/* =========================================
+   2. PANEL TOGGLING (State Management)
+   ========================================= */
 function toggleSiteNav() {
-  document.body.classList.toggle("site-open");
-  localStorage.setItem("sitePanel", document.body.classList.contains("site-open") ? "open" : "closed");
-  setAriaExpandedForToggles();
+  const body = document.body;
+  const isOpen = body.classList.toggle('site-open');
+  localStorage.setItem('sitePanel', isOpen ? 'open' : 'closed');
+  
+  // Auto-close the TOC panel on mobile devices to prevent overlapping
+  if (isOpen && window.innerWidth <= 768) {
+    body.classList.remove('toc-open');
+  }
 }
 
 function toggleTocNav() {
-  document.body.classList.toggle("toc-open");
-  localStorage.setItem("tocPanel", document.body.classList.contains("toc-open") ? "open" : "closed");
-  setAriaExpandedForToggles();
+  const body = document.body;
+  const isOpen = body.classList.toggle('toc-open');
+  localStorage.setItem('tocPanel', isOpen ? 'open' : 'closed');
+  
+  // Auto-close the Site panel on mobile devices to prevent overlapping
+  if (isOpen && window.innerWidth <= 768) {
+    body.classList.remove('site-open');
+  }
 }
 
+/* =========================================
+   3. THEME TOGGLING (Dark/Light Mode)
+   ========================================= */
 function toggleTheme() {
-  document.body.classList.toggle("dark-mode");
-  const isDark = document.body.classList.contains("dark-mode");
-  const themeBtn = document.getElementById("theme-toggle");
+  const isDark = document.body.classList.toggle('dark-mode');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
   
-  if (themeBtn) {
-    const iconLight = themeBtn.getAttribute("data-icon-light") || "☀️";
-    const iconDark = themeBtn.getAttribute("data-icon-dark") || "🌙";
-    themeBtn.innerText = isDark ? iconLight : iconDark;
+  updateThemeIcon(isDark);
+}
+
+function initThemeToggle() {
+  const isDark = document.body.classList.contains('dark-mode');
+  updateThemeIcon(isDark);
+}
+
+function updateThemeIcon(isDark) {
+  const btn = document.getElementById('theme-toggle');
+  if (btn) {
+    // Swaps the emoji/icon based on the data attributes we set in toc-panel.html
+    btn.textContent = isDark ? btn.getAttribute('data-icon-dark') : btn.getAttribute('data-icon-light');
+  }
+}
+
+/* =========================================
+   4. ACCORDION MENU LOGIC
+   ========================================= */
+function initAccordions() {
+  const accBtns = document.querySelectorAll('.accordion-btn');
+  
+  accBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      this.classList.toggle('active');
+      const content = this.nextElementSibling;
+      
+      if (this.classList.contains('active')) {
+        // Expand the accordion dynamically based on its inner scrollHeight
+        content.style.maxHeight = content.scrollHeight + "px";
+        this.setAttribute('aria-expanded', 'true');
+      } else {
+        // Collapse the accordion
+        content.style.maxHeight = null;
+        this.setAttribute('aria-expanded', 'false');
+      }
+    });
+  });
+}
+
+/* =========================================
+   5. DYNAMIC TABLE OF CONTENTS & SCROLLSPY
+   ========================================= */
+function buildTOC() {
+  const tocNav = document.getElementById('tocNav');
+  if (!tocNav) return;
+
+  // Grab all H2 and H3 tags inside the main markdown content area
+  const headers = document.querySelectorAll('.doc-content h2, .doc-content h3');
+  
+  if (headers.length === 0) {
+    tocNav.innerHTML = '<p style="padding: 0 20px; color: var(--text-muted); font-style: italic; font-size: 0.9em;">No headings on this page.</p>';
+    return;
   }
 
-  localStorage.setItem("theme", isDark ? "dark" : "light");
-  requestAnimationFrame(reflowAccordions);
-}
-
-// =========================================
-// AUTO-GENERATE TABLE OF CONTENTS & SCROLLSPY
-// =========================================
-function generateTOC() {
-  const tocNav = document.getElementById('tocNav');
-  const article = document.querySelector('.doc-content');
+  const fragment = document.createDocumentFragment();
   
-  if (!tocNav || !article) return;
-
-  const headings = Array.from(article.querySelectorAll('h2, h3, h4'));
-  if (headings.length === 0) return;
-
-  // 1. Build the Links
-  headings.forEach(heading => {
-    if (!heading.id) {
-      heading.id = heading.textContent.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  headers.forEach(header => {
+    // Ensure every header has an ID so we can link to it
+    if (!header.id) {
+      header.id = header.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
     }
 
     const link = document.createElement('a');
-    link.href = `#${heading.id}`;
-    link.textContent = heading.textContent;
-    link.className = `toc-${heading.tagName.toLowerCase()}`;
+    link.href = '#' + header.id;
+    link.textContent = header.textContent;
     
-    link.addEventListener('click', () => {
-      if (window.innerWidth <= 768) toggleTocNav();
-    });
-
-    tocNav.appendChild(link);
+    // Apply the CSS classes we built in style.css to indent H3s
+    link.className = header.tagName.toLowerCase() === 'h2' ? 'toc-h2' : 'toc-h3';
+    
+    fragment.appendChild(link);
   });
 
-  // 2. Setup ScrollSpy (Tracks your position)
-  const tocLinks = tocNav.querySelectorAll('a');
-  
-  function onScroll() {
-    let currentHeading = headings[0];
+  tocNav.appendChild(fragment);
 
-    // Find the heading closest to the top of the viewport
-    for (let heading of headings) {
-      const rect = heading.getBoundingClientRect();
-      // 120px offset accounts for the sticky header + some breathing room
-      if (rect.top <= 120) {
-        currentHeading = heading;
-      } else {
-        break; 
-      }
-    }
-
-    // Apply the active class to the matching TOC link
-    tocLinks.forEach(link => {
-      if (link.getAttribute('href') === `#${currentHeading.id}`) {
-        link.classList.add('active-toc');
-        // Automatically scroll the TOC sidebar if the list gets too long
-        link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-      } else {
-        link.classList.remove('active-toc');
-      }
-    });
-  }
-
-  // Fire once on load to set the initial state, then attach to the window scroll
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
+  // Initialize ScrollSpy to highlight the active heading as you scroll
+  setupScrollSpy(headers, tocNav);
 }
 
-// =========================================
-// INITIALIZE ON LOAD
-// =========================================
-document.addEventListener("DOMContentLoaded", () => {
+function setupScrollSpy(headers, tocNav) {
+  const tocLinks = tocNav.querySelectorAll('a');
   
-  // 1. Sync the theme button icon
-  const themeBtn = document.getElementById("theme-toggle");
-  if (themeBtn) {
-    const iconLight = themeBtn.getAttribute("data-icon-light") || "☀️";
-    const iconDark = themeBtn.getAttribute("data-icon-dark") || "🌙";
-    const isDark = document.body.classList.contains("dark-mode");
-    themeBtn.innerText = isDark ? iconLight : iconDark;
-  }
-
-  // 2. Setup Accordion Clicks & State Memory
-  // A. Auto-open the accordions if the user is currently on a nested page
-  const activeLink = document.querySelector('.site-nav a.active-link');
-  if (activeLink) {
-    let parentPanel = activeLink.closest('.accordion-content');
-    while (parentPanel) {
-      const btn = parentPanel.previousElementSibling;
-      if (btn && btn.classList.contains('accordion-btn')) {
-        btn.classList.add('active');
-        btn.setAttribute('aria-expanded', 'true');
+  // Creates an intersection observer that triggers when a heading hits the top 15% of the screen
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        tocLinks.forEach(link => {
+          link.classList.remove('active-toc');
+          if (link.getAttribute('href') === '#' + entry.target.id) {
+            link.classList.add('active-toc');
+          }
+        });
       }
-      parentPanel.style.maxHeight = "none";
-      parentPanel = parentPanel.parentElement.closest('.accordion-content');
+    });
+  }, { rootMargin: "0px 0px -85% 0px", threshold: 0.1 }); 
+
+  headers.forEach(header => observer.observe(header));
+}
+
+/* =========================================
+   6. AUTO-INJECT COPY CODE BUTTONS
+   ========================================= */
+function initCodeCopy() {
+  // Target the wrapper that Jekyll's Rouge highlighter generates
+  const codeBlocks = document.querySelectorAll('div.highlighter-rouge');
+  
+  codeBlocks.forEach(block => {
+    // 1. Check if a header exists. If not, build one!
+    let header = block.querySelector('.code-header');
+    
+    if (!header) {
+      header = document.createElement('div');
+      header.className = 'code-header';
+      
+      // Try to extract the language name from the <pre> class (e.g., language-css)
+      const pre = block.querySelector('pre.highlight') || block.querySelector('pre');
+      const langClass = pre ? Array.from(pre.classList).find(c => c.startsWith('language-')) : null;
+      const langName = langClass ? langClass.replace('language-', '') : 'Code';
+      
+      const langSpan = document.createElement('span');
+      langSpan.className = 'code-lang';
+      langSpan.textContent = langName;
+      
+      header.appendChild(langSpan);
+      block.insertBefore(header, block.firstChild);
     }
     
-    // Convert "none" to actual pixel heights for closing animations
-    document.querySelectorAll('.accordion-content').forEach(panel => {
-      if (panel.previousElementSibling && panel.previousElementSibling.classList.contains('active')) {
-        panel.style.maxHeight = panel.scrollHeight + "px";
-      }
-    });
-  }
-
-  // B. The click listener (with nested height recalculation)
-  document.querySelectorAll(".accordion-btn").forEach(btn => {
-    btn.addEventListener("click", function (e) {
-      this.classList.toggle("active");
-      const panel = this.nextElementSibling;
-      const expanded = this.classList.contains("active");
-      this.setAttribute("aria-expanded", expanded ? "true" : "false");
-
-      if (expanded) {
-        panel.style.maxHeight = panel.scrollHeight + "px";
-      } else {
-        panel.style.maxHeight = null;
-      }
-
-      // If this accordion is INSIDE another accordion, adjust the parent's height
-      let parentPanel = this.parentElement.closest('.accordion-content');
-      while (parentPanel) {
-        if (expanded) {
-          parentPanel.style.maxHeight = parseInt(parentPanel.style.maxHeight) + panel.scrollHeight + "px";
-        } else {
-          parentPanel.style.maxHeight = parseInt(parentPanel.style.maxHeight) - panel.scrollHeight + "px";
-        }
-        parentPanel = parentPanel.parentElement.closest('.accordion-content');
-      }
-    });
-  });
-
-  // 3. Run the TOC Generator
-  generateTOC();
-  
-  // 4. Update Accessibility
-  setAriaExpandedForToggles();
-
-  // 5. Code Blocks: Title Bar & Copy Button
-  // USING 'div' SO IT IGNORES INLINE CODE
-  document.querySelectorAll('div.highlighter-rouge').forEach(codeBlock => {
+    // 2. Inject the Copy Button
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'copy-btn';
+    copyBtn.textContent = 'Copy';
+    copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
     
-    // Extract the language from the class name
-    let lang = "Code";
-    codeBlock.classList.forEach(cls => {
-      if (cls.startsWith('language-')) {
-        lang = cls.replace('language-', '');
-      }
-    });
-
-    // Make the shortcodes look pretty
-    const langMap = {
-      'js': 'JavaScript',
-      'javascript': 'JavaScript',
-      'gml': 'GML',
-      'python': 'Python',
-      'java': 'Java',
-      'go': 'Go',
-      'html': 'HTML',
-      'css': 'CSS',
-      'ruby': 'Ruby',
-      'json': 'JSON',
-      'yaml': 'YAML',
-      'yml': 'YAML',
-      'bash': 'Bash',
-      'sh': 'Shell'
-    };
-    const displayLang = langMap[lang.toLowerCase()] || lang;
-
-    // Create the Title Bar (Header)
-    const header = document.createElement('div');
-    header.className = 'code-header';
-
-    const langSpan = document.createElement('span');
-    langSpan.className = 'code-lang';
-    langSpan.textContent = displayLang;
-
-    // Create the Copy Button
-    const btn = document.createElement('button');
-    btn.className = 'copy-btn';
-    btn.setAttribute('aria-label', 'Copy code to clipboard');
-    btn.textContent = 'Copy';
-
-    // Assemble and Inject the Title Bar
-    header.appendChild(langSpan);
-    header.appendChild(btn);
-    codeBlock.insertBefore(header, codeBlock.firstChild);
-
-    // Add Copy Functionality
-    btn.addEventListener('click', () => {
-      const codeText = codeBlock.querySelector('code').innerText;
+    copyBtn.addEventListener('click', () => {
+      // Grab the raw text inside the <code> element
+      const code = block.querySelector('code').innerText;
       
-      navigator.clipboard.writeText(codeText).then(() => {
-        btn.textContent = 'Copied!';
-        btn.classList.add('copied');
+      // Write to clipboard and trigger the success animation we styled in CSS
+      navigator.clipboard.writeText(code).then(() => {
+        copyBtn.textContent = 'Copied!';
+        copyBtn.classList.add('copied');
         
         setTimeout(() => {
-          btn.textContent = 'Copy';
-          btn.classList.remove('copied');
+          copyBtn.textContent = 'Copy';
+          copyBtn.classList.remove('copied');
         }, 2000);
-      }).catch(err => console.error('Failed to copy code: ', err));
+      });
+    });
+    
+    header.appendChild(copyBtn);
+  });
+}
+
+/* =========================================
+   7. NATIVE IMAGE LIGHTBOX & GALLERY
+   ========================================= */
+function initLightbox() {
+  const modal = document.getElementById('lightbox-modal');
+  const modalImg = document.getElementById('lightbox-img');
+  const closeBtn = document.getElementById('lightbox-close');
+  const prevBtn = document.getElementById('lightbox-prev');
+  const nextBtn = document.getElementById('lightbox-next');
+  const captionDiv = document.getElementById('lightbox-caption');
+  
+  if (!modal) return;
+
+  // Gather ALL images in the document to create a master gallery
+  const images = Array.from(document.querySelectorAll('.doc-content img'));
+  let currentIndex = 0;
+
+  function showLightboxImage(index) {
+    // Math trick to loop perfectly forwards and backwards
+    currentIndex = (index + images.length) % images.length;
+    const targetImg = images[currentIndex];
+    
+    modalImg.src = targetImg.src;
+    modalImg.alt = targetImg.alt || 'Full screen image';
+    
+    // Auto-detect caption: Check if the next element is an <em> tag, otherwise use the Alt text
+    let captionText = '';
+    if (targetImg.nextElementSibling && targetImg.nextElementSibling.tagName.toLowerCase() === 'EM') {
+      captionText = targetImg.nextElementSibling.innerHTML;
+    } else if (targetImg.alt) {
+      captionText = targetImg.alt;
+    }
+    captionDiv.innerHTML = captionText;
+  }
+
+  // Click an image to open the lightbox at that specific image's index
+  images.forEach((img, index) => {
+    img.addEventListener('click', () => {
+      showLightboxImage(index);
+      modal.showModal();
     });
   });
 
-  // 6. Remove the preload class to allow smooth animations again
-  setTimeout(() => {
-    document.body.classList.remove("preload");
-  }, 50);
-});
+  // UI Button Navigation
+  prevBtn.addEventListener('click', () => showLightboxImage(currentIndex - 1));
+  nextBtn.addEventListener('click', () => showLightboxImage(currentIndex + 1));
 
-// Handle Window Resizing 
-window.addEventListener("resize", () => {
-  reflowAccordions();
-  setAriaExpandedForToggles();
-});
+  // Close behavior
+  closeBtn.addEventListener('click', () => modal.close());
+  modal.addEventListener('click', (e) => {
+    // Close if clicking the dark background (not the image or buttons)
+    if (e.target === modal || e.target.classList.contains('lightbox-content')) {
+      modal.close();
+    }
+  });
+
+  // Lightbox Keyboard Controls
+  modal.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') {
+      showLightboxImage(currentIndex - 1);
+    } else if (e.key === 'ArrowRight' || e.key === ' ') {
+      e.preventDefault(); // Prevents spacebar from scrolling the background
+      showLightboxImage(currentIndex + 1);
+    }
+  });
+
+  // Wipe data on close to prevent flashing
+  modal.addEventListener('close', () => {
+    modalImg.src = '';
+    captionDiv.innerHTML = '';
+  });
+}
+
+/* =========================================
+   8. MARKDOWN IMAGE ALBUM (CAROUSEL)
+   ========================================= */
+function initAlbums() {
+  const albums = document.querySelectorAll('.doc-content ul.album');
+  
+  albums.forEach(album => {
+    const slides = album.querySelectorAll('li');
+    if (slides.length <= 1) return; 
+    
+    // Make the album focusable so keyboard events can target it
+    album.setAttribute('tabindex', '0'); 
+    
+    let currentIndex = 0;
+    slides[currentIndex].classList.add('active');
+    
+    const controls = document.createElement('div');
+    controls.className = 'album-controls';
+    
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'album-btn';
+    prevBtn.innerHTML = '&#10094;'; 
+    prevBtn.setAttribute('aria-label', 'Previous image');
+    
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'album-btn';
+    nextBtn.innerHTML = '&#10095;'; 
+    nextBtn.setAttribute('aria-label', 'Next image');
+    
+    controls.appendChild(prevBtn);
+    controls.appendChild(nextBtn);
+    
+    const counter = document.createElement('div');
+    counter.className = 'album-counter';
+    counter.textContent = `1 / ${slides.length}`;
+    
+    album.appendChild(controls);
+    album.appendChild(counter);
+    
+    function showSlide(index) {
+      slides[currentIndex].classList.remove('active');
+      currentIndex = (index + slides.length) % slides.length; 
+      slides[currentIndex].classList.add('active');
+      counter.textContent = `${currentIndex + 1} / ${slides.length}`;
+    }
+    
+    prevBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      showSlide(currentIndex - 1);
+    });
+    
+    nextBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      showSlide(currentIndex + 1);
+    });
+    
+    // Album Keyboard Controls
+    album.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault(); // Prevents page scrolling
+        showSlide(currentIndex - 1);
+      } else if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        showSlide(currentIndex + 1);
+      }
+    });
+  });
+}

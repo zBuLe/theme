@@ -89,3 +89,13 @@ alert(message);
 This web site is using `markedjs/marked`.
 
 
+* **Strength:** High physical power and carrying capacity.
+* **Agility:** Fast reflexes but lower overall stamina.
+* **Intelligence:** High analytical skills, weak physical defense.
+* **Strength:** High physical power and carrying capacity.
+* **Agility:** Fast reflexes but lower overall stamina.
+* **Intelligence:** High analytical skills, weak physical defense.
+* **Strength:** High physical power and carrying capacity.
+* **Agility:** Fast reflexes but lower overall stamina.
+* **Intelligence:** High analytical skills, weak physical defense.
+{: .grid-5}

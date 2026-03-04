@@ -1,36 +1,41 @@
 /* =========================================
-   1. CORE COLOR SYSTEM (LIGHT MODE)
+   1. CORE DESIGN TOKENS (LIGHT MODE)
    ========================================= */
 :root {
-  /* Backgrounds (Depth Stacking) */
-  --bg-dark: hsl(210, 33%, 96%);       /* Deepest background (e.g., code blocks) */
-  --bg: hsl(210, 40%, 98%);            /* Standard base background (main body) */
-  --bg-light: hsl(0, 0%, 100%);        /* Elevated surfaces (sidebars, panels) */
+  /* --- BASE COLORS (User defines these) --- */
+  --bg: hsl(0, 0%, 90%);
+  --text: hsl(0, 0%, 10%);
+  --accent: hsl(218.5, 79.2%, 66.1%);
 
-  /* Typography */
-  --text: hsl(222, 47%, 11%);          /* High contrast main reading text */
-  --text-muted: hsl(215, 16%, 47%);    /* Secondary text, metadata */
-
-  /* Borders & Dividers */
-  --border: hsl(213, 27%, 84%);        /* Strong structural borders */
-  --border-muted: hsl(214, 32%, 91%);  /* Subtle dividers */
-
-  /* Brand / Interactive */
-  --accent: hsl(221, 83%, 53%);        /* Main interactive color */
-  --accent-muted: hsl(214, 100%, 93%); /* Soft highlights, hover states */
-  --contrast: hsl(0, 0%, 100%);        /* Text color ON TOP of the accent */
-
-  /* Semantic / Status States */
+  /* Semantic / Status Tokens */
   --danger: hsl(0, 84%, 60%);          
   --warning: hsl(38, 92%, 50%);       
   --success: hsl(160, 84%, 39%);       
-  --info: hsl(217, 91%, 60%);          
+  --info: hsl(218.5, 79.2%, 66.1%);
 
-  /* Sizing & Layout Variables */
+  /* --- DERIVED COLORS (Auto-calculated) --- */
+  --border: color-mix(in srgb, var(--bg) 80%, var(--text)); 
+  
+  --bg-dark: color-mix(in srgb, var(--bg) 95%, black);
+  --bg-light: color-mix(in srgb, var(--bg) 90%, black);
+  
+  --text-muted: color-mix(in srgb, var(--text) 50%, var(--bg));
+  --border-muted: color-mix(in srgb, var(--border) 40%, var(--bg));
+  
+  --accent-muted: color-mix(in srgb, var(--accent) 15%, var(--bg));
+  --contrast: #ffffff; 
+
+  /* --- LAYOUT & TYPOGRAPHY FALLBACKS --- */
+  --font-main: "Lato", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  --font-code: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+  --text-size: 16px;
+  --panel-width: 250px;
+  --content-max-width: 800px;
+  --radius: 6px;
+
+  /* --- SIZING & Z-INDEX --- */
   --nav-pad-left: 32px;
   --active-border: 3px;
-
-  /* Z-Index Stack */
   --z-header: 10;
   --z-panel: 20;
   --z-modal: 100;
@@ -40,33 +45,32 @@
    2. DARK MODE OVERRIDES
    ========================================= */
 body.dark-mode {
-  /* Backgrounds */
-  --bg-dark: hsl(229, 84%, 5%);       
-  --bg: hsl(222, 47%, 11%);            
-  --bg-light: hsl(217, 33%, 17%);      
-
-  /* Typography */
-  --text: hsl(210, 40%, 98%);          
-  --text-muted: hsl(215, 20%, 65%);    
-
-  /* Borders & Dividers */
-  --border: hsl(215, 19%, 35%);        
-  --border-muted: hsl(215, 25%, 27%);  
-
-  /* Brand / Interactive */
+  /* --- BASE COLORS --- */
+  --bg: hsl(0, 0%, 10%);            
+  --text: hsl(0, 0%, 90%);        
   --accent: hsl(217, 91%, 60%);        
-  --accent-muted: hsl(224, 64%, 33%);  
-  --contrast: hsl(0, 0%, 100%);        
 
-  /* Semantic / Status States */
+  /* Semantic / Status Tokens */
   --danger: hsl(0, 93%, 71%);
   --warning: hsl(43, 96%, 56%);
   --success: hsl(158, 64%, 52%);
   --info: hsl(213, 97%, 68%);
+  
+  /* --- DERIVED COLORS --- */
+  --border: color-mix(in srgb, var(--bg) 80%, var(--text)); 
+  
+  --bg-dark: color-mix(in srgb, var(--bg) 95%, white);
+  --bg-light: color-mix(in srgb, var(--bg) 90%, white);
+  
+  --text-muted: color-mix(in srgb, var(--text) 65%, var(--bg));
+  --border-muted: color-mix(in srgb, var(--border) 50%, var(--bg));
+  
+  --accent-muted: color-mix(in srgb, var(--accent) 20%, var(--bg));
+  --contrast: #ffffff; 
 }
 
 /* =========================================
-   3. CSS RESET
+   3. CSS RESET & BASE GLOBALS
    ========================================= */
 *, *::before, *::after { box-sizing: border-box; }
 *:not(dialog) { margin: 0; }
@@ -75,9 +79,17 @@ body.dark-mode {
   html { interpolate-size: allow-keywords; }
 }
 
+html { scroll-behavior: smooth; }
+
 body {
-  line-height: 1.5;
+  font-family: var(--font-main);
+  font-size: var(--text-size);
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.3s, color 0.3s;
 }
 
 img, picture, video, canvas, svg { display: block; max-width: 100%; }
@@ -92,30 +104,11 @@ h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
   outline-offset: 2px;
 }
 
-html { scroll-behavior: smooth; }
+/* Stops animation flash on load */
+.preload, .preload * { transition: none !important; }
 
 /* =========================================
-   3.5. PRELOADER (Stops animation flash)
-   ========================================= */
-.preload, .preload * {
-  transition: none !important;
-}
-
-/* =========================================
-   4. GLOBAL STYLES
-   ========================================= */
-body {
-  font-family: "Lato", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  font-size: 16px;
-  overflow-x: hidden;
-  background-color: var(--bg);
-  color: var(--text);
-  transition: background-color 0.3s, color 0.3s;
-  line-height: 1.6;
-}
-
-/* =========================================
-   5. SIDE PANELS
+   4. CORE LAYOUT SKELETON
    ========================================= */
 .side-panel {
   height: 100%;
@@ -123,7 +116,7 @@ body {
   position: fixed;
   z-index: var(--z-panel);
   top: 0;
-  background-color: var(--bg-light);
+  background-color: var(--bg-dark);
   overflow-x: hidden;
   transition: width 0.5s, background-color 0.3s;
   white-space: nowrap;
@@ -136,19 +129,29 @@ body {
 
 .site-header, .site-nav, .site-footer,
 .toc-header, .toc-nav, .toc-footer {
-  min-width: 250px;
+  min-width: var(--panel-width);
   box-sizing: border-box;
 }
 
-/* --- Panel Headers --- */
+.doc-panel {
+  transition: margin-left .5s, margin-right .5s;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* =========================================
+   5. PANEL INTERNALS (Header, Nav, Footer)
+   ========================================= */
+/* Headers */
 .site-header, .toc-header {
   height: 64px;
   display: flex;
   align-items: center;
   padding: 0 20px;
+  background-color: var(--accent);
   border-bottom: 1px solid var(--border);
 }
-
 .site-header { justify-content: flex-start; gap: 15px; }
 .toc-header  { justify-content: space-between; }
 
@@ -157,26 +160,20 @@ body {
   font-size: 1.25em;
   font-weight: 600;
 }
-
-/* Make the site title link inherit the header styling seamlessly */
 .site-header h2 a {
   color: inherit;
   text-decoration: none;
   transition: color 0.2s ease, opacity 0.2s ease;
 }
+.site-header h2 a:hover { color: var(--contrast); }
 
-.site-header h2 a:hover {
-  color: var(--accent);
-}
-
-/* --- Panel Navigation --- */
+/* Navigation */
 .site-nav, .toc-nav {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 20px 0;
 }
-
 .site-nav a, .toc-nav a {
   padding: 8px 20px 8px var(--nav-pad-left);
   text-decoration: none;
@@ -185,28 +182,106 @@ body {
   display: block;
   transition: 0.2s;
 }
-
 .site-nav a:hover, .toc-nav a:hover {
   color: var(--accent);
   background-color: var(--bg);
 }
 
-/* --- Panel Footers --- */
+/* Active Nav States */
+.active-link {
+  color: var(--accent) !important;
+  font-weight: bold;
+  border-left: var(--active-border) solid var(--accent);
+  padding-left: calc(var(--nav-pad-left) - var(--active-border)) !important;
+  background-color: var(--bg);
+}
+.toc-nav a.active-toc {
+  color: var(--accent) !important;
+  font-weight: bold;
+  background-color: var(--accent-muted);
+}
+
+/* Footers */
 .site-footer, .toc-footer {
   padding: 15px 25px;
   border-top: 1px solid var(--border);
   color: var(--text-muted);
   font-size: 0.875em;
+  background-color: var(--bg-light);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-footer { align-items: center; gap: 6px; padding: 16px; }
+
+/* Contact Icons (Site Footer) */
+.contact-icons { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.contact-icons a {
+  color: var(--text);
+  font-size: 1.25em;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+.contact-icons a svg { width: 1.25em; height: 1.25em; fill: currentColor; }
+.contact-icons a:hover { color: var(--accent); transform: translateY(-2px); }
+
+.site-copyright { font-size: 0.85em; opacity: 0.7; text-align: center; }
+
+/* Metadata (TOC Footer) */
+.toc-footer .meta-item { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 0.9em; white-space: normal; }
+.toc-footer .meta-item strong { color: var(--text); }
+.toc-footer .meta-item i { opacity: 0.7; width: 16px; text-align: center; }
+
+/* =========================================
+   6. DOCUMENT INTERNALS (Header, Content)
+   ========================================= */
+.doc-header {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  background-color: var(--accent);
+  border-bottom: 1px solid var(--border);
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.doc-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.25em;
+  color: var(--text);
+  font-weight: 600;
+  transition: color 0.3s;
+}
+.doc-title a { color: inherit; text-decoration: none; transition: opacity 0.2s; }
+.doc-title a:hover { opacity: 0.7; }
+
+.doc-content {
+  padding: 20px;
+  flex: 1;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  width: 100%;
 }
 
 /* =========================================
-   6. UI COMPONENTS
+   7. UI COMPONENTS
    ========================================= */
+/* Action Buttons (Menu/TOC toggles) */
 .action-btn {
   font-size: 1.75em;
   cursor: pointer;
   user-select: none;
-  color: var(--text-muted);
+  color: var(--text);
   background: none;
   border: none;
   padding: 0;
@@ -214,40 +289,27 @@ body {
   align-items: center;
   transition: color 0.2s, opacity 0.2s;
 }
-.action-btn:hover { color: var(--accent); opacity: 0.85; }
+.action-btn:hover { color: var(--accent-muted); opacity: 0.85; }
 .doc-header .action-btn { color: var(--text); }
 
-.logo-img {
-  height: 40px;
-  width: 40px;
-  display: block;
-  border-radius: 6px;
-  object-fit: contain;
-}
+.logo-img { height: 40px; width: 40px; display: block; object-fit: contain; }
 
-/* Search Box */
-.search-box { 
-  position: relative; 
-  padding: 0 16px 20px 16px; 
+/* Tags */
+.meta-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 16px; white-space: normal; }
+a.tag {
+  background-color: var(--accent-muted);
+  border: 1px solid var(--accent);
+  padding: 4px 10px;
+  border-radius: calc(var(--radius) * 3);
+  font-size: 0.75em;
+  color: var(--accent);
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.2s, color 0.2s;
 }
-.search-input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background-color: var(--bg);
-  color: var(--text);
-  font-size: 0.95em;
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-.search-input::placeholder { color: var(--text-muted); }
-.search-input:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px var(--accent-muted);
-}
+a.tag:hover, a.tag.active-tag { background-color: var(--accent); color: var(--contrast); }
 
-/* Accordion Component */
+/* Accordions */
 .accordion-btn {
   background-color: transparent;
   color: var(--text-muted);
@@ -265,155 +327,72 @@ body {
   font-family: inherit;
   white-space: nowrap;
 }
-.accordion-btn:hover, .accordion-btn.active {
-  color: var(--accent);
-  background-color: var(--bg);
-}
+.accordion-btn:hover, .accordion-btn.active { color: var(--accent); background-color: var(--bg); }
 .caret { font-size: 0.8em; transition: transform 0.3s ease; }
 .accordion-btn.active .caret { transform: rotate(180deg); }
 
-.accordion-content {
-  background-color: var(--bg);
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.2s ease-out;
-}
-
-/* Nested Menu Indentation */
+.accordion-content { background-color: var(--bg); max-height: 0; overflow: hidden; transition: max-height 0.2s ease-out; }
 .accordion-content a { font-size: 0.95em; }
+
+/* Nested Indentation */
 .level-1 { padding-left: var(--nav-pad-left); }
 .level-2 { padding-left: calc(var(--nav-pad-left) + 16px); }
 .level-3 { padding-left: calc(var(--nav-pad-left) + 32px); }
 .level-4 { padding-left: calc(var(--nav-pad-left) + 48px); }
 
-/* TOC Specifics */
+/* TOC Hierarchy */
 .toc-h2 { font-size: 1em !important; font-weight: bold; color: var(--text) !important; margin-top: 8px; }
 .toc-h3 { font-size: 0.95em !important; padding-left: 48px !important; }
 .toc-h4 { font-size: 0.85em !important; padding-left: 64px !important; opacity: 0.8; }
 
-/* Metadata Tags */
-.meta-item { margin-bottom: 6px; white-space: normal; }
-.meta-item strong { color: var(--text); }
-.meta-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; white-space: normal; }
-
-/* Target a.tag explicitly to override default link styles */
-a.tag {
-  background-color: var(--accent-muted);
-  border: 1px solid var(--accent);
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 0.75em;
-  color: var(--accent);
-  font-weight: bold;
-  text-decoration: none;
-  transition: background-color 0.2s, color 0.2s;
-}
-
-a.tag:hover {
-  background-color: var(--accent);
-  color: var(--contrast);
-}
-
-/* Keeps the tag highlighted when it is the active filter on the tags page */
-a.tag.active-tag {
-  background-color: var(--accent);
-  color: var(--contrast);
-}
-
-/* Active TOC/Nav State */
-.active-link {
-  color: var(--accent) !important;
-  font-weight: bold;
-  border-left: var(--active-border) solid var(--accent);
-  padding-left: calc(var(--nav-pad-left) - var(--active-border)) !important;
-  background-color: var(--bg);
-}
-
-/* Active TOC State (ScrollSpy) */
-.toc-nav a.active-toc {
-  color: var(--accent) !important;
-  font-weight: bold;
-  background-color: var(--accent-muted);
-}
-
-/* Metadata Tags */
-.meta-item { margin-bottom: 6px; white-space: normal; }
-.meta-item strong { color: var(--text); }
-.meta-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; white-space: normal; }
-.meta-tags .tag {
-  background-color: var(--accent-muted);
-  border: 1px solid var(--accent);
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 0.75em;
-  color: var(--accent);
-  font-weight: bold;
-}
-
-/* =========================================
-   7. DOCUMENT PANEL
-   ========================================= */
-.doc-panel {
-  transition: margin-left .5s, margin-right .5s;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.doc-header {
-  height: 64px;
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  background-color: var(--bg-light);
-  border-bottom: 1px solid var(--border);
-  justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: var(--z-header);
-  transition: background-color 0.3s, border-color 0.3s;
-}
-
-.doc-title {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 1.25em;
-  color: var(--text);
-  transition: color 0.3s;
-  font-weight: 600;
-}
-
-.doc-title a {
-  color: inherit;
-  text-decoration: none;
-  transition: opacity 0.2s;
-}
-
-.doc-title a:hover {
-  opacity: 0.7;
-}
-
-.doc-content {
-  padding: 20px;
-  flex: 1;
-  max-width: 800px;
-  margin: 0 auto;
+/* Search Elements */
+.search-box { position: relative; padding: 0 16px 20px 16px; }
+.search-input {
   width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--bg);
+  color: var(--text);
+  font-size: 0.95em;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
+.search-input::placeholder { color: var(--text-muted); }
+.search-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-muted); }
+
+.search-results {
+  position: absolute;
+  top: calc(100% - 15px);
+  left: 16px; right: 16px;
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+  margin: 0; padding: 0;
+  list-style: none;
+  max-height: 350px; overflow-y: auto;
+  z-index: 50; display: none;
+}
+.search-results:not(:empty) { display: block; }
+.search-results li { border-bottom: 1px solid var(--border-muted); }
+.search-results li:last-child { border-bottom: none; }
+.search-results li a, .search-results li.no-results {
+  display: block; padding: 10px 14px; text-decoration: none; color: var(--text); font-size: 0.9em; transition: background-color 0.2s, color 0.2s; white-space: normal; line-height: 1.4;
+}
+.search-results li a:hover { background-color: var(--bg-light); color: var(--accent); }
+.search-results li.no-results { color: var(--text-muted); font-style: italic; }
 
 /* =========================================
-   8. STATE CONTROLS & RESPONSIVE BEHAVIOR
+   8. STATE CONTROLS & RESPONSIVE
    ========================================= */
-body.site-open .site-panel { width: 250px; }
-body.toc-open  .toc-panel  { width: 250px; }
-
+body.site-open .site-panel { width: var(--panel-width); }
+body.toc-open  .toc-panel  { width: var(--panel-width); }
 body.site-open .logo-btn { opacity: 0; pointer-events: none; }
 body.toc-open  .book-btn { opacity: 0; pointer-events: none; }
 
 @media screen and (min-width: 769px) {
-  body.site-open .doc-panel { margin-left: 250px; }
-  body.toc-open  .doc-panel { margin-right: 250px; }
+  body.site-open .doc-panel { margin-left: var(--panel-width); }
+  body.toc-open  .doc-panel { margin-right: var(--panel-width); }
 }
 
 @media screen and (max-width: 768px) {
@@ -425,136 +404,125 @@ body.toc-open  .book-btn { opacity: 0; pointer-events: none; }
 
 @media screen and (max-height: 450px), screen and (max-width: 450px) {
   body.site-open .site-panel, body.toc-open .toc-panel { width: 100%; }
-  
-  /* Update this block to use 100vw instead of auto/100% */
-  .site-header, .site-nav, .site-footer, .toc-header, .toc-nav, .toc-footer { 
-    min-width: 100vw; 
-    width: 100vw; 
-  }
-  
+  .site-header, .site-nav, .site-footer, .toc-header, .toc-nav, .toc-footer { min-width: 100vw; width: 100vw; }
   .site-nav a, .accordion-btn { font-size: 1.125em; }
 }
 
 /* =========================================
-   9. SEARCH RESULTS DROPDOWN
+   NATIVE LIGHTBOX & GALLERY
    ========================================= */
-.search-results {
-  position: absolute;
-  top: calc(100% - 15px);
-  left: 16px;
-  right: 16px;
-  background-color: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
-  margin: 0;
+/* Make document images look clickable */
+.doc-content img {
+  cursor: zoom-in;
+}
+
+/* The Native <dialog> Element */
+.lightbox {
+  border: none;
+  background: transparent; /* Allows backdrop blur to show */
   padding: 0;
-  list-style: none;
-  max-height: 350px;
-  overflow-y: auto;
-  z-index: 50;
-  display: none;
+  margin: auto;
+  max-width: 100vw;
+  max-height: 100vh;
+  overflow: hidden; /* Stops scrollbars from appearing on massive images */
+  outline: none;
 }
 
-.search-results:not(:empty) {
-  display: block;
+/* The dark overlay & blur (The native ::backdrop) */
+.lightbox::backdrop {
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px); /* Adds a heavy, blurry overlay */
 }
 
-.search-results li {
-  border-bottom: 1px solid var(--border-muted);
-}
-
-.search-results li:last-child {
-  border-bottom: none;
-}
-
-.search-results li a, 
-.search-results li.no-results {
-  display: block;
-  padding: 10px 14px;
-  text-decoration: none;
-  color: var(--text);
-  font-size: 0.9em;
-  transition: background-color 0.2s, color 0.2s;
-  white-space: normal;
-  line-height: 1.4;
-}
-
-.search-results li a:hover {
-  background-color: var(--bg-light);
-  color: var(--accent);
-}
-
-.search-results li.no-results {
-  color: var(--text-muted);
-  font-style: italic;
-}
-
-/* =========================================
-   10. SITE PANEL FOOTER & SOCIAL ICONS
-   ========================================= */
-.site-footer {
-  padding: 16px 16px;
-  border-top: 1px solid var(--border);
-  background-color: var(--bg-light);
-  flex-shrink: 0;
+/* The Inner Content Wrapper (Flexbox for perfect centering) */
+.lightbox-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-}
-
-.contact-icons {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
   justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  padding: 60px; /* Padding for UI elements (close button/arrows) */
+  box-sizing: border-box;
 }
 
-.contact-icons a {
+/* The Image Constraints:
+  These lines force massive 4000px images to always scale down to the screen size.
+*/
+.lightbox-content img {
+  max-width: 90vw; /* Keep a margin on the left/right */
+  max-height: 80vh; /* Leave room at the top/bottom for UI & captions */
+  object-fit: contain; /* Shrinks without stretching */
+  border-radius: var(--radius);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  display: block;
+}
+
+/* Prevents broken image icon when src is empty (cleared in JS) */
+.lightbox-content img[src=""] {
+  display: none;
+}
+
+/* --- LIGHTBOX UI CONTROLS (Arrows/Close) --- */
+.lightbox-close {
+  position: fixed;
+  top: 15px;
+  right: 25px;
+  color: white; /* Keep white for maximum contrast over dark backdrop */
+  font-size: 2.5em;
+  z-index: 101;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+.lightbox-close:hover { color: var(--danger); opacity: 1; }
+
+.lightbox-btn {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white; /* Keep white for maximum contrast over dark backdrop */
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 1.5em;
+  cursor: pointer;
+  z-index: 101;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s, transform 0.2s, color 0.2s;
+}
+
+.lightbox-btn:hover {
+  background-color: var(--accent);
+  color: white;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.lightbox-prev { left: 20px; }
+.lightbox-next { right: 20px; }
+
+/* --- THEME-AWARE CAPTIONS --- */
+.lightbox-caption {
+  margin-top: 20px;
+  font-size: 1.1em;
+  text-align: center;
+  max-width: 800px;
+  
+  /* Theme variables for perfect light/dark mode adaptation */
+  background-color: var(--bg-dark);
   color: var(--text);
-  font-size: 1.25em;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.2s ease, transform 0.2s ease;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  
+  /* Fallback: ensure long text doesn't overflow */
+  word-break: break-word;
 }
 
-.contact-icons a svg {
-  width: 1.25em;
-  height: 1.25em;
-  fill: currentColor;
-}
-
-.contact-icons a:hover {
-  color: var(--accent);
-  transform: translateY(-2px);
-}
-
-.site-copyright {
-  font-size: 0.85em;
-  opacity: 0.7;
-  text-align: center;
-}
-
-/* =========================================
-   11. TOC PANEL FOOTER
-   ========================================= */
-.toc-footer .meta-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
-  font-size: 0.9em;
-}
-
-.toc-footer .meta-item i {
-  opacity: 0.7;
-  width: 16px;
-  text-align: center;
-}
-
-.toc-footer .meta-tags {
-  margin-top: 16px; 
+/* Hides the caption box completely if the image has no alt text or <em> caption */
+.lightbox-caption:empty {
+  display: none;
 }

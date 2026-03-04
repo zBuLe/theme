@@ -1,0 +1,28 @@
+{% if site.data.theme %}
+<style>
+  :root {
+    /* 1. Inject Layout & Typography Variables */
+    {% if site.data.theme.layout %}
+      {% for setting in site.data.theme.layout %}
+      --{{ setting[0] | replace: '_', '-' }}: {{ setting[1] }};
+      {% endfor %}
+    {% endif %}
+
+    /* 2. Inject Light Mode Color Variables */
+    {% if site.data.theme.colors.light %}
+      {% for color in site.data.theme.colors.light %}
+      --{{ color[0] | replace: '_', '-' }}: {{ color[1] }};
+      {% endfor %}
+    {% endif %}
+  }
+
+  /* 3. Inject Dark Mode Color Variables */
+  {% if site.data.theme.colors.dark %}
+  body.dark-mode {
+    {% for color in site.data.theme.colors.dark %}
+    --{{ color[0] | replace: '_', '-' }}: {{ color[1] }};
+    {% endfor %}
+  }
+  {% endif %}
+</style>
+{% endif %}

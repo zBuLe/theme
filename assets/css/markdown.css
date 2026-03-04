@@ -1,5 +1,5 @@
 /* =========================================
-   MARKDOWN ELEMENT STYLES (.doc-content)
+   1. BASE MARKDOWN ELEMENTS
    ========================================= */
 
 /* Removes top margin from the very first item so it aligns with the header */
@@ -33,42 +33,90 @@
 .doc-content ul, .doc-content ol { padding-left: 2em; }
 .doc-content li { margin-bottom: 0.25em; }
 
-/* Images */
+/* =========================================
+   IMAGES & CAPTIONS
+   ========================================= */
+
+/* Base Images */
 .doc-content img {
   max-width: 100%;
   height: auto;
-  border-radius: 6px;
-  margin: 1.5em 0;
+  border-radius: var(--radius);
+  margin: 1.5em auto;
+  display: block;
+  border: 1px solid var(--border-muted);
 }
+
+/* Pure Markdown Captions! 
+  Targets any italic text that immediately follows an image 
+*/
+.doc-content img + em {
+  display: block;
+  text-align: center;
+  font-size: 0.85em;
+  color: var(--text-muted);
+  max-width: 80%;
+  
+  /* Change the top margin from -1em to 0.5em to stop the overlap */
+  margin: 0.5em auto 1.5em auto; 
+}
+
+/* Grid Image Fix (Forces images to uniform squares/rectangles without stretching) */
+.doc-content [class*="grid-"] img {
+  width: 100%;
+  height: 100%;
+  max-height: 300px; 
+  object-fit: cover;
+  margin: 0;
+}
+
+/* Tables */
+.doc-content table { 
+  width: 100%; 
+  border-collapse: collapse; 
+  margin: 1.5em 0; 
+  display: block; 
+  overflow-x: auto;
+}
+.doc-content th, .doc-content td {
+  padding: 12px;
+  border: 1px solid var(--border);
+  text-align: left;
+}
+.doc-content th { background-color: var(--bg-dark); font-weight: bold; }
+
+/* =========================================
+   2. INLINE CODE & BLOCKQUOTES
+   ========================================= */
 
 /* Inline Code */
 .doc-content code:not(pre code) {
   background-color: var(--bg-dark);
   color: var(--danger);
   padding: 0.2em 0.4em;
-  border-radius: 4px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+  border-radius: calc(var(--radius) * 0.75);
+  font-family: var(--font-code);
   font-size: 0.85em;
   white-space: normal;
   word-break: break-word;
 }
 
-/* Blockquotes */
+/* Standard Blockquotes */
 .doc-content blockquote {
   margin: 1.5em 0;
   padding: 16px 20px;
   background-color: var(--bg-dark);
   border-left: 5px solid var(--accent);
-  border-radius: 0 8px 8px 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
   font-style: italic;
   transition: background-color 0.3s, border-color 0.3s;
+  display: flow-root;
 }
 .doc-content blockquote p { margin: 0; color: var(--text-muted); }
 
 /* =========================================
-   CUSTOM CALLOUT BLOCKS (Lore & Alerts)
+   3. CUSTOM CALLOUT BLOCKS (Alerts)
    ========================================= */
-/* Reset font style for callouts so they read as UI text, not quotes */
 .doc-content blockquote.info,
 .doc-content blockquote.warning,
 .doc-content blockquote.danger,
@@ -76,7 +124,6 @@
   font-style: normal;
 }
 
-/* Map the border and dynamically mix the background color */
 .doc-content blockquote.info {
   border-left-color: var(--info);
   background-color: color-mix(in srgb, var(--info) 10%, var(--bg-dark));
@@ -97,61 +144,35 @@
   background-color: color-mix(in srgb, var(--success) 10%, var(--bg-dark));
 }
 
-/* Tables */
-.doc-content table { 
-  width: 100%; 
-  border-collapse: collapse; 
-  margin: 1.5em 0; 
-  display: block; 
-  overflow-x: auto;
-}
-.doc-content th, .doc-content td {
-  padding: 12px;
-  border: 1px solid var(--border);
-  text-align: left;
-}
-.doc-content th { background-color: var(--bg-dark); font-weight: bold; }
-
-
 /* =========================================
-   FALLBACK CODE BLOCKS (Ignored by Rouge)
+   4. CODE BLOCKS & TITLE BARS
    ========================================= */
+
+/* Fallback Pre (If Rouge fails or is disabled) */
 .doc-content pre {
   background-color: var(--bg-dark);
   color: var(--text);
   padding: 16px;
-  border-radius: 8px;
+  border-radius: var(--radius);
   overflow-x: auto; 
   border: 1px solid var(--border);
   margin: 1.5em 0;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-family: var(--font-code);
   font-size: 0.9em;
   line-height: 1.5;
   max-width: 100%;
 }
 
-/* Strips the fallback styling if Rouge successfully wrapped it */
-.highlight pre { 
-  margin: 0; 
-  padding: 0; 
-  border: none; 
-  background: transparent; 
-}
-
-
-/* =========================================
-   CODE BLOCKS & TITLE BARS
-   ========================================= */
-/* The outermost wrapper Jekyll generates */
+/* Rouge Highlighter Container */
 div.highlighter-rouge {
   background: var(--bg-dark);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius);
   margin: 1.5em 0;
   overflow: hidden; 
 }
 
-/* The title bar injected via JS */
+/* The Title Bar */
 .code-header {
   display: flex;
   justify-content: space-between;
@@ -161,37 +182,48 @@ div.highlighter-rouge {
   padding: 8px 16px;
 }
 
-/* The language label */
 .code-lang {
   color: var(--text-muted);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-family: var(--font-code);
   font-size: 0.75em;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-/* The inner code wrapper */
+/* Inner highlight wrapper */
 .highlight {
   color: var(--text);
   padding: 16px;
   overflow-x: auto;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-family: var(--font-code);
   font-size: 0.9em;
   line-height: 1.5;
   margin: 0;
 }
 
-.highlight pre { margin: 0; padding: 0; border: none; background: transparent; }
+/* Reset inner pre styles to inherit from wrapper */
+.highlight pre { 
+  margin: 0; 
+  padding: 0; 
+  border: none; 
+  background: transparent; 
+}
+
+/* FORCE the inner code tags to use the custom variable */
+.doc-content pre code,
+.highlight code {
+  font-family: var(--font-code);
+}
 
 /* =========================================
-   COPY BUTTON STYLES
+   5. COPY BUTTON STYLES
    ========================================= */
 .copy-btn {
   background-color: transparent;
   color: var(--text-muted);
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: calc(var(--radius) * 0.75);
   padding: 4px 10px;
   font-size: 0.75em;
   font-family: inherit;
@@ -213,9 +245,10 @@ div.highlighter-rouge {
 }
 
 /* =========================================
-   ROUGE SYNTAX HIGHLIGHTING (HSL COLORS)
+   6. ROUGE SYNTAX HIGHLIGHTING (HSL)
    ========================================= */
-/* Base Colors (Light Mode) */
+
+/* Light Mode */
 .highlight .c, .highlight .cm, .highlight .c1 { color: hsl(212, 8%, 45%); font-style: italic; } /* Comments */
 .highlight .k, .highlight .kd, .highlight .kn, .highlight .kr, .highlight .kt { color: hsl(354, 66%, 54%); font-weight: bold; } /* Keywords */
 .highlight .o, .highlight .ow { color: hsl(354, 66%, 54%); font-weight: bold; } /* Operators */
@@ -259,3 +292,207 @@ body.dark-mode .highlight .nx { color: var(--text); }
 body.dark-mode .highlight .nd, 
 body.dark-mode .highlight .ni, 
 body.dark-mode .highlight .nn { color: hsl(28, 100%, 67%); }
+
+
+/* =========================================
+   7. MARKDOWN GRID UTILITIES
+   ========================================= */
+
+/* Auto-fitting Grid (Creates as many columns as will fit at 250px wide) */
+.doc-content .grid {
+  display: grid;
+  gap: 20px;
+  margin: 1.5em 0;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  align-items: start;
+}
+
+/* Forced Grids */
+.doc-content .grid-2 {
+  display: grid; gap: 20px; margin: 1.5em 0; align-items: start;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.doc-content .grid-3 {
+  display: grid; gap: 20px; margin: 1.5em 0; align-items: start;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.doc-content .grid-4 {
+  display: grid; gap: 20px; margin: 1.5em 0; align-items: start;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.doc-content .grid-5 {
+  display: grid; gap: 20px; margin: 1.5em 0; align-items: start;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+/* Mobile override: Collapse all forced grids to a single column on small screens */
+@media screen and (max-width: 768px) {
+  .doc-content .grid-2,
+  .doc-content .grid-3,
+  .doc-content .grid-4,
+  .doc-content .grid-5 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================
+   8. IMAGE FLOATS & ALIGNMENT
+   ========================================= */
+
+/* The Float Utilities */
+.doc-content .float-left {
+  float: left;
+  width: 100%;
+  max-width: 300px;
+  margin: 0.5em 2em 1em 0; /* Breathing room on the right and bottom */
+}
+
+.doc-content .float-right {
+  float: right;
+  width: 100%;
+  max-width: 300px;
+  margin: 0.5em 0 1em 2em; /* Breathing room on the left and bottom */
+}
+
+/* If the float is applied to a captioned paragraph, reset the inner image margins */
+.doc-content p.float-left img,
+.doc-content p.float-right img {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+}
+
+/* Force headings to clear floats so the next section doesn't awkwardly wrap alongside a tall image */
+.doc-content h2, 
+.doc-content h3, 
+.doc-content h4, 
+.doc-content h5, 
+.doc-content h6 {
+  clear: both;
+}
+
+/* Mobile override: stack floated images natively on small screens */
+@media screen and (max-width: 768px) {
+  .doc-content .float-left,
+  .doc-content .float-right {
+    float: none;
+    max-width: 100%;
+    margin: 1.5em auto;
+    display: block;
+  }
+}
+
+/* =========================================
+   9. MARKDOWN IMAGE ALBUM (CAROUSEL)
+   ========================================= */
+
+/* The main container */
+.doc-content ul.album {
+  position: relative;
+  list-style: none;
+  padding: 0;
+  margin: 1.5em auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background-color: var(--bg-dark);
+}
+
+/* Hide all slides by default */
+.doc-content ul.album li {
+  display: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+/* Show only the active slide with a quick fade */
+.doc-content ul.album li.active {
+  display: block;
+  animation: fade-in 0.3s ease-in-out;
+}
+
+@keyframes fade-in {
+  from { opacity: 0.5; }
+  to { opacity: 1; }
+}
+
+/* Album Images & Captions */
+.doc-content ul.album li img {
+  max-height: 500px;
+  width: 100%;
+  object-fit: contain;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+}
+
+.doc-content ul.album li em {
+  display: block;
+  padding: 12px 20px;
+  background-color: var(--bg-dark);
+  color: var(--text-muted);
+  font-size: 0.85em;
+  margin: 0;
+  border-top: 1px solid var(--border);
+  max-width: 100%;
+}
+
+/* Navigation Controls */
+.album-controls {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  pointer-events: none; /* Lets clicks pass through to the image */
+  padding: 0 10px;
+  z-index: 2;
+}
+
+/* The Prev/Next Buttons */
+.album-btn {
+  pointer-events: auto;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+  font-size: 1.2em;
+}
+
+.album-btn:hover {
+  background-color: var(--accent);
+  transform: scale(1.1);
+}
+
+/* The 1/3 Counter Overlay */
+.album-counter {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 4px 10px;
+  border-radius: calc(var(--radius) * 2);
+  font-size: 0.8em;
+  pointer-events: none;
+  z-index: 2;
+  backdrop-filter: blur(2px);
+}
+
+/* Shows a focus ring when the user tabs to the album or clicks it */
+.doc-content ul.album:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
