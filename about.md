@@ -32,8 +32,8 @@ To accurately visualize these elemental contradictions, our scribes generated th
 ---
 
 ![Newest Researcher](/assets/img/portrait___fire_by_zbule_df9xgfl.jpg){:#fire}
-*insert nonsencical caption of this person*
-insert nonsensical description
+*Researcher Ignis during the Combustible Ice incident.*
+Ignis was explicitly told not to bring standard flint into the Sector 4 laboratories. The resulting thermal event vaporized the budget reports for the entire fiscal year. Arch-Scribe Vex was surprisingly pleased.
 
 ---
 

@@ -56,9 +56,13 @@
     <button type="button" id="lightbox-prev" class="lightbox-btn lightbox-prev" aria-label="Previous image">&#10094;</button>
     <button type="button" id="lightbox-next" class="lightbox-btn lightbox-next" aria-label="Next image">&#10095;</button>
     
-    <div class="lightbox-content">
+<div class="lightbox-content">
       <img id="lightbox-img" src="" alt="Full screen view">
-      <div id="lightbox-caption" class="lightbox-caption"></div>
+      
+      <div id="lightbox-info" class="lightbox-info hidden">
+        <div id="lightbox-caption" class="lightbox-caption"></div>
+        <div id="lightbox-desc" class="lightbox-desc"></div>
+      </div>
     </div>
   </dialog>
 

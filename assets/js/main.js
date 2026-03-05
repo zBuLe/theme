@@ -216,22 +216,60 @@ function initLightbox() {
   const images = Array.from(document.querySelectorAll('.doc-content img'));
   let currentIndex = 0;
 
-  function showLightboxImage(index) {
-    // Math trick to loop perfectly forwards and backwards
+function showLightboxImage(index) {
     currentIndex = (index + images.length) % images.length;
     const targetImg = images[currentIndex];
     
     modalImg.src = targetImg.src;
     modalImg.alt = targetImg.alt || 'Full screen image';
     
-    // Auto-detect caption: Check if the next element is an <em> tag, otherwise use the Alt text
-    let captionText = '';
-    if (targetImg.nextElementSibling && targetImg.nextElementSibling.tagName.toLowerCase() === 'EM') {
-      captionText = targetImg.nextElementSibling.innerHTML;
-    } else if (targetImg.alt) {
-      captionText = targetImg.alt;
+    const infoBox = document.getElementById('lightbox-info');
+    const captionDiv = document.getElementById('lightbox-caption');
+    const descDiv = document.getElementById('lightbox-desc');
+    const contentBox = document.querySelector('.lightbox-content');
+    
+    // THE NEW LOGIC: Aspect Ratio Detection
+    // If width is greater than height, it's landscape. Otherwise, portrait/square.
+    if (targetImg.naturalWidth > targetImg.naturalHeight) {
+      contentBox.classList.remove('portrait');
+      contentBox.classList.add('landscape');
+    } else {
+      contentBox.classList.remove('landscape');
+      contentBox.classList.add('portrait');
     }
+    
+    let captionText = targetImg.alt || '';
+    let descText = '';
+
+    const parent = targetImg.parentElement;
+    
+    if (parent && parent.tagName.toLowerCase() === 'p') {
+      const em = parent.querySelector('em');
+      
+      if (em && em.previousElementSibling === targetImg) {
+        captionText = em.innerHTML;
+        
+        const clone = parent.cloneNode(true);
+        const cloneImg = clone.querySelector('img');
+        const cloneEm = clone.querySelector('em');
+        
+        if (cloneImg) cloneImg.remove();
+        if (cloneEm) cloneEm.remove();
+        
+        descText = clone.innerHTML
+          .replace(/^[\s\n]*<br\s*\/?>/i, '')
+          .trim();
+      }
+    }
+
     captionDiv.innerHTML = captionText;
+    descDiv.innerHTML = descText;
+
+    if (!captionText && !descText) {
+      infoBox.classList.add('hidden');
+    } else {
+      infoBox.classList.remove('hidden');
+    }
   }
 
   // Click an image to open the lightbox at that specific image's index
@@ -239,6 +277,7 @@ function initLightbox() {
     img.addEventListener('click', () => {
       showLightboxImage(index);
       modal.showModal();
+      document.body.style.overflow = 'hidden';
     });
   });
 
@@ -266,9 +305,14 @@ function initLightbox() {
   });
 
   // Wipe data on close to prevent flashing
+  // Wipe data on close to prevent flashing and restore scrolling
   modal.addEventListener('close', () => {
     modalImg.src = '';
-    captionDiv.innerHTML = '';
+    document.getElementById('lightbox-caption').innerHTML = '';
+    document.getElementById('lightbox-desc').innerHTML = ''; // Clears the lore box
+    
+    // THE FIX: Unlock the background scroll
+    document.body.style.overflow = ''; 
   });
 }
 
