@@ -16,13 +16,13 @@ colors:
 #    bg: "#fdfbf7"       # A warm parchment
 #    text: "#2c2825"     # Deep brown-black
 #    border: "#e6e0d4"
-    accent: "red"   # A wax-seal red
+    accent: "blue"   # A wax-seal red
     # All muted versions, depth backgrounds, and contrasts will auto-calculate!
   dark:
 #    bg: "#1c1b18"       # A rich, dark charcoal
 #    text: "#fdfbf7"     # The same warm parchment for contrast
 #    border: "#2c2825"
-    accent: "red"   # Same wax-seal red for consistency
+    accent: "blue"   # Same wax-seal red for consistency
 
 bg_image: "url('/bg.jpg')"
   # bg_size: "auto"        # Use 'cover' for photos, 'auto' for repeating seamless patterns

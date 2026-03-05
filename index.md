@@ -5,7 +5,20 @@ author: Jane Doe
 tags: [jekyll, guide, setup]
 ---
 
-# Markdown syntax guide 1
+
+
+## Latest Updates
+<div class="grid-3">
+{% for post in site.posts limit:3 %}
+  <div class="card">
+    <em>{{ post.date | date: "%B %-d" }}</em>
+    <strong><a href="{{ post.url | relative_url }}">{{ post.title }}</a></strong>
+    <p>{{ post.excerpt | strip_html | truncatewords: 15 }}</p>
+  </div>
+{% endfor %}
+</div>
+
+
 
 ## Headers
 

@@ -561,3 +561,131 @@ body.toc-open  .book-btn { opacity: 0; pointer-events: none; }
 .lightbox-btn:hover { background-color: var(--accent); color: white; transform: translateY(-50%) scale(1.1); }
 .lightbox-prev { left: 20px; }
 .lightbox-next { right: 20px; }
+
+/* =========================================
+   PAGINATION UI (Unified List)
+   ========================================= */
+.doc-content ul.pagination-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  gap: 8px;
+  padding-left: 0em;
+}
+
+.pagination-list li a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  text-decoration: none;
+  color: var(--text);
+  background: var(--bg-dark);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.pagination-list li.active a {
+  background: var(--accent);
+  color: var(--contrast);
+  border-color: var(--accent);
+  pointer-events: none;
+}
+
+.pagination-status {
+  text-align: center;
+  color: var(--text-muted); /* Optional: tones down the text slightly */
+  font-size: 0.9rem;        /* Optional: makes it look more like metadata */
+  margin-bottom: 1rem;
+}
+
+.nav-arrow a {
+  font-size: 1.4rem; /* Makes the ‹ and › symbols easier to click */
+  border-color: transparent;
+  background: transparent;
+}
+
+.nav-arrow a:hover {
+  background: var(--accent-muted);
+  border-color: var(--border);
+}
+
+/* =========================================
+   GENERIC POST NAVIGATION
+   ========================================= */
+
+.post-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4rem;
+  padding: 2rem 0;
+  border-top: 1px solid var(--border);
+  gap: 20px;
+}
+
+/* Base link behavior using established tokens */
+/* Assign equal space to all three columns regardless of HTML tag */
+.prev-post,
+.next-post,
+.back-to-blog {
+  flex: 1;
+}
+
+/* Keep the base link behavior */
+.post-navigation a {
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.post-navigation a:hover {
+  opacity: 0.7;
+}
+
+/* Align the outer columns */
+.prev-post { text-align: left; }
+.next-post { text-align: right; }
+
+/* The Index/Home Escape Hatch */
+.back-to-blog {
+  text-align: center;
+  color: var(--accent);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Ensure the icon inherits the color perfectly */
+.back-to-blog i {
+  font-size: 1.1rem;
+  color: inherit; 
+}
+
+/* Mobile Stack for Accessibility */
+@media screen and (max-width: 768px) {
+  .post-navigation {
+    flex-direction: column;
+    text-align: center;
+    gap: 25px;
+  }
+  .prev-post, .next-post, .back-to-blog {
+    flex: none;
+    width: 100%;
+  }
+  .back-to-blog {
+    order: -1; 
+    border-bottom: 1px solid var(--border-muted);
+    padding-bottom: 15px;
+  }
+}
+

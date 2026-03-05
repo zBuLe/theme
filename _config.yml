@@ -9,9 +9,34 @@ logo: /assets/images/logo.svg
 # THEME SETTINGS & UI ICONS
 # =========================================
 # These icons are pulled dynamically into the HTML
-#toc_icon: "📖"
+#toc_icon: "☰"
 theme_icon_light: "🌞"
 theme_icon_dark: "🌚"
+
+
+blog_url: "/blog"
+blog_title: "Devlog"
+
+
+# =========================================
+# PLUGINS
+# =========================================
+plugins:
+  - jekyll-paginate-v2
+
+# =========================================
+# PAGINATION V2 SETTINGS
+# =========================================
+pagination:
+  enabled: true
+  per_page: 5
+  permalink: '/page/:num/'
+  # Shows 2 numbers before and 2 after the current page (e.g., [1] [2] (3) [4] [5])
+  trail:
+    before: 2
+    after: 2
+
+
 
 # =========================================
 # AUTOMATIC LAYOUTS

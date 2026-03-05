@@ -1,28 +1,56 @@
 ---
 layout: default
-title: Updates & Devlog
+title: Blog
+permalink: /blog/
+pagination: 
+  enabled: true
 ---
 
-Welcome to the development log. Here you will find the latest updates, lore additions, and system changes.
+{% for post in paginator.posts %}
+  <article class="post-entry">
+    <h3>
+      <a href="{{ post.url | relative_url }}?from_page={{ paginator.page }}">
+        {{ post.title }}
+      </a>
+    </h3>
+    <p>{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+  </article>
+{% endfor %}
 
-<div class="post-feed" style="margin-top: 2em; display: flex; flex-direction: column; gap: 20px;">
-  {% for post in site.posts %}
-    <article class="post-card" style="padding: 20px; background-color: var(--bg-dark); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-      
-      <h2 style="margin-top: 0; border-bottom: none; padding-bottom: 0;">
-        <a href="{{ post.url | relative_url }}" style="color: var(--text); text-decoration: none;">{{ post.title }}</a>
-      </h2>
-      
-      <div class="post-meta" style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 15px;">
-        {{ post.date | date: "%B %-d, %Y" }} 
-        {% if post.author %} • {{ post.author }}{% endif %}
-      </div>
-      
-      <p style="margin-bottom: 15px; color: var(--text-muted);">
-        {{ post.excerpt | strip_html | truncatewords: 35 }}
-      </p>
-      
-      <a href="{{ post.url | relative_url }}" style="font-weight: bold; font-size: 0.9em; text-transform: uppercase; letter-spacing: 0.05em;">Read Post &rarr;</a>
-    </article>
-  {% endfor %}
-</div>
+<hr>
+
+<section class="pagination-status">
+  <p>Page {{ page.pagination_info.curr_page }} of {{ page.pagination_info.total_pages }}</p>
+</section>
+
+{% if paginator.total_pages > 1 %}
+<nav class="pagination-nav">
+  <ul class="pagination-list">
+    
+    <li class="nav-arrow">
+      {% if paginator.previous_page %}
+        <a href="{{ paginator.previous_page_path | relative_url }}" title="Previous Page">‹</a>
+      {% else %}
+        <a class="disabled" title="No Previous Page">‹</a>
+      {% endif %}
+    </li>
+
+    {% if paginator.page_trail %}
+      {% for trail in paginator.page_trail %}
+        <li class="nav-number {% if paginator.page == trail.num %}active{% endif %}">
+            <a href="{{ trail.path | relative_url }}">{{ trail.num }}</a>
+        </li>
+      {% endfor %}
+    {% endif %}
+
+    <li class="nav-arrow">
+      {% if paginator.next_page %}
+        <a href="{{ paginator.next_page_path | relative_url }}" title="Next Page">›</a>
+      {% else %}
+        <a class="disabled" title="No Next Page">›</a>
+      {% endif %}
+    </li>
+
+  </ul>
+</nav>
+{% endif %}
