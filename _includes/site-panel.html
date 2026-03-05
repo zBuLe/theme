@@ -98,7 +98,7 @@
         
         let parentContent = link.closest('.accordion-content');
         while (parentContent) {
-          parentContent.style.maxHeight = "1000px"; 
+          parentContent.style.maxHeight = "none"; 
           
           let parentBtn = parentContent.previousElementSibling;
           if (parentBtn && parentBtn.classList.contains('accordion-btn')) {

@@ -1,0 +1,36 @@
+---
+layout: default
+---
+<div class="post-header" style="margin-bottom: 2em; padding-bottom: 1em; border-bottom: 1px solid var(--border-muted);">
+  <div class="post-meta" style="color: var(--text-muted); font-size: 0.95em; display: flex; gap: 15px; flex-wrap: wrap;">
+    {% if page.date %}
+      <span title="Published Date"><i class="far fa-calendar-alt"></i> {{ page.date | date: "%B %-d, %Y" }}</span>
+    {% endif %}
+    {% if page.author %}
+      <span title="Author"><i class="fas fa-pen-nib"></i> {{ page.author }}</span>
+    {% endif %}
+    {% if page.categories.size > 0 %}
+      <span title="Categories"><i class="fas fa-folder-open"></i> {{ page.categories | join: ", " }}</span>
+    {% endif %}
+  </div>
+</div>
+
+{{ content }}
+
+<div class="post-navigation" style="display: flex; justify-content: space-between; margin-top: 4em; padding-top: 1.5em; border-top: 1px solid var(--border);">
+  {% if page.previous.url %}
+    <a href="{{ page.previous.url | relative_url }}" class="prev-post" style="text-decoration: none; font-weight: bold;">
+      &larr; {{ page.previous.title }}
+    </a>
+  {% else %}
+    <span></span>
+  {% endif %}
+
+  {% if page.next.url %}
+    <a href="{{ page.next.url | relative_url }}" class="next-post" style="text-decoration: none; font-weight: bold;">
+      {{ page.next.title }} &rarr;
+    </a>
+  {% else %}
+    <span></span>
+  {% endif %}
+</div>

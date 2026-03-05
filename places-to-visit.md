@@ -80,7 +80,7 @@ Would you like me to organize a breakdown of the specific club variants and thei
 > Example line for prompt.
 {: .prompt-info }
 
-> Example line for prompt.
-> Example line for prompt.
-> Example line for prompt.
+> Example line for prompt.  
+> Example line for prompt.  
+> Example line for prompt.  
 {: .prompt-info }

@@ -68,19 +68,44 @@ function updateThemeIcon(isDark) {
 function initAccordions() {
   const accBtns = document.querySelectorAll('.accordion-btn');
   
-  accBtns.forEach(btn => {
-    btn.addEventListener('click', function() {
-      this.classList.toggle('active');
+  accBtns.forEach(acc => {
+    acc.addEventListener('click', function() {
       const content = this.nextElementSibling;
-      
-      if (this.classList.contains('active')) {
-        // Expand the accordion dynamically based on its inner scrollHeight
-        content.style.maxHeight = content.scrollHeight + "px";
+      const isExpanded = this.getAttribute('aria-expanded') === 'true';
+
+      if (!isExpanded) {
+        // --- OPENING ---
+        this.classList.add('active');
         this.setAttribute('aria-expanded', 'true');
+        
+        // 1. Set exactly to the scrollHeight to trigger the CSS transition
+        content.style.maxHeight = content.scrollHeight + "px";
+        
+        // 2. Wait for the transition to finish, then UNLOCK the parent
+        // so nested children can expand without clipping!
+        content.addEventListener('transitionend', function unlockHeight() {
+          if (acc.classList.contains('active')) {
+            content.style.maxHeight = 'none';
+          }
+          content.removeEventListener('transitionend', unlockHeight);
+        }, { once: true });
+
       } else {
-        // Collapse the accordion
-        content.style.maxHeight = null;
+        // --- CLOSING ---
+        this.classList.remove('active');
         this.setAttribute('aria-expanded', 'false');
+        
+        // 1. If it was 'none', we must briefly set it to its current pixel height
+        // so the CSS transition has a number to animate down from.
+        if (content.style.maxHeight === 'none') {
+          content.style.maxHeight = content.scrollHeight + "px";
+        }
+        
+        // 2. Force a tiny delay so the browser registers the pixel height 
+        // before we slam it back down to null (0).
+        requestAnimationFrame(() => {
+          content.style.maxHeight = null; 
+        });
       }
     });
   });

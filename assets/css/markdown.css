@@ -293,9 +293,9 @@ div.highlighter-rouge {
 }
 
 .copy-btn.copied {
-  background-color: var(--success); 
-  color: var(--contrast);
-  border-color: var(--success);
+  background-color: var(--accent-muted); 
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
 /* =========================================

@@ -1,7 +1,7 @@
 # =========================================
 # SITE CONFIGURATION
 # =========================================
-title: Thema
+title: Theme
 description: A fast, responsive, and accessible documentation theme.
 logo: /assets/images/logo.svg
 
@@ -10,8 +10,8 @@ logo: /assets/images/logo.svg
 # =========================================
 # These icons are pulled dynamically into the HTML
 #toc_icon: "📖"
-#theme_icon_light: "🌞"
-#theme_icon_dark: "🪫"
+theme_icon_light: "🌞"
+theme_icon_dark: "🌚"
 
 # =========================================
 # AUTOMATIC LAYOUTS

@@ -1,12 +1,8 @@
-# =========================================
-# LEFT PANEL NAVIGATION
-# =========================================
-# - title: The name displayed in the menu
-#   url: The path to the page (e.g., /about/)
-#   sublinks: Add this instead of a URL to create an accordion dropdown
-
 - title: Home
   url: /
+
+- title: Blog
+  url: /blog/
 
 - title: Text
   url: /text/
@@ -29,38 +25,31 @@
     - title: Vertebrates
       url: /vertebrates/
 
-# --- 4-LEVEL NESTING DEMONSTRATION ---
+ #--- 4-LEVEL NESTING DEMONSTRATION ---
+- title: Home
+  url: /
 - title: Geography
   sublinks:
-    # Level 2
     - title: Places
       url: /places-to-visit/
     - title: Continents
       sublinks:
-        # Level 3
         - title: North America
           sublinks:
-            # Level 4
             - title: United States
               url: /geography/na/usa/
             - title: Canada
               url: /geography/na/canada/
             - title: Mexico
               url: /geography/na/mexico/
-        
-        # Level 3
         - title: South America
           sublinks:
-            # Level 4
             - title: Brazil
               url: /geography/sa/brazil/
             - title: Argentina
               url: /geography/sa/argentina/
-              
-        # Level 3
         - title: Europe
           sublinks:
-            # Level 4
             - title: France
               url: /geography/eu/france/
 
@@ -73,3 +62,52 @@
 
 - title: GitHub Repository
   url: https://github.com/
+
+
+# Level 1: Direct Link
+- title: "Home"
+  url: "/"
+
+# Level 1: Direct Link to your test file
+- title: "Test Page"
+  url: "/test.html"
+
+# Level 1 Accordion: Simple Nested Links
+- title: "Project Docs"
+  sublinks:
+    - title: "Introduction"
+      url: "/docs/intro"
+    - title: "Getting Started"
+      url: "/docs/setup"
+
+# Level 1 Accordion: Deep Nesting Test (Targets all 4 levels)
+- title: "Deep Nesting"
+  sublinks:
+    - title: "Level 2 Category"
+      sublinks:
+        - title: "Level 3 Sub-Category"
+          sublinks:
+            - title: "Level 4 Item (The End)"
+              url: "/docs/deep-item"
+        - title: "Level 3 Standalone"
+          url: "/docs/level-3-link"
+    - title: "Level 2 Standalone"
+      url: "/docs/level-2-link"
+
+# Level 1 Accordion: External/Other Links
+- title: "Resources"
+  sublinks:
+    - title: "External Wiki"
+      url: "https://wikipedia.org"
+
+
+# =========================================
+# LEFT PANEL NAVIGATION
+# =========================================
+# - title: The name displayed in the menu
+#   url: The path to the page (e.g., /about/)
+#   sublinks: Add this instead of a URL to create an accordion dropdown
+
+
+
+
