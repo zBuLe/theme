@@ -34,6 +34,7 @@ To accurately visualize these elemental contradictions, our scribes generated th
 ![Newest Researcher](/assets/img/portrait___fire_by_zbule_df9xgfl.jpg){:#fire}
 *Researcher Ignis during the Combustible Ice incident.*
 Ignis was explicitly told not to bring standard flint into the Sector 4 laboratories. The resulting thermal event vaporized the budget reports for the entire fiscal year. Arch-Scribe Vex was surprisingly pleased.
+{: .card }
 
 ---
 
@@ -75,6 +76,9 @@ To initiate a temporal geological scan, field operatives must strictly adhere to
 
 If the `target_coordinates` fail to initialize, you must manually verify the `chronosphere.exe` module and verbally apologize to the nearest piece of quartz.
 
+> **Critical Failure:** The structural `integrity` of the *combustible ice* is ***compromised***.
+{: .danger }
+
 ### Institute Field Recordings
 
 The following visual logs were captured by the Bureau of Sharp Spheres during a recent expedition.
@@ -106,3 +110,28 @@ For a more comprehensive breakdown of our methodologies, please consult the [Ind
 ![Grand Scholar Balthazar](/assets/img/portrait___death_by_zbule_dfe6i34.png)*Grand Scholar Balthazar shortly after the budget meeting.*
 {: .float-right }
 
+---
+
+### Institute Testing Log: Corlee Plating vs. Combustible Ice
+*Testing overseen by Researcher Ignis. Budget approved by Arch-Scribe Vex.*
+
+| Plating Type / Material | Kinetic Deflection (Shrapnel) | Thermal Absorption | Acoustic Resonance | Researcher Notes |
+| :--- | :--- | :--- | :--- | :--- |
+| **Juvenile Dorsal Scute** | Low (Brittle) | High | Dampened | *Do not drop.* Shatters like glass when separated from the host. |
+| **Adult Thoracic Plate** | Very High | Moderate | High (Rings like a bell) | Survived a point-blank Combustible Ice detonation. Vex owes me five credits. |
+| **Elder Cranial Ridge** | Absolute | Very Low (Overheats) | Extreme | Conducts heat instantly. Vaporized my left eyebrow during the Sector 4 event. |
+| **Synthesized Alloy** | Moderate | High | Deadened | Institute-approved replacement. Melts slightly faster than actual Corlee plating. |
+| **Standard Clipboard** | Negligible | Zero | N/A | Currently fused to the ceiling of the paradox chambers. |
+| **Combustible Ice Core** | N/A (Explosive) | N/A (Volatile) | Deafening | Why did we bring this into the laboratory again? |
+
+As the data shows, the adult plating acts primarily as a kinetic shield against the explosive shrapnel of the ice, but at the heavy cost of ringing like a bell—which temporarily blinds their acoustic pressure tracking!
+
+## Sector 4 Terminology
+
+Acoustic Blinding
+: A physiological vulnerability in adult Corlee.
+: Occurs when kinetic impacts against their thoracic plating cause it to ring at high frequencies, temporarily overwhelming their pressure-tracking navigation.
+
+Combustible Ice
+: A highly volatile, naturally occurring subterranean mineral.
+: Fuses to standard laboratory clipboards with zero effort.

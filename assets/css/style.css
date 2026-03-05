@@ -10,7 +10,7 @@
   /* Semantic / Status Tokens */
   --danger: hsl(0, 84%, 60%);          
   --warning: hsl(38, 92%, 50%);       
-  --success: hsl(160, 84%, 39%);       
+  --tip: hsl(160, 84%, 39%);       
   --info: hsl(218.5, 79.2%, 66.1%);
 
   /* --- DERIVED COLORS (Auto-calculated) --- */
@@ -53,7 +53,7 @@ body.dark-mode {
   /* Semantic / Status Tokens */
   --danger: hsl(0, 93%, 71%);
   --warning: hsl(43, 96%, 56%);
-  --success: hsl(158, 64%, 52%);
+  --tip: hsl(158, 64%, 52%);
   --info: hsl(213, 97%, 68%);
   
   /* --- DERIVED COLORS --- */
