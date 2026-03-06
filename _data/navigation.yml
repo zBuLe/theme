@@ -2,19 +2,19 @@
   url: /
 
 - title: Blog
-  url: /blog/
+  url: /blog
 
 - title: Text
-  url: /text/
+  url: /text
 
 - title: Test
   url: /test
 
 - title: Readme
-  url: /readme/
+  url: /readme
 
 - title: About
-  url: /about/
+  url: /about
 
 - title: Test Pages
   sublinks:
