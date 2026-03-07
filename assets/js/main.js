@@ -69,7 +69,7 @@ function toggleNavMenu(id) {
 
 function buildTOC() {
   const tocList = document.getElementById('toc-list');
-  const docPanel = document.querySelector('.doc-panel'); // We need the scrolling container
+  const docPanel = document.querySelector('.doc-content'); // We need the scrolling container
   const headers = Array.from(document.querySelectorAll('.doc-content h2, .doc-content h3'));
   
   if (!tocList || !docPanel) return;
@@ -269,7 +269,8 @@ function initSearch() {
 // 7. SCROLL TO TOP
 // ==========================================
 function scrollToTop() {
-  const docPanel = document.querySelector('.doc-panel');
+  // Change this line:
+  const docPanel = document.querySelector('.doc-content'); // Was .doc-panel
   if (docPanel) {
     docPanel.scrollTo({ top: 0, behavior: 'smooth' });
   }
