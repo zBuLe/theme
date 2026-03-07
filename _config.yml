@@ -55,3 +55,5 @@ plugins:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
+
+# Add this anywhere in your _config.yml
