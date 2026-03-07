@@ -1,88 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>{{ page.title | default: site.title }}</title>
-  
-  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
-  <link rel="stylesheet" href="{{ '/assets/css/markdown.css' | relative_url }}">
-
-  {% include theme.html %}
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
-
-<body class="preload">
-
-  <script>
-    // 1. Theme Check
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme !== "light") {
-      document.body.classList.add("dark-mode");
-    }
-
-    // 2. Panel State Check
-    if (window.innerWidth > 768) {
-      if (localStorage.getItem("sitePanel") === "open") document.body.classList.add("site-open");
-      if (localStorage.getItem("tocPanel") === "open") document.body.classList.add("toc-open");
-    }
-  </script>
-
-  {% include site-panel.html %}
-  {% include toc-panel.html %}
-
-  <main class="doc-panel">
-    <header class="doc-header">
-      <button type="button" class="action-btn logo-btn" onclick="toggleSiteNav()" aria-label="Toggle site navigation" aria-controls="siteNav" aria-expanded="false">
-        <img src="{{ site.logo | relative_url }}" alt="{{ site.title }} Logo" class="logo-img">
-      </button>
-      
-      <h1 class="doc-title">
-        <a href="#" aria-label="Scroll to top">{{ page.title }}</a>
-      </h1>
-      
-      <button type="button" class="action-btn book-btn" onclick="toggleTocNav()" aria-label="Toggle table of contents" aria-controls="tocNav" aria-expanded="false">
-        {{ site.toc_icon | default: '📖' }}
-      </button>
-    </header>
-
-    <article class="doc-content">
-      {{ content }}
-    </article>
-  </main>
-
-  <dialog id="lightbox-modal" class="lightbox">
-    <button type="button" id="lightbox-close" class="action-btn lightbox-close" aria-label="Close image">×</button>
-    <button type="button" id="lightbox-prev" class="lightbox-btn lightbox-prev" aria-label="Previous image">&#10094;</button>
-    <button type="button" id="lightbox-next" class="lightbox-btn lightbox-next" aria-label="Next image">&#10095;</button>
+<!doctype html>
+<html lang="{{ site.lang | default: "en" }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ page.title }} | {{ site.title }}</title>
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  </head>
+  <body class="site-container preload">
     
-<div class="lightbox-content">
-      <img id="lightbox-img" src="" alt="Full screen view">
+<script>
+      // 1. Only restore open panels if the screen is desktop-sized
+      const isDesktop = window.innerWidth >= 768;
+      if (isDesktop && localStorage.getItem('site-panel-state') !== 'closed') document.body.classList.add('site-open');
+      if (isDesktop && localStorage.getItem('page-panel-state') !== 'closed') document.body.classList.add('page-open');
       
-      <div id="lightbox-info" class="lightbox-info hidden">
-        <div id="lightbox-caption" class="lightbox-caption"></div>
-        <div id="lightbox-desc" class="lightbox-desc"></div>
-      </div>
-    </div>
-  </dialog>
+      // 2. Theme always restores regardless of screen size
+      if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
+    </script>
 
-  <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+    {% include site-panel.html %}
 
-  <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script>
-  
-  <script>
-    if (document.getElementById('search-input')) {
-      SimpleJekyllSearch({
-        searchInput: document.getElementById('search-input'),
-        resultsContainer: document.getElementById('search-results'),
-        
-        // Pointing to the assets folder for remote theme compatibility!
-        json: '{{ "/assets/search.json" | relative_url }}',
-        
-        searchResultTemplate: '<li><a href="{url}">{title}</a></li>',
-        noResultsText: '<li class="no-results">No results found for that term.</li>'
-      });
-    }
-  </script>
-</body>
+    <main class="doc-panel">
+      <header class="doc-header">
+        <button type="button" class="panel-btn toggle-site" onclick="toggleSitePanel()">
+           {% if site.logo %}<img src="{{ site.logo | relative_url }}" alt="Logo" class="logo-img">{% endif %}
+        </button>
+
+        <h1 onclick="scrollToTop()">{{ page.title }}</h1>
+
+        <button type="button" class="panel-btn toggle-page" onclick="togglePagePanel()">📖</button>
+      </header>
+      
+      <article class="doc-content">
+        {{ content }}
+      </article>
+    </main>
+
+    {% include page-panel.html %}
+
+    <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+  </body>
 </html>

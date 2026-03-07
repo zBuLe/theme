@@ -1,114 +1,54 @@
 ---
 layout: default
-title: Welcome to My Docs
-author: Jane Doe
-tags: [jekyll, guide, setup]
+title: Welcome to My Site
 ---
 
+# Hello, World!
 
+Welcome to your new minimalist website. This page is generated from `index.md` using the **{{ site.remote_theme | default: "custom" }}** Jekyll theme.
 
-## Latest Updates
-<div class="grid-3">
-{% for post in site.posts limit:3 %}
-  <div class="card">
-    <em>{{ post.date | date: "%B %-d" }}</em>
-    <strong><a href="{{ post.url | relative_url }}">{{ post.title }}</a></strong>
-    <p>{{ post.excerpt | strip_html | truncatewords: 15 }}</p>
-  </div>
+## Features of this Theme
+* **Minimalist Design:** No heavy frameworks, just clean CSS.
+* **Remote Ready:** Works instantly with GitHub Pages via `remote_theme`.
+* **Responsive:** Scales beautifully from desktops to mobile devices.
+
+---
+
+### Getting Started
+
+To customize this page, simply edit `index.md` in your repository. You can use standard Markdown to add content, images, or links.
+
+#### A Simple Code Example
+If you want to share snippets, the theme handles backticks automatically:
+
+```javascript
+function greet() {
+  console.log("Welcome to my Jekyll site!");
+}
+
+```
+
+> "Simplicity is the ultimate sophistication." — Leonardo da Vinci
+
+---
+
+### Recent Posts
+
+{% for post in site.posts limit:5 %}
+
+* [{{ post.date | date: "%b %d, %Y" }} — {{ post.title }}]({{ post.url | relative_url }})
 {% endfor %}
-</div>
 
+---
 
+## Implementation Instructions
 
-## Headers
+1.  **Placement:** Save this file as `index.md` in the root directory of your Jekyll project.
+2.  **Front Matter:** * `layout: default` tells Jekyll to wrap this content inside the `_layouts/default.html` file we created earlier.
+    * `title: Welcome to My Site` provides the title that the `[% seo %}` tag and your `<header>` will use.
+3.  **Liquid Logic:** The "Recent Posts" section at the bottom uses a Liquid `for` loop. If you haven't created any posts in a `_posts` folder yet, this section will simply remain empty until you do.
 
-# This is a Heading h1
-## This is a Heading h2
-###### This is a Heading h6
+### Why this works:
+By using the `{{ content }}` tag in our `default.html` layout, Jekyll takes everything below the second `---` in this `index.md` file, converts it from Markdown to HTML, and injects it right into the middle of your site's structure.
 
-## Emphasis
-
-*This text will be italic*  
-_This will also be italic_
-
-**This text will be bold**  
-__This will also be bold__
-
-_You **can** combine them_
-
-## Lists
-
-### Unordered
-
-* Item 1
-* Item 2
-* Item 2a
-* Item 2b
-    * Item 3a
-    * Item 3b
-
-### Ordered
-
-1. Item 1
-2. Item 2
-3. Item 3
-    1. Item 3a
-    2. Item 3b
-
-## Images
-
-![This is an alt text.](/image/Markdown-mark.svg "This is a sample image.")
-
-## Links
-
-You may be using [Markdown Live Preview](https://markdownlivepreview.com/).
-
-## Blockquotes
-
-> Markdown is a lightweight markup language with plain-text-formatting syntax, created in 2004 by John Gruber with Aaron Swartz.
->
->> Markdown is often used to format readme files, for writing messages in online discussion forums, and to create rich text using a plain text editor.
-
-
-> This is a helpful tip!
-{: .info }
-
-> Operation completed successfully.
-{: .success }
-
-> Proceed with caution, Corlee goons ahead.
-{: .warning }
-
-> Do not cross the Donna.
-{: .danger }
-
-## Tables
-
-| Left columns  | Right columns |
-| ------------- |:-------------:|
-| left foo      | right foo     |
-| left bar      | right bar     |
-| left baz      | right baz     |
-
-## Blocks of code
-
-```
-let message = 'Hello world';
-alert(message);
-```
-
-## Inline code
-
-This web site is using `markedjs/marked`.
-
-
-* **Strength:** High physical power and carrying capacity.
-* **Agility:** Fast reflexes but lower overall stamina.
-* **Intelligence:** High analytical skills, weak physical defense.
-* **Strength:** High physical power and carrying capacity.
-* **Agility:** Fast reflexes but lower overall stamina.
-* **Intelligence:** High analytical skills, weak physical defense.
-* **Strength:** High physical power and carrying capacity.
-* **Agility:** Fast reflexes but lower overall stamina.
-* **Intelligence:** High analytical skills, weak physical defense.
-{: .grid-5}
+**Would you like me to create a `_posts/` example file so you can see how the blog functionality looks with this index?**

@@ -1,0 +1,51 @@
+// _sass/_variables.scss
+
+:root {
+  // ==========================================
+  // 1. BASE COLORS (Light Mode Defaults)
+  // ==========================================
+  --bg: #ccc;
+  --text: #333;
+  --accent: #0076df;
+
+  --border: color-mix(in srgb, var(--bg) 80%, var(--text)); 
+  --border-muted: color-mix(in srgb, var(--border) 40%, var(--bg));
+  --text-muted: color-mix(in srgb, var(--text) 60%, var(--bg));
+  --accent-muted: color-mix(in srgb, var(--accent) 10%, var(--bg));
+  
+  --bg-1: color-mix(in srgb, var(--bg) 90%, var(--text));
+  --bg-2: color-mix(in srgb, var(--bg) 95%, var(--text));
+
+  // ==========================================
+  // 3. LAYOUT DIMENSIONS
+  // ==========================================
+  // We keep these as CSS variables for standard elements
+  --panel-width: 280px;
+  --header-height: 64px;
+}
+
+// ==========================================
+// 4. DARK MODE OVERRIDES
+// ==========================================
+body.dark-mode {
+  // All you have to do is flip the 3 base colors!
+  // The 4 derived colors will recalculate themselves instantly.
+  --bg: #121212;
+  --text: #e0e0e0;
+  --accent: #5db0ff; 
+
+    --border: color-mix(in srgb, var(--bg) 80%, var(--text)); 
+  --border-muted: color-mix(in srgb, var(--border) 40%, var(--bg));
+  --text-muted: color-mix(in srgb, var(--text) 60%, var(--bg));
+  --accent-muted: color-mix(in srgb, var(--accent) 10%, var(--bg));
+
+  --bg-1: color-mix(in srgb, var(--bg) 90%, var(--text));
+  --bg-2: color-mix(in srgb, var(--bg) 95%, var(--text));
+}
+
+// ==========================================
+// 5. SCSS VARIABLES (For Media Queries)
+// ==========================================
+// Standard CSS variables cannot be used inside @media (max-width: ...)
+// so we define our breakpoint as an SCSS variable.
+$mobile: 768px;

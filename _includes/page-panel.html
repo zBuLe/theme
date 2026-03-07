@@ -1,0 +1,15 @@
+<aside class="page-panel">
+  <header class="page-header">
+    <button type="button" id="theme-toggle" class="panel-btn theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">☀️</button>
+    <div class="header-spacer"></div> 
+    <button type="button" class="panel-btn close-page" onclick="togglePagePanel()">×</button>
+  </header>
+  
+  <nav class="page-toc">
+    <ul id="toc-list"></ul>
+  </nav>
+
+  <footer class="page-footer">
+    <p>Last updated: {{ page.last_modified_at | date: "%b %d, %Y" }}</p>
+  </footer>
+</aside>

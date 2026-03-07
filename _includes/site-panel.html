@@ -1,114 +1,35 @@
-<aside class="side-panel site-panel" id="siteNav" aria-label="Site Navigation">
-  
-  <header class="site-header" style="justify-content: space-between;">    
-    <button type="button" class="action-btn" onclick="toggleSiteNav()" aria-label="Close site navigation">×</button>
-    <h2 style="margin: 0;">
-      <a href="{{ '/' | relative_url }}" style="color: inherit; text-decoration: none;" title="Return to Home">{{ site.title }}</a>
-    </h2>    
-    {% if site.logo %}
-      <img src="{{ site.logo | relative_url }}" alt="Logo" class="logo-img">
-    {% endif %}    
+<aside class="site-panel">
+  <header class="site-header">
+    <button type="button" class="panel-btn close-site" onclick="toggleSitePanel()" aria-label="Close site panel">
+      {% if site.logo %}
+        <img src="{{ site.logo | relative_url }}" alt="Close" class="logo-img">
+      {% else %}
+        <span style="font-size: 1.5rem;">×</span> {% endif %}
+    </button>
+    
+    <a href="{{ '/' | relative_url }}" class="site-title-link">
+      {{ site.title }}
+    </a>
+
+    <div class="header-spacer"></div>
   </header>
+  <div class="search-container">
+    <div class="search-input-wrapper">
+      <input type="text" id="search-input" placeholder="Search docs..." aria-label="Search" autocomplete="off">
+      <button type="button" id="search-clear" class="search-clear-btn" aria-label="Clear search" style="display: none;">×</button>
+    </div>
+    <ul id="search-results" class="search-results"></ul>
+  </div>
 
   <nav class="site-nav">
-    
-    <div class="search-box">
-      <input type="text" id="search-input" class="search-input" placeholder="Search docs..." />
-      <ul id="search-results" class="search-results"></ul>
-    </div>
-
-    {% if site.data.navigation %}
+    <ul class="nav-list base-level">
       {% for item in site.data.navigation %}
-        {% if item.sublinks %}
-          <button type="button" class="accordion-btn level-1" aria-expanded="false">{{ item.title }} <span class="caret">▼</span></button>
-          <div class="accordion-content">
-            
-            {% for sub1 in item.sublinks %}
-              {% if sub1.sublinks %}
-                <button type="button" class="accordion-btn level-2" aria-expanded="false">{{ sub1.title }} <span class="caret">▼</span></button>
-                <div class="accordion-content">
-                  
-                  {% for sub2 in sub1.sublinks %}
-                    {% if sub2.sublinks %}
-                      <button type="button" class="accordion-btn level-3" aria-expanded="false">{{ sub2.title }} <span class="caret">▼</span></button>
-                      <div class="accordion-content">
-                        
-                        {% for sub3 in sub2.sublinks %}
-                          <a href="{{ sub3.url | relative_url }}" class="level-4 {% if page.url == sub3.url %}active-link{% endif %}">{{ sub3.title }}</a>
-                        {% endfor %}
-                        
-                      </div>
-                    {% else %}
-                      <a href="{{ sub2.url | relative_url }}" class="level-3 {% if page.url == sub2.url %}active-link{% endif %}">{{ sub2.title }}</a>
-                    {% endif %}
-                  {% endfor %}
-                  
-                </div>
-              {% else %}
-                <a href="{{ sub1.url | relative_url }}" class="level-2 {% if page.url == sub1.url %}active-link{% endif %}">{{ sub1.title }}</a>
-              {% endif %}
-            {% endfor %}
-            
-          </div>
-        {% else %}
-          <a href="{{ item.url | relative_url }}" class="level-1 {% if page.url == item.url %}active-link{% endif %}">{{ item.title }}</a>
-        {% endif %}
+        {% include nav-item.html item=item prefix="nav" %}
       {% endfor %}
-    {% endif %}
+    </ul>
+  </nav>
 
-  </nav> 
-  
   <footer class="site-footer">
-    <div class="contact-icons">
-      {% if site.data.contact %}
-        {% for item in site.data.contact %}
-          {% if item.url and item.url != empty %}
-            <a href="{{ item.url }}" aria-label="{{ item.type }}" {% unless item.noblank %}target="_blank" rel="noopener noreferrer"{% endunless %}>
-              {% if item.svg %}
-                {{ item.svg }}
-              {% elsif item.icon %}
-                <i class="{{ item.icon }}"></i>
-              {% endif %}
-            </a>
-          {% endif %}
-        {% endfor %}
-      {% endif %}
-    </div>
-
-    <div class="site-copyright">
-      &copy; {{ 'now' | date: "%Y" }} {{ site.title }}
-    </div>
+    2026 &copy; 
   </footer>
-
 </aside>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const currentPath = window.location.pathname.replace(/\/$/, ""); 
-    const navLinks = document.querySelectorAll('.site-nav a');
-    
-    navLinks.forEach(link => {
-      // --- NEW: Ignore external links so they don't accidentally match ---
-      if (link.hostname !== window.location.hostname) return;
-
-      const linkPath = new URL(link.href).pathname.replace(/\/$/, "");
-      
-      if (currentPath === linkPath || currentPath === linkPath + ".html") {
-        link.classList.add('active-link'); 
-        
-        let parentContent = link.closest('.accordion-content');
-        while (parentContent) {
-          parentContent.style.maxHeight = "none"; 
-          
-          let parentBtn = parentContent.previousElementSibling;
-          if (parentBtn && parentBtn.classList.contains('accordion-btn')) {
-            parentBtn.classList.add('active');
-            parentBtn.setAttribute('aria-expanded', 'true');
-          }
-          
-          parentContent = parentContent.parentElement.closest('.accordion-content');
-        }
-      }
-    });
-  });
-</script>

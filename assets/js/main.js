@@ -1,411 +1,276 @@
-/* =========================================
-   1. PRELOADER & INITIALIZATION
-   ========================================= */
-window.addEventListener('load', () => {
-  // Removes the preload class so CSS transitions can safely begin
-  document.body.classList.remove('preload');
-  
-  // Initialize UI components
-  initThemeToggle();
-  initAccordions();
-  buildTOC();
-  initCodeCopy();
-  initLightbox();
-  initAlbums();
-});
+// assets/js/main.js
 
-/* =========================================
-   2. PANEL TOGGLING (State Management)
-   ========================================= */
-function toggleSiteNav() {
-  const body = document.body;
-  const isOpen = body.classList.toggle('site-open');
-  localStorage.setItem('sitePanel', isOpen ? 'open' : 'closed');
-  
-  // Auto-close the TOC panel on mobile devices to prevent overlapping
-  if (isOpen && window.innerWidth <= 768) {
-    body.classList.remove('toc-open');
-  }
+// ==========================================
+// 1. PANEL TOGGLES (Left and Right Sidebars)
+// ==========================================
+
+// Function to toggle the Site (Left) Panel
+function toggleSitePanel() {
+  const isOpen = document.body.classList.toggle('site-open');
+  localStorage.setItem('site-panel-state', isOpen ? 'open' : 'closed');
 }
 
-function toggleTocNav() {
-  const body = document.body;
-  const isOpen = body.classList.toggle('toc-open');
-  localStorage.setItem('tocPanel', isOpen ? 'open' : 'closed');
-  
-  // Auto-close the Site panel on mobile devices to prevent overlapping
-  if (isOpen && window.innerWidth <= 768) {
-    body.classList.remove('site-open');
-  }
+// Function to toggle the Page (Right) Panel
+function togglePagePanel() {
+  const isOpen = document.body.classList.toggle('page-open');
+  localStorage.setItem('page-panel-state', isOpen ? 'open' : 'closed');
 }
 
-/* =========================================
-   3. THEME TOGGLING (Dark/Light Mode)
-   ========================================= */
+// ==========================================
+// 2. THEME TOGGLE (Light/Dark Mode)
+// ==========================================
+
+// Function to toggle Dark Mode
 function toggleTheme() {
   const isDark = document.body.classList.toggle('dark-mode');
   localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  
   updateThemeIcon(isDark);
 }
 
-function initThemeToggle() {
-  const isDark = document.body.classList.contains('dark-mode');
-  updateThemeIcon(isDark);
-}
-
+// Helper to swap the icon to reflect the CURRENT state
 function updateThemeIcon(isDark) {
-  const btn = document.getElementById('theme-toggle');
-  if (btn) {
-    // Swaps the emoji/icon based on the data attributes we set in toc-panel.html
-    btn.textContent = isDark ? btn.getAttribute('data-icon-dark') : btn.getAttribute('data-icon-light');
+  const themeBtn = document.getElementById('theme-toggle');
+  if (themeBtn) {
+    // If dark mode is active, show the Moon. Otherwise, show the Sun.
+    themeBtn.innerText = isDark ? '🌙' : '☀️';
   }
 }
 
-/* =========================================
-   4. ACCORDION MENU LOGIC
-   ========================================= */
-function initAccordions() {
-  const accBtns = document.querySelectorAll('.accordion-btn');
+// ==========================================
+// 3. NAVIGATION FOLDERS (Accordion State)
+// ==========================================
+
+// Function to toggle a navigation folder and save its state
+function toggleNavMenu(id) {
+  const container = document.getElementById(id);
+  const icon = document.getElementById(`icon-${id}`);
   
-  accBtns.forEach(acc => {
-    acc.addEventListener('click', function() {
-      const content = this.nextElementSibling;
-      const isExpanded = this.getAttribute('aria-expanded') === 'true';
+  if (!container) return;
 
-      if (!isExpanded) {
-        // --- OPENING ---
-        this.classList.add('active');
-        this.setAttribute('aria-expanded', 'true');
-        
-        // 1. Set exactly to the scrollHeight to trigger the CSS transition
-        content.style.maxHeight = content.scrollHeight + "px";
-        
-        // 2. Wait for the transition to finish, then UNLOCK the parent
-        // so nested children can expand without clipping!
-        content.addEventListener('transitionend', function unlockHeight() {
-          if (acc.classList.contains('active')) {
-            content.style.maxHeight = 'none';
-          }
-          content.removeEventListener('transitionend', unlockHeight);
-        }, { once: true });
+  // Toggle the CSS classes for the slide animation and icon rotation
+  const isOpen = container.classList.toggle('is-open');
+  if (icon) icon.classList.toggle('is-rotated');
 
-      } else {
-        // --- CLOSING ---
-        this.classList.remove('active');
-        this.setAttribute('aria-expanded', 'false');
-        
-        // 1. If it was 'none', we must briefly set it to its current pixel height
-        // so the CSS transition has a number to animate down from.
-        if (content.style.maxHeight === 'none') {
-          content.style.maxHeight = content.scrollHeight + "px";
-        }
-        
-        // 2. Force a tiny delay so the browser registers the pixel height 
-        // before we slam it back down to null (0).
-        requestAnimationFrame(() => {
-          content.style.maxHeight = null; 
-        });
-      }
-    });
-  });
+  // Save the state to LocalStorage so it persists across pages
+  let openMenus = JSON.parse(localStorage.getItem('open-nav-menus') || '[]');
+  
+  if (isOpen) {
+    if (!openMenus.includes(id)) openMenus.push(id);
+  } else {
+    openMenus = openMenus.filter(menuId => menuId !== id);
+  }
+  
+  localStorage.setItem('open-nav-menus', JSON.stringify(openMenus));
 }
 
-/* =========================================
-   5. DYNAMIC TABLE OF CONTENTS & SCROLLSPY
-   ========================================= */
-function buildTOC() {
-  const tocNav = document.getElementById('tocNav');
-  if (!tocNav) return;
+// ==========================================
+// 4. TABLE OF CONTENTS GENERATOR & SCROLLSPY
+// ==========================================
 
-  // Grab all H2 and H3 tags inside the main markdown content area
-  const headers = document.querySelectorAll('.doc-content h2, .doc-content h3');
+function buildTOC() {
+  const tocList = document.getElementById('toc-list');
+  const docPanel = document.querySelector('.doc-panel'); // We need the scrolling container
+  const headers = Array.from(document.querySelectorAll('.doc-content h2, .doc-content h3'));
   
+  if (!tocList || !docPanel) return;
+
+  // If there are no headers, show a subtle message
   if (headers.length === 0) {
-    tocNav.innerHTML = '<p style="padding: 0 20px; color: var(--text-muted); font-style: italic; font-size: 0.9em;">No headings on this page.</p>';
+    tocList.innerHTML = '<li class="toc-empty">No sections on this page.</li>';
     return;
   }
 
-  const fragment = document.createDocumentFragment();
-  
+  // 1. Build the list (Same as before)
   headers.forEach(header => {
-    // Ensure every header has an ID so we can link to it
     if (!header.id) {
-      header.id = header.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      header.id = header.innerText.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     }
 
-    const link = document.createElement('a');
-    link.href = '#' + header.id;
-    link.textContent = header.textContent;
-    
-    // Apply the CSS classes we built in style.css to indent H3s
-    link.className = header.tagName.toLowerCase() === 'h2' ? 'toc-h2' : 'toc-h3';
-    
-    fragment.appendChild(link);
+    const li = document.createElement('li');
+    li.className = `toc-item toc-${header.tagName.toLowerCase()}`; 
+
+    const a = document.createElement('a');
+    a.href = `#${header.id}`;
+    a.innerText = header.innerText;
+    a.className = 'toc-link';
+
+    li.appendChild(a);
+    tocList.appendChild(li);
   });
 
-  tocNav.appendChild(fragment);
+  // 2. The ScrollSpy Logic (Keep track of where we are)
+  const tocLinks = document.querySelectorAll('.toc-link');
 
-  // Initialize ScrollSpy to highlight the active heading as you scroll
-  setupScrollSpy(headers, tocNav);
-}
+  docPanel.addEventListener('scroll', () => {
+    let currentId = '';
 
-function setupScrollSpy(headers, tocNav) {
-  const tocLinks = tocNav.querySelectorAll('a');
-  
-  // Creates an intersection observer that triggers when a heading hits the top 15% of the screen
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        tocLinks.forEach(link => {
-          link.classList.remove('active-toc');
-          if (link.getAttribute('href') === '#' + entry.target.id) {
-            link.classList.add('active-toc');
-          }
-        });
+    // Loop through headers to find which one is currently at the top
+    headers.forEach(header => {
+      // 100px is the 64px header + some extra buffer so it triggers naturally
+      if (header.getBoundingClientRect().top < 100) {
+        currentId = header.id;
       }
     });
-  }, { rootMargin: "0px 0px -85% 0px", threshold: 0.1 }); 
 
-  headers.forEach(header => observer.observe(header));
-}
-
-/* =========================================
-   6. AUTO-INJECT COPY CODE BUTTONS
-   ========================================= */
-function initCodeCopy() {
-  // Target the wrapper that Jekyll's Rouge highlighter generates
-  const codeBlocks = document.querySelectorAll('div.highlighter-rouge');
-  
-  codeBlocks.forEach(block => {
-    // 1. Check if a header exists. If not, build one!
-    let header = block.querySelector('.code-header');
-    
-    if (!header) {
-      header = document.createElement('div');
-      header.className = 'code-header';
-      
-      // Try to extract the language name from the <pre> class (e.g., language-css)
-      const pre = block.querySelector('pre.highlight') || block.querySelector('pre');
-      const langClass = pre ? Array.from(pre.classList).find(c => c.startsWith('language-')) : null;
-      const langName = langClass ? langClass.replace('language-', '') : 'Code';
-      
-      const langSpan = document.createElement('span');
-      langSpan.className = 'code-lang';
-      langSpan.textContent = langName;
-      
-      header.appendChild(langSpan);
-      block.insertBefore(header, block.firstChild);
+    // Edge Case Fix: If user scrolls to the absolute bottom, highlight the last item
+    // even if it hasn't hit the top of the screen yet.
+    if (docPanel.scrollHeight - docPanel.scrollTop <= docPanel.clientHeight + 10) {
+      currentId = headers[headers.length - 1].id;
     }
-    
-    // 2. Inject the Copy Button
-    const copyBtn = document.createElement('button');
-    copyBtn.className = 'copy-btn';
-    copyBtn.textContent = 'Copy';
-    copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
-    
-    copyBtn.addEventListener('click', () => {
-      // Grab the raw text inside the <code> element
-      const code = block.querySelector('code').innerText;
-      
-      // Write to clipboard and trigger the success animation we styled in CSS
-      navigator.clipboard.writeText(code).then(() => {
-        copyBtn.textContent = 'Copied!';
-        copyBtn.classList.add('copied');
-        
-        setTimeout(() => {
-          copyBtn.textContent = 'Copy';
-          copyBtn.classList.remove('copied');
-        }, 2000);
+
+    // Apply the active class to the correct link
+    if (currentId) {
+      tocLinks.forEach(link => {
+        link.classList.remove('active-toc');
+        if (link.getAttribute('href') === `#${currentId}`) {
+          link.classList.add('active-toc');
+        }
       });
-    });
-    
-    header.appendChild(copyBtn);
+    }
   });
+
+  // 3. Trigger it once immediately on load so the first item highlights
+  docPanel.dispatchEvent(new Event('scroll'));
 }
 
-/* =========================================
-   7. NATIVE IMAGE LIGHTBOX & GALLERY
-   ========================================= */
-function initLightbox() {
-  const modal = document.getElementById('lightbox-modal');
-  const modalImg = document.getElementById('lightbox-img');
-  const closeBtn = document.getElementById('lightbox-close');
-  const prevBtn = document.getElementById('lightbox-prev');
-  const nextBtn = document.getElementById('lightbox-next');
-  const captionDiv = document.getElementById('lightbox-caption');
-  
-  if (!modal) return;
+// ==========================================
+// 5. INITIALIZATION ON PAGE LOAD
+// ==========================================
 
-  // Gather ALL images in the document to create a master gallery
-  const images = Array.from(document.querySelectorAll('.doc-content img'));
-  let currentIndex = 0;
+document.addEventListener("DOMContentLoaded", () => {
+  // 1. Remove the preload class after a tiny delay
+  // This allows the smooth sliding transitions to work when clicking buttons
+  // without flashing the animations when the page first loads.
+  setTimeout(() => {
+    document.body.classList.remove('preload');
+  }, 50);
 
-function showLightboxImage(index) {
-    currentIndex = (index + images.length) % images.length;
-    const targetImg = images[currentIndex];
-    
-    modalImg.src = targetImg.src;
-    modalImg.alt = targetImg.alt || 'Full screen image';
-    
-    const infoBox = document.getElementById('lightbox-info');
-    const captionDiv = document.getElementById('lightbox-caption');
-    const descDiv = document.getElementById('lightbox-desc');
-    const contentBox = document.querySelector('.lightbox-content');
-    
-    // THE NEW LOGIC: Aspect Ratio Detection
-    // If width is greater than height, it's landscape. Otherwise, portrait/square.
-    if (targetImg.naturalWidth > targetImg.naturalHeight) {
-      contentBox.classList.remove('portrait');
-      contentBox.classList.add('landscape');
-    } else {
-      contentBox.classList.remove('landscape');
-      contentBox.classList.add('portrait');
-    }
-    
-    let captionText = targetImg.alt || '';
-    let descText = '';
+  // 2. Initialize the correct theme icon based on the body class
+  const isDark = document.body.classList.contains('dark-mode');
+  updateThemeIcon(isDark);
 
-    const parent = targetImg.parentElement;
+  // 3. Restore Navigation Folders
+  const openMenus = JSON.parse(localStorage.getItem('open-nav-menus') || '[]');
+  openMenus.forEach(id => {
+    const container = document.getElementById(id);
+    const icon = document.getElementById(`icon-${id}`);
     
-    if (parent && parent.tagName.toLowerCase() === 'p') {
-      const em = parent.querySelector('em');
-      
-      if (em && em.previousElementSibling === targetImg) {
-        captionText = em.innerHTML;
-        
-        const clone = parent.cloneNode(true);
-        const cloneImg = clone.querySelector('img');
-        const cloneEm = clone.querySelector('em');
-        
-        if (cloneImg) cloneImg.remove();
-        if (cloneEm) cloneEm.remove();
-        
-        descText = clone.innerHTML
-          .replace(/^[\s\n]*<br\s*\/?>/i, '')
-          .trim();
+    // If the ID was saved in localStorage, add the open classes back
+    if (container) container.classList.add('is-open');
+    if (icon) icon.classList.add('is-rotated');
+  });
+
+  // 4. Generate the Table of Contents dynamically based on page content
+  buildTOC();
+
+  // 5. Initialize the Search Bar
+  initSearch();
+});
+
+// ==========================================
+// 6. SITE SEARCH
+// ==========================================
+
+let searchIndex = null;
+
+function initSearch() {
+  const input = document.getElementById('search-input');
+  const clearBtn = document.getElementById('search-clear');
+  const resultsContainer = document.getElementById('search-results');
+  const sitePanel = document.querySelector('.site-panel');
+
+  if (!input) return;
+
+  // Helper function to clear and reset the UI
+  const clearSearch = () => {
+    input.value = '';
+    clearBtn.style.display = 'none';
+    sitePanel.classList.remove('is-searching');
+    resultsContainer.innerHTML = '';
+  };
+
+  // 1. Load index on focus
+  input.addEventListener('focus', async () => {
+    if (!searchIndex) {
+      try {
+        const response = await fetch('/search.json');
+        searchIndex = await response.json();
+      } catch (e) {
+        console.error("Search index failed to load");
       }
     }
+  });
 
-    captionDiv.innerHTML = captionText;
-    descDiv.innerHTML = descText;
+  // 2. Filter as the user types
+  input.addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase();
 
-    if (!captionText && !descText) {
-      infoBox.classList.add('hidden');
-    } else {
-      infoBox.classList.remove('hidden');
+    // Toggle the clear button visibility
+    clearBtn.style.display = query.length > 0 ? 'block' : 'none';
+
+    // If query is too short, close results
+    if (query.length < 2) {
+      sitePanel.classList.remove('is-searching');
+      resultsContainer.innerHTML = '';
+      return;
     }
+
+    sitePanel.classList.add('is-searching');
+    if (!searchIndex) return; 
+
+    const results = searchIndex.filter(page => {
+      return page.title.toLowerCase().includes(query) || 
+             page.content.toLowerCase().includes(query);
+    });
+
+    if (results.length === 0) {
+      resultsContainer.innerHTML = '<li style="padding: 1rem 0; color: var(--text-muted); font-size: 0.9rem; text-align: center;">No results found.</li>';
+      return;
+    }
+
+    resultsContainer.innerHTML = results.slice(0, 10).map(result => {
+      let snippet = '';
+      const contentIndex = result.content.toLowerCase().indexOf(query);
+      if (contentIndex !== -1) {
+        const start = Math.max(0, contentIndex - 25);
+        const end = Math.min(result.content.length, contentIndex + query.length + 25);
+        snippet = `...${result.content.substring(start, end)}...`;
+      }
+      
+      return `
+        <li>
+          <a href="${result.url}">
+            <span class="search-title">${result.title}</span>
+            ${snippet ? `<span class="search-snippet">${snippet}</span>` : ''}
+          </a>
+        </li>
+      `;
+    }).join('');
+  });
+
+  // 3. Listen for the clear button click
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      clearSearch();
+      input.focus(); // Keep the user in the input box if they click the X
+    });
   }
 
-  // Click an image to open the lightbox at that specific image's index
-  images.forEach((img, index) => {
-    img.addEventListener('click', () => {
-      showLightboxImage(index);
-      modal.showModal();
-      document.body.style.overflow = 'hidden';
-    });
-  });
-
-  // UI Button Navigation
-  prevBtn.addEventListener('click', () => showLightboxImage(currentIndex - 1));
-  nextBtn.addEventListener('click', () => showLightboxImage(currentIndex + 1));
-
-  // Close behavior
-  closeBtn.addEventListener('click', () => modal.close());
-  modal.addEventListener('click', (e) => {
-    // Close if clicking the dark background (not the image or buttons)
-    if (e.target === modal || e.target.classList.contains('lightbox-content')) {
-      modal.close();
+  // 4. Listen for the Escape key
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      clearSearch();
+      input.blur(); // Remove focus from the input so they can go back to reading
     }
-  });
-
-  // Lightbox Keyboard Controls
-  modal.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft') {
-      showLightboxImage(currentIndex - 1);
-    } else if (e.key === 'ArrowRight' || e.key === ' ') {
-      e.preventDefault(); // Prevents spacebar from scrolling the background
-      showLightboxImage(currentIndex + 1);
-    }
-  });
-
-  // Wipe data on close to prevent flashing
-  // Wipe data on close to prevent flashing and restore scrolling
-  modal.addEventListener('close', () => {
-    modalImg.src = '';
-    document.getElementById('lightbox-caption').innerHTML = '';
-    document.getElementById('lightbox-desc').innerHTML = ''; // Clears the lore box
-    
-    // THE FIX: Unlock the background scroll
-    document.body.style.overflow = ''; 
   });
 }
 
-/* =========================================
-   8. MARKDOWN IMAGE ALBUM (CAROUSEL)
-   ========================================= */
-function initAlbums() {
-  const albums = document.querySelectorAll('.doc-content ul.album');
-  
-  albums.forEach(album => {
-    const slides = album.querySelectorAll('li');
-    if (slides.length <= 1) return; 
-    
-    // Make the album focusable so keyboard events can target it
-    album.setAttribute('tabindex', '0'); 
-    
-    let currentIndex = 0;
-    slides[currentIndex].classList.add('active');
-    
-    const controls = document.createElement('div');
-    controls.className = 'album-controls';
-    
-    const prevBtn = document.createElement('button');
-    prevBtn.className = 'album-btn';
-    prevBtn.innerHTML = '&#10094;'; 
-    prevBtn.setAttribute('aria-label', 'Previous image');
-    
-    const nextBtn = document.createElement('button');
-    nextBtn.className = 'album-btn';
-    nextBtn.innerHTML = '&#10095;'; 
-    nextBtn.setAttribute('aria-label', 'Next image');
-    
-    controls.appendChild(prevBtn);
-    controls.appendChild(nextBtn);
-    
-    const counter = document.createElement('div');
-    counter.className = 'album-counter';
-    counter.textContent = `1 / ${slides.length}`;
-    
-    album.appendChild(controls);
-    album.appendChild(counter);
-    
-    function showSlide(index) {
-      slides[currentIndex].classList.remove('active');
-      currentIndex = (index + slides.length) % slides.length; 
-      slides[currentIndex].classList.add('active');
-      counter.textContent = `${currentIndex + 1} / ${slides.length}`;
-    }
-    
-    prevBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      showSlide(currentIndex - 1);
-    });
-    
-    nextBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      showSlide(currentIndex + 1);
-    });
-    
-    // Album Keyboard Controls
-    album.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') {
-        e.preventDefault(); // Prevents page scrolling
-        showSlide(currentIndex - 1);
-      } else if (e.key === 'ArrowRight' || e.key === ' ') {
-        e.preventDefault();
-        showSlide(currentIndex + 1);
-      }
-    });
-  });
+// ==========================================
+// 7. SCROLL TO TOP
+// ==========================================
+function scrollToTop() {
+  const docPanel = document.querySelector('.doc-panel');
+  if (docPanel) {
+    docPanel.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 }

@@ -1,113 +1,20 @@
 - title: Home
   url: /
-
 - title: Blog
-  url: /blog
-
-- title: Text
-  url: /text
-
-- title: Test
-  url: /test
-
-- title: Readme
-  url: /readme
-
+  url: /blog/
 - title: About
-  url: /about
-
-- title: Test Pages
+  url: /about.html
+- title: Test
+  url: /test/
+- title: Documentation
   sublinks:
-    - title: Code Syntax
-      url: /code/
-    - title: Birds
-      url: /birds/
-    - title: Vertebrates
-      url: /vertebrates/
-
- #--- 4-LEVEL NESTING DEMONSTRATION ---
-- title: Home
-  url: /
-- title: Geography
-  sublinks:
-    - title: Places
-      url: /places-to-visit/
-    - title: Continents
+    - title: Level 1 - Getting Started
+      url: /start/
+    - title: Level 1 - Advanced
       sublinks:
-        - title: North America
+        - title: Level 2 - API
+          url: /api/
+        - title: Level 2 - Security
           sublinks:
-            - title: United States
-              url: /geography/na/usa/
-            - title: Canada
-              url: /geography/na/canada/
-            - title: Mexico
-              url: /geography/na/mexico/
-        - title: South America
-          sublinks:
-            - title: Brazil
-              url: /geography/sa/brazil/
-            - title: Argentina
-              url: /geography/sa/argentina/
-        - title: Europe
-          sublinks:
-            - title: France
-              url: /geography/eu/france/
-
-- title: Game Systems
-  sublinks:
-    - title: Combat
-      url: /systems/combat/
-    - title: Magic
-      url: https://google.com/
-
-- title: GitHub Repository
-  url: https://github.com/
-
-
-# Level 1: Direct Link
-- title: "Home"
-  url: "/"
-
-# Level 1: Direct Link to your test file
-- title: "Test Page"
-  url: "/test.html"
-
-# Level 1 Accordion: Simple Nested Links
-- title: "Project Docs"
-  sublinks:
-    - title: "Introduction"
-      url: "/docs/intro"
-    - title: "Getting Started"
-      url: "/docs/setup"
-
-# Level 1 Accordion: Deep Nesting Test (Targets all 4 levels)
-- title: "Deep Nesting"
-  sublinks:
-    - title: "Level 2 Category"
-      sublinks:
-        - title: "Level 3 Sub-Category"
-          sublinks:
-            - title: "Level 4 Item (The End)"
-              url: "/docs/deep-item"
-        - title: "Level 3 Standalone"
-          url: "/docs/level-3-link"
-    - title: "Level 2 Standalone"
-      url: "/docs/level-2-link"
-
-# Level 1 Accordion: External/Other Links
-- title: "Resources"
-  sublinks:
-    - title: "External Wiki"
-      url: "https://wikipedia.org"
-
-
-# =========================================
-# LEFT PANEL NAVIGATION
-# =========================================
-# - title: The name displayed in the menu
-#   url: The path to the page (e.g., /about/)
-#   sublinks: Add this instead of a URL to create an accordion dropdown
-
-
-
-
+            - title: Level 3 - Encryption
+              url: /encryption/
