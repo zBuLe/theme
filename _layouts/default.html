@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ page.title }} | {{ site.title }}</title>
     <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+
+    <script>
+      // Tell our JS files what the baseurl is!
+      window.SITE_BASEURL = "{{ site.baseurl }}";
+    </script>
+    <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
   </head>
   <body class="site-container preload">
     
@@ -38,6 +44,5 @@
 
     {% include page-panel.html %}
 
-    <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
   </body>
 </html>

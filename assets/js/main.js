@@ -193,7 +193,7 @@ function initSearch() {
   input.addEventListener('focus', async () => {
     if (!searchIndex) {
       try {
-        const response = await fetch('/search.json');
+        const response = await fetch(window.SITE_BASEURL + '/search.json');
         searchIndex = await response.json();
       } catch (e) {
         console.error("Search index failed to load");
