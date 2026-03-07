@@ -2,13 +2,9 @@
 layout: default
 title: Chrono-Toaster Operations Manual
 author: Dr. Emmett Brown
-contributors: [Marty McFly, Einstein]
 date: 2026-03-07
 updated: 2026-03-08
-version: Mk. IV
-status: experimental
-category: Hardware Guide
-tags: [temporal, safety, calibration]
+tags: [temporal, safety, calibration, Tommorow, Today, Yesterday ]
 ---
 
 # Advanced Operations of the Chrono-Toaster
