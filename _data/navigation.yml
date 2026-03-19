@@ -1,20 +1,63 @@
+# =========================================
+# LEFT PANEL NAVIGATION
+# =========================================
+# - title: The name displayed in the menu
+#   url: The path to the page (e.g., /about/)
+#   sublinks: Add this instead of a URL to create an accordion dropdown
+
 - title: Home
   url: /
-- title: Blog
-  url: /blog/
-- title: About
-  url: /about.html
+
 - title: Test
-  url: /test/
-- title: Documentation
+  url: /test
+
+- title: Readme
+  url: /readme/
+
+- title: About
+  url: /about/
+
+- title: Test Pages
   sublinks:
-    - title: Level 1 - Getting Started
-      url: /start/
-    - title: Level 1 - Advanced
+    - title: Code Syntax
+      url: /code/
+    - title: Birds
+      url: /birds/
+    - title: Vertebrates
+      url: /vertebrates/
+
+# --- 4-LEVEL NESTING DEMONSTRATION ---
+- title: Geography
+  sublinks:
+    - title: Places
+      url: /places-to-visit/
+    - title: Continents
       sublinks:
-        - title: Level 2 - API
-          url: /api/
-        - title: Level 2 - Security
+        - title: North America
           sublinks:
-            - title: Level 3 - Encryption
-              url: /encryption/
+            - title: United States
+              url: /geography/na/usa/
+            - title: Canada
+              url: /geography/na/canada/
+            - title: Mexico
+              url: /geography/na/mexico/
+        - title: South America
+          sublinks:
+            - title: Brazil
+              url: /geography/sa/brazil/
+            - title: Argentina
+              url: /geography/sa/argentina/
+        - title: Europe
+          sublinks:
+            - title: France
+              url: /geography/eu/france/
+
+- title: Game Systems
+  sublinks:
+    - title: Combat
+      url: /systems/combat/
+    - title: Magic
+      url: /systems/magic/
+
+- title: GitHub Repository
+  url: https://github.com/

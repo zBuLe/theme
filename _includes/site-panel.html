@@ -1,48 +1,109 @@
-<aside class="site-panel">
-  <header class="site-header">
-    <button type="button" class="panel-btn close-site" onclick="toggleSitePanel()" aria-label="Close site panel">
-      {% if site.logo %}
-        <img src="{{ site.logo | relative_url }}" alt="Close" class="logo-img">
-      {% else %}
-        <span style="font-size: 1.5rem;">×</span> {% endif %}
+<aside class="side-panel site-panel" id="siteNav" aria-label="Site Navigation">
+  
+  <header class="site-header">    
+    <button type="button" class="action-btn" data-action="toggle-site" aria-label="Close site navigation">
+      <span class="close-icon" aria-hidden="true">&#215;</span>
+      <span class="sr-only">Close navigation</span>
     </button>
-    
-    <a href="{{ '/' | relative_url }}" class="site-title-link">
-      {{ site.title }}
-    </a>
-
-    <div class="header-spacer"></div>
+    <h2>
+      <a href="{{ '/' | relative_url }}" title="Return to Home">{{ site.title }}</a>
+    </h2>  
+    {% if site.logo %}
+      <img src="{{ site.logo | relative_url }}" alt="Logo" class="logo-img">
+    {% endif %}    
   </header>
-  <div class="search-container">
-    <div class="search-input-wrapper">
-      <input type="text" id="search-input" placeholder="Search docs..." aria-label="Search" autocomplete="off">
-      <button type="button" id="search-clear" class="search-clear-btn" aria-label="Clear search" style="display: none;">×</button>
-    </div>
-    <ul id="search-results" class="search-results"></ul>
-  </div>
 
   <nav class="site-nav">
-    <ul class="nav-list base-level">
+    
+    <div class="search-box">
+      <input type="text" id="search-input" class="search-input" placeholder="Search docs..." aria-label="Search documentation" />
+      <ul id="search-results" class="search-results" role="listbox"></ul>
+    </div>
+
+    {% if site.data.navigation %}
       {% for item in site.data.navigation %}
-        {% include nav-item.html item=item prefix="nav" %}
+        {% if item.sublinks %}
+          <button type="button" class="accordion-btn level-1" aria-expanded="false">{{ item.title }} <span class="caret">&#9660;</span></button>
+          <div class="accordion-content">
+            
+            {% for sub1 in item.sublinks %}
+              {% if sub1.sublinks %}
+                <button type="button" class="accordion-btn level-2" aria-expanded="false">{{ sub1.title }} <span class="caret">&#9660;</span></button>
+                <div class="accordion-content">
+                  
+                  {% for sub2 in sub1.sublinks %}
+                    {% if sub2.sublinks %}
+                      <button type="button" class="accordion-btn level-3" aria-expanded="false">{{ sub2.title }} <span class="caret">&#9660;</span></button>
+                      <div class="accordion-content">
+                        
+                        {% for sub3 in sub2.sublinks %}
+                          <a href="{{ sub3.url | relative_url }}" class="level-4 {% if page.url == sub3.url %}active-link{% endif %}">{{ sub3.title }}</a>
+                        {% endfor %}
+                        
+                      </div>
+                    {% else %}
+                      <a href="{{ sub2.url | relative_url }}" class="level-3 {% if page.url == sub2.url %}active-link{% endif %}">{{ sub2.title }}</a>
+                    {% endif %}
+                  {% endfor %}
+                  
+                </div>
+              {% else %}
+                <a href="{{ sub1.url | relative_url }}" class="level-2 {% if page.url == sub1.url %}active-link{% endif %}">{{ sub1.title }}</a>
+              {% endif %}
+            {% endfor %}
+            
+          </div>
+        {% else %}
+          <a href="{{ item.url | relative_url }}" class="level-1 {% if page.url == item.url %}active-link{% endif %}">{{ item.title }}</a>
+        {% endif %}
       {% endfor %}
-    </ul>
-  </nav>
+    {% endif %}
+
+  </nav> 
 
   <footer class="site-footer">
-    <div class="social-links">
-      {% for link in site.data.social %}
-        <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="{{ link.title }}" title="{{ link.title }}">
-          {% if link.icon_svg %}
-            {{ link.icon_svg }} {% elsif link.icon_fa %}
-            <i class="{{ link.icon_fa }}"></i>
+    <div class="contact-icons">
+      {% if site.data.contact %}
+        {% for item in site.data.contact %}
+          {% if item.url and item.url != empty %}
+            <a href="{{ item.url }}" aria-label="{{ item.type }}" {% unless item.noblank %}target="_blank" rel="noopener noreferrer"{% endunless %}>
+              {% if item.svg %}
+                {{ item.svg }}
+              {% elsif item.icon %}
+                <i class="{{ item.icon }}"></i>
+              {% endif %}
+            </a>
           {% endif %}
-        </a>
-      {% endfor %}
+        {% endfor %}
+      {% endif %}
     </div>
-    
     <div class="site-copyright">
-      &copy; {{ 'now' | date: "%Y" }} {{ site.title | default: "My Docs" }}
+      &copy; {{ 'now' | date: "%Y" }} {{ site.title }}
     </div>
   </footer>
 </aside>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const currentPath = window.location.pathname.replace(/\/$/, ""); 
+    const navLinks = document.querySelectorAll('.site-nav a');
+    
+    navLinks.forEach(link => {
+      const linkPath = new URL(link.href).pathname.replace(/\/$/, "");
+      
+      if (currentPath === linkPath || currentPath === linkPath + ".html") {
+        link.classList.add('active-link'); 
+        
+        let parentContent = link.closest('.accordion-content');
+        while (parentContent) {
+          parentContent.style.maxHeight = "1000px";
+          let parentBtn = parentContent.previousElementSibling;
+          if (parentBtn && parentBtn.classList.contains('accordion-btn')) {
+            parentBtn.classList.add('active');
+          }
+          parentContent = parentContent.parentElement.closest('.accordion-content');
+        }
+      }
+    });
+  });
+</script>

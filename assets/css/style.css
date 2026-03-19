@@ -1,0 +1,408 @@
+/* =========================================
+   1. BASE COLOR SYSTEM (color-mix derivations)
+   Only --bg, --text, --accent need to change
+   per theme. Everything else recalculates.
+   Individual tokens CAN be overridden via
+   theme.yml — they just won't derive.
+   ========================================= */
+:root {
+  /* 3 Base Tokens (Light Mode Defaults) */
+  --bg: hsl(210, 40%, 98%);
+  --text: hsl(222, 47%, 11%);
+  --accent: hsl(221, 83%, 53%);
+
+  /* Derived Backgrounds */
+  --bg-dark: color-mix(in srgb, var(--bg) 85%, var(--text));
+  --bg-light: color-mix(in srgb, var(--bg) 60%, white);
+
+  /* Derived Typography */
+  --text-muted: color-mix(in srgb, var(--text) 60%, var(--bg));
+
+  /* Derived Borders */
+  --border: color-mix(in srgb, var(--bg) 80%, var(--text));
+  --border-muted: color-mix(in srgb, var(--border) 40%, var(--bg));
+
+  /* Derived Interactive */
+  --accent-muted: color-mix(in srgb, var(--accent) 10%, var(--bg));
+  --contrast: #ffffff;
+
+  /* Semantic (static — don't derive from base) */
+  --danger: hsl(0, 84%, 60%);
+  --warning: hsl(38, 92%, 50%);
+  --success: hsl(160, 84%, 39%);
+  --info: hsl(217, 91%, 60%);
+
+  /* Sizing & Layout */
+  --nav-pad-left: 32px;
+  --active-border: 3px;
+  --z-header: 10;
+  --z-panel: 20;
+  --z-backdrop: 15;
+  --z-modal: 100;
+  --z-back-to-top: 30;
+}
+
+/* =========================================
+   2. DARK MODE (flip base, re-derive)
+   ========================================= */
+body.dark-mode {
+  --bg: hsl(222, 47%, 11%);
+  --text: hsl(210, 40%, 98%);
+  --accent: hsl(217, 91%, 60%);
+
+  --bg-dark: color-mix(in srgb, var(--bg) 85%, var(--text));
+  --bg-light: color-mix(in srgb, var(--bg) 60%, white);
+  --text-muted: color-mix(in srgb, var(--text) 60%, var(--bg));
+  --border: color-mix(in srgb, var(--bg) 80%, var(--text));
+  --border-muted: color-mix(in srgb, var(--border) 40%, var(--bg));
+  --accent-muted: color-mix(in srgb, var(--accent) 10%, var(--bg));
+
+  --danger: hsl(0, 93%, 71%);
+  --warning: hsl(43, 96%, 56%);
+  --success: hsl(158, 64%, 52%);
+  --info: hsl(213, 97%, 68%);
+}
+
+/* =========================================
+   3. CSS RESET
+   ========================================= */
+*, *::before, *::after { box-sizing: border-box; }
+*:not(dialog) { margin: 0; }
+
+@media (prefers-reduced-motion: no-preference) {
+  html { interpolate-size: allow-keywords; }
+}
+
+body { line-height: 1.5; -webkit-font-smoothing: antialiased; }
+img, picture, video, canvas, svg { display: block; max-width: 100%; }
+input, button, textarea, select { font: inherit; }
+p, h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; }
+p { text-wrap: pretty; }
+h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+/* =========================================
+   3.5. PRELOADER (Stops animation flash)
+   ========================================= */
+.preload, .preload * { transition: none !important; }
+
+/* =========================================
+   4. GLOBAL STYLES
+   ========================================= */
+body {
+  font-family: "Lato", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: 16px;
+  overflow-x: hidden;
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.3s, color 0.3s;
+  line-height: 1.6;
+}
+
+/* =========================================
+   5. SIDE PANELS
+   ========================================= */
+.side-panel {
+  height: 100%; width: 0; position: fixed; z-index: var(--z-panel); top: 0;
+  background-color: var(--bg-light); overflow-x: hidden;
+  transition: width 0.5s, background-color 0.3s;
+  white-space: nowrap; display: flex; flex-direction: column;
+}
+
+.site-panel { left: 0; border-right: 1px solid var(--border); }
+.toc-panel  { right: 0; border-left: 1px solid var(--border); }
+
+.site-header, .site-nav, .site-footer,
+.toc-header, .toc-nav, .toc-footer {
+  min-width: 250px; box-sizing: border-box;
+}
+
+.site-header, .toc-header {
+  height: 64px; display: flex; align-items: center;
+  padding: 0 20px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+
+.site-header { justify-content: space-between; gap: 15px; }
+.toc-header  { justify-content: space-between; }
+
+.site-header h2, .toc-header h2 { color: var(--text); font-size: 1.25em; font-weight: 600; }
+
+.site-header h2 a {
+  color: inherit; text-decoration: none;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+.site-header h2 a:hover { color: var(--accent); }
+
+.site-nav, .toc-nav {
+  flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px 0;
+}
+
+.site-nav a, .toc-nav a {
+  padding: 8px 20px 8px var(--nav-pad-left); text-decoration: none;
+  font-size: 1.1em; color: var(--text-muted); display: block; transition: 0.2s;
+}
+
+.site-nav a:hover, .toc-nav a:hover {
+  color: var(--accent); background-color: var(--bg);
+}
+
+.site-footer, .toc-footer {
+  padding: 15px 25px; border-top: 1px solid var(--border);
+  color: var(--text-muted); font-size: 0.875em;
+}
+
+/* =========================================
+   6. MOBILE BACKDROP
+   ========================================= */
+.panel-backdrop {
+  display: none; position: fixed; inset: 0;
+  background-color: rgba(0,0,0,0.4); z-index: var(--z-backdrop);
+  opacity: 0; transition: opacity 0.3s ease;
+}
+.panel-backdrop.visible { opacity: 1; }
+
+@media screen and (max-width: 768px) {
+  body.site-open .panel-backdrop,
+  body.toc-open .panel-backdrop { display: block; }
+}
+
+/* =========================================
+   7. UI COMPONENTS
+   ========================================= */
+.action-btn {
+  font-size: 1.75em; cursor: pointer; user-select: none;
+  color: var(--text-muted); background: none; border: none; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: color 0.2s, opacity 0.2s; min-width: 40px; min-height: 40px;
+}
+.action-btn:hover { color: var(--accent); opacity: 0.85; }
+.doc-header .action-btn { color: var(--text); }
+
+.close-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 4px;
+  font-size: 1.25rem; line-height: 1; transition: background-color 0.2s;
+}
+.action-btn:hover .close-icon { background-color: var(--accent-muted); }
+
+.logo-img {
+  height: 40px; width: 40px; display: block;
+  border-radius: 6px; object-fit: contain;
+}
+
+/* Search Box */
+.search-box { position: relative; padding: 0 16px 20px 16px; }
+.search-input {
+  width: 100%; padding: 10px; border: 1px solid var(--border);
+  border-radius: 6px; background-color: var(--bg); color: var(--text);
+  font-size: 0.95em; transition: border-color 0.3s, box-shadow 0.3s;
+}
+.search-input::placeholder { color: var(--text-muted); }
+.search-input:focus {
+  outline: none; border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-muted);
+}
+
+/* Accordion */
+.accordion-btn {
+  background-color: transparent; color: var(--text-muted); cursor: pointer;
+  padding: 8px 25px 8px var(--nav-pad-left); width: 100%; border: none;
+  text-align: left; outline: none; font-size: 1.1em; transition: 0.2s;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: inherit; white-space: nowrap;
+}
+.accordion-btn:hover, .accordion-btn.active {
+  color: var(--accent); background-color: var(--bg);
+}
+.caret { font-size: 0.8em; transition: transform 0.3s ease; }
+.accordion-btn.active .caret { transform: rotate(180deg); }
+
+.accordion-content {
+  background-color: var(--bg); max-height: 0; overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+
+/* Nested Menu Indentation */
+.accordion-content a { font-size: 0.95em; }
+.level-1 { padding-left: var(--nav-pad-left); }
+.level-2 { padding-left: calc(var(--nav-pad-left) + 16px); }
+.level-3 { padding-left: calc(var(--nav-pad-left) + 32px); }
+.level-4 { padding-left: calc(var(--nav-pad-left) + 48px); }
+
+/* TOC Link Levels */
+.toc-h2 { font-size: 1em !important; font-weight: bold; color: var(--text) !important; margin-top: 8px; }
+.toc-h3 { font-size: 0.95em !important; padding-left: 48px !important; }
+.toc-h4 { font-size: 0.85em !important; padding-left: 64px !important; opacity: 0.8; }
+
+/* Empty TOC State */
+.toc-empty {
+  padding: 20px var(--nav-pad-left); color: var(--text-muted);
+  font-style: italic; font-size: 0.9em; white-space: normal;
+}
+
+/* Metadata & Tags */
+.meta-item { margin-bottom: 6px; white-space: normal; }
+.meta-item strong { color: var(--text); }
+.meta-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; white-space: normal; }
+
+a.tag {
+  background-color: var(--accent-muted); border: 1px solid var(--accent);
+  padding: 4px 10px; border-radius: 12px; font-size: 0.75em;
+  color: var(--accent); font-weight: bold; text-decoration: none;
+  transition: background-color 0.2s, color 0.2s;
+}
+a.tag:hover { background-color: var(--accent); color: var(--contrast); }
+a.tag.active-tag { background-color: var(--accent); color: var(--contrast); }
+
+/* Active Navigation State */
+.active-link {
+  color: var(--accent) !important; font-weight: bold;
+  border-left: var(--active-border) solid var(--accent);
+  padding-left: calc(var(--nav-pad-left) - var(--active-border)) !important;
+  background-color: var(--bg);
+}
+
+/* Active TOC State (ScrollSpy) */
+.toc-nav a.active-toc {
+  color: var(--accent) !important; font-weight: bold;
+  background-color: var(--accent-muted);
+}
+
+/* =========================================
+   8. DOCUMENT PANEL
+   ========================================= */
+.doc-panel {
+  transition: margin-left .5s, margin-right .5s;
+  display: flex; flex-direction: column; min-height: 100vh;
+}
+
+.doc-header {
+  height: 64px; display: flex; align-items: center;
+  padding: 0 20px; background-color: var(--bg-light);
+  border-bottom: 1px solid var(--border);
+  justify-content: space-between; gap: 12px;
+  position: sticky; top: 0; z-index: var(--z-header);
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.doc-title {
+  flex: 1; min-width: 0; text-align: center;
+  font-size: 1.25em; color: var(--text);
+  transition: color 0.3s; font-weight: 600;
+}
+
+.doc-title a {
+  color: inherit; text-decoration: none; transition: opacity 0.2s;
+  display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.doc-title a:hover { opacity: 0.7; }
+
+.doc-content {
+  padding: 20px; flex: 1; max-width: 800px; margin: 0 auto; width: 100%;
+}
+
+/* =========================================
+   9. STATE CONTROLS & RESPONSIVE
+   ========================================= */
+body.site-open .site-panel { width: 250px; }
+body.toc-open  .toc-panel  { width: 250px; }
+
+body.site-open .logo-btn { opacity: 0; pointer-events: none; }
+body.toc-open  .book-btn { opacity: 0; pointer-events: none; }
+
+@media screen and (min-width: 769px) {
+  body.site-open .doc-panel { margin-left: 250px; }
+  body.toc-open  .doc-panel { margin-right: 250px; }
+}
+
+@media screen and (max-width: 768px) {
+  body.site-open .doc-panel { margin-left: 0; }
+  body.toc-open  .doc-panel { margin-right: 0; }
+  .doc-title { font-size: 1.125em; }
+}
+
+@media screen and (max-height: 450px), screen and (max-width: 450px) {
+  body.site-open .site-panel, body.toc-open .toc-panel { width: 100%; }
+  .site-header, .site-nav, .site-footer, .toc-header, .toc-nav, .toc-footer {
+    min-width: 100vw; width: 100vw;
+  }
+  .site-nav a, .accordion-btn { font-size: 1.125em; }
+}
+
+/* =========================================
+   10. SEARCH RESULTS DROPDOWN
+   ========================================= */
+.search-results {
+  position: absolute; top: calc(100% - 15px); left: 16px; right: 16px;
+  background-color: var(--bg); border: 1px solid var(--border);
+  border-radius: 6px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.2);
+  margin: 0; padding: 0; list-style: none; max-height: 350px;
+  overflow-y: auto; z-index: 50; display: none;
+}
+.search-results:not(:empty) { display: block; }
+.search-results li { border-bottom: 1px solid var(--border-muted); }
+.search-results li:last-child { border-bottom: none; }
+.search-results li a, .search-results li.no-results {
+  display: block; padding: 10px 14px; text-decoration: none;
+  color: var(--text); font-size: 0.9em;
+  transition: background-color 0.2s, color 0.2s;
+  white-space: normal; line-height: 1.4;
+}
+.search-results li a:hover { background-color: var(--bg-light); color: var(--accent); }
+.search-results li.no-results { color: var(--text-muted); font-style: italic; }
+
+/* =========================================
+   11. SITE PANEL FOOTER & SOCIAL ICONS
+   ========================================= */
+.site-footer {
+  padding: 16px; border-top: 1px solid var(--border);
+  background-color: var(--bg-light); flex-shrink: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.contact-icons { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.contact-icons a {
+  color: var(--text); font-size: 1.25em; text-decoration: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+.contact-icons a svg { width: 1.25em; height: 1.25em; fill: currentColor; }
+.contact-icons a:hover { color: var(--accent); transform: translateY(-2px); }
+.site-copyright { font-size: 0.85em; opacity: 0.7; text-align: center; }
+
+/* =========================================
+   12. TOC PANEL FOOTER
+   ========================================= */
+.toc-footer .meta-item {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 0.9em;
+}
+.toc-footer .meta-item i { opacity: 0.7; width: 16px; text-align: center; }
+.toc-footer .meta-tags { margin-top: 16px; }
+
+/* =========================================
+   13. BACK TO TOP BUTTON
+   ========================================= */
+.back-to-top {
+  position: fixed; bottom: 24px; right: 24px;
+  z-index: var(--z-back-to-top); width: 44px; height: 44px;
+  border-radius: 50%; border: 1px solid var(--border);
+  background-color: var(--bg-light); color: var(--text-muted);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 1.25em; box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  opacity: 0; pointer-events: none; transform: translateY(12px);
+  transition: opacity 0.3s, transform 0.3s, background-color 0.2s, color 0.2s;
+}
+.back-to-top.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+.back-to-top:hover {
+  background-color: var(--accent); color: var(--contrast); border-color: var(--accent);
+}
+@media screen and (min-width: 769px) {
+  body.toc-open .back-to-top { right: 274px; }
+}
